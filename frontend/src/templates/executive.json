@@ -1,0 +1,54 @@
+{
+  "id": "executive",
+  "name": "Executive",
+  "layout": {
+    "type": "single-column",
+    "pageMarginTop": "0in",
+    "pageMarginSides": "0in",
+    "contentPaddingSides": "0.75in",
+    "contentPaddingTop": "24px",
+    "sectionSpacing": "16px",
+    "itemSpacing": "10px"
+  },
+  "colors": {
+    "headerBackground": "#1a1a1a",
+    "headerText": "#ffffff",
+    "headerMuted": "#cccccc",
+    "mainBackground": "#ffffff",
+    "mainText": "#222222",
+    "headingText": "#1a1a1a",
+    "accentColor": "#1a1a1a",
+    "dividerColor": "#1a1a1a",
+    "mutedText": "#666666"
+  },
+  "typography": {
+    "nameFont": "Georgia, serif",
+    "nameFontSize": "26px",
+    "nameFontWeight": "700",
+    "nameLetterSpacing": "2px",
+    "titleFont": "Arial, sans-serif",
+    "titleFontSize": "12px",
+    "sectionLabelFont": "Arial, sans-serif",
+    "sectionLabelSize": "10px",
+    "sectionLabelStyle": "uppercase",
+    "sectionLabelSpacing": "2px",
+    "bodyFont": "Georgia, serif",
+    "bodyFontSize": "10.5px",
+    "bodyLineHeight": "1.5",
+    "summaryFontStyle": "italic"
+  },
+  "header": {
+    "placement": "top-full-bleed",
+    "alignment": "left",
+    "showAvatar": false,
+    "dividerStyle": "thick"
+  },
+  "sections": {
+    "type": "single-column",
+    "order": ["personal", "experience", "education", "skills", "projects", "certifications", "awards", "languages", "custom"],
+    "dividerStyle": "thick",
+    "bulletStyle": "bullet",
+    "dateAlignment": "inline-right",
+    "labelWeight": "bold"
+  }
+}

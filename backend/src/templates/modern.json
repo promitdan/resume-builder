@@ -1,0 +1,52 @@
+{
+  "id": "modern",
+  "name": "Modern",
+  "layout": {
+    "type": "two-column",
+    "sidebarPosition": "left",
+    "sidebarWidthPercent": 35,
+    "pageMarginTop": "0in",
+    "pageMarginSides": "0in",
+    "sectionSpacing": "14px",
+    "itemSpacing": "8px"
+  },
+  "colors": {
+    "sidebarBackground": "#1e3a5f",
+    "sidebarText": "#ffffff",
+    "sidebarAccent": "#4a9eda",
+    "mainBackground": "#ffffff",
+    "mainText": "#222222",
+    "headingText": "#1e3a5f",
+    "accentColor": "#4a9eda",
+    "dividerColor": "#4a9eda",
+    "mutedText": "#666666"
+  },
+  "typography": {
+    "nameFont": "Arial, sans-serif",
+    "nameFontSize": "22px",
+    "nameFontWeight": "700",
+    "titleFont": "Arial, sans-serif",
+    "titleFontSize": "12px",
+    "sectionLabelFont": "Arial, sans-serif",
+    "sectionLabelSize": "10px",
+    "sectionLabelStyle": "uppercase",
+    "sectionLabelSpacing": "2px",
+    "bodyFont": "Arial, sans-serif",
+    "bodyFontSize": "10px",
+    "bodyLineHeight": "1.5"
+  },
+  "header": {
+    "placement": "sidebar-top",
+    "alignment": "center",
+    "showAvatar": true,
+    "avatarStyle": "circle",
+    "avatarSizePx": 64
+  },
+  "sections": {
+    "dividerStyle": "solid-accent",
+    "bulletStyle": "dash",
+    "dateAlignment": "inline-right",
+    "sidebarSections": ["personal-contact", "skills", "languages", "certifications"],
+    "mainSections": ["experience", "education", "projects", "awards", "custom"]
+  }
+}

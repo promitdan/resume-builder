@@ -1,0 +1,57 @@
+{
+  "id": "creative",
+  "name": "Creative",
+  "layout": {
+    "type": "two-column",
+    "sidebarPosition": "left",
+    "sidebarWidthPercent": 38,
+    "pageMarginTop": "0in",
+    "pageMarginSides": "0in",
+    "sectionSpacing": "14px",
+    "itemSpacing": "8px"
+  },
+  "colors": {
+    "headerGradientStart": "#6c63ff",
+    "headerGradientEnd": "#e040fb",
+    "sidebarBackground": "#f8f7ff",
+    "sidebarText": "#333333",
+    "sidebarAccent": "#6c63ff",
+    "mainBackground": "#ffffff",
+    "mainText": "#222222",
+    "headingText": "#6c63ff",
+    "accentColor": "#6c63ff",
+    "dividerColor": "#e8e6ff",
+    "mutedText": "#888888",
+    "tagBackground": "#f0eeff",
+    "tagText": "#6c63ff"
+  },
+  "typography": {
+    "nameFont": "Arial, sans-serif",
+    "nameFontSize": "22px",
+    "nameFontWeight": "700",
+    "titleFont": "Arial, sans-serif",
+    "titleFontSize": "11px",
+    "sectionLabelFont": "Arial, sans-serif",
+    "sectionLabelSize": "9px",
+    "sectionLabelStyle": "uppercase",
+    "sectionLabelSpacing": "1.5px",
+    "bodyFont": "Arial, sans-serif",
+    "bodyFontSize": "10px",
+    "bodyLineHeight": "1.5"
+  },
+  "header": {
+    "placement": "top-full-bleed-gradient",
+    "alignment": "left",
+    "showAvatar": false,
+    "gradientStart": "#6c63ff",
+    "gradientEnd": "#e040fb"
+  },
+  "sections": {
+    "dividerStyle": "light",
+    "bulletStyle": "bullet",
+    "dateAlignment": "below",
+    "skillStyle": "pill",
+    "sidebarSections": ["personal-contact", "skills", "languages", "certifications"],
+    "mainSections": ["experience", "education", "projects", "awards", "custom"]
+  }
+}
