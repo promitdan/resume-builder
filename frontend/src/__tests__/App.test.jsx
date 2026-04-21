@@ -12,7 +12,7 @@ function renderAt(route) {
 
 test('/ renders LandingPage', () => {
   renderAt('/')
-  expect(screen.getByText('Landing')).toBeInTheDocument()
+  expect(screen.getByText(/build your perfect resume/i)).toBeInTheDocument()
 })
 
 test('/build renders BuildPage', () => {
