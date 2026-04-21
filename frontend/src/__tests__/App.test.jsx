@@ -17,10 +17,10 @@ test('/ renders LandingPage', () => {
 
 test('/build renders BuildPage', () => {
   renderAt('/build')
-  expect(screen.getByText('Build')).toBeInTheDocument()
+  expect(screen.getByText(/step 1 of 7/i)).toBeInTheDocument()
 })
 
 test('/preview renders PreviewPage', () => {
   renderAt('/preview')
-  expect(screen.getByText('Preview')).toBeInTheDocument()
+  expect(screen.getByText(/resume preview/i)).toBeInTheDocument()
 })

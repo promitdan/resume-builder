@@ -1,3 +1,39 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import WizardLayout         from '../components/wizard/WizardLayout'
+import PersonalInfoStep     from '../components/wizard/PersonalInfoStep'
+import ExperienceStep       from '../components/wizard/ExperienceStep'
+import EducationStep        from '../components/wizard/EducationStep'
+import SkillsStep           from '../components/wizard/SkillsStep'
+import OptionalSectionsStep from '../components/wizard/OptionalSectionsStep'
+import TemplatePickerStep   from '../components/wizard/TemplatePickerStep'
+import PreviewStep          from '../components/wizard/PreviewStep'
+
+const STEPS = [
+  { title: 'Personal Info',       component: PersonalInfoStep     },
+  { title: 'Work Experience',     component: ExperienceStep       },
+  { title: 'Education',           component: EducationStep        },
+  { title: 'Skills',              component: SkillsStep           },
+  { title: 'Optional Sections',   component: OptionalSectionsStep },
+  { title: 'Choose Template',     component: TemplatePickerStep   },
+  { title: 'Preview & Download',  component: PreviewStep          }
+]
+
 export default function BuildPage() {
-  return <div>Build</div>
+  const [currentStep, setCurrentStep] = useState(0)
+  const navigate = useNavigate()
+
+  function handleNext() {
+    if (currentStep === STEPS.length - 1) navigate('/preview')
+    else setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1))
+  }
+
+  return (
+    <WizardLayout
+      steps={STEPS}
+      currentStep={currentStep}
+      onNext={handleNext}
+      onBack={() => setCurrentStep((s) => Math.max(s - 1, 0))}
+    />
+  )
 }
