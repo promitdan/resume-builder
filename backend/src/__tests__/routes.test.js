@@ -49,3 +49,49 @@ describe('POST /api/upload', () => {
     expect(res.body.content).toHaveProperty('personal')
   })
 })
+
+const sampleContent = {
+  meta: { version: '1.0', updatedAt: '' },
+  personal: { name: 'Jane Doe', title: 'Engineer', email: 'jane@test.com', phone: '', location: '', linkedin: '', website: '', summary: '' },
+  experience: [], education: [], skills: [], projects: [],
+  certifications: [], languages: [], awards: [], custom: [],
+  sectionOrder: ['personal', 'experience', 'education', 'skills'],
+  _raw: ''
+}
+
+describe('POST /api/export/docx', () => {
+  test('returns 400 when content is missing', async () => {
+    const res = await request(app).post('/api/export/docx').send({ templateId: 'classic' })
+    expect(res.status).toBe(400)
+  })
+
+  test('returns 400 when templateId is missing', async () => {
+    const res = await request(app).post('/api/export/docx').send({ content: sampleContent })
+    expect(res.status).toBe(400)
+  })
+
+  test('returns 400 for unknown templateId', async () => {
+    const res = await request(app).post('/api/export/docx').send({ content: sampleContent, templateId: 'nonexistent' })
+    expect(res.status).toBe(400)
+  })
+
+  test('returns a DOCX buffer with correct content-type for valid request', async () => {
+    const res = await request(app)
+      .post('/api/export/docx')
+      .send({ content: sampleContent, templateId: 'classic' })
+    expect(res.status).toBe(200)
+    expect(res.headers['content-type']).toMatch(/officedocument/)
+  }, 15000)
+})
+
+describe('POST /api/export/pdf', () => {
+  test('returns 400 when content is missing', async () => {
+    const res = await request(app).post('/api/export/pdf').send({ templateId: 'classic' })
+    expect(res.status).toBe(400)
+  })
+
+  test('returns 400 for unknown templateId', async () => {
+    const res = await request(app).post('/api/export/pdf').send({ content: sampleContent, templateId: 'nonexistent' })
+    expect(res.status).toBe(400)
+  })
+})
