@@ -8,7 +8,7 @@ const SECTION_PATTERNS = [
   { key: 'certifications', regex: /^(certifications?|licenses?|credentials)/i },
   { key: 'languages',      regex: /^(languages)/i },
   { key: 'awards',         regex: /^(awards?|honors?|achievements?|accomplishments?)/i },
-  { key: 'custom',         regex: /^(volunteer|publications?|references?|interests?|hobbies)/i },
+  { key: 'custom',         regex: /^(volunteer|publications?|references?|interests?|hobbies|extra.curriculars?)/i },
 ]
 
 const EMAIL_RE    = /[\w.+-]+@[\w-]+\.[a-z]{2,}/i
@@ -78,23 +78,28 @@ function parseExperience(lines) {
       continue
     }
 
-    if (trimmed.match(/^[•\-–*]\s+/) && current) {
-      current.bullets.push(trimmed.replace(/^[•\-–*]\s+/, ''))
+    if (trimmed.match(/^([•\-–*]|\d+\.)\s+/) && current) {
+      current.bullets.push(trimmed.replace(/^([•\-–*]|\d+\.)\s+/, ''))
       continue
     }
 
-    if (/—|–|-|@|\bat\b/.test(trimmed) && trimmed.length < 100 && !trimmed.startsWith('•')) {
-      const parts = trimmed.split(/\s*[—–]\s*|\s+at\s+|\s*-\s*/)
-      current = {
-        id: uuid(), role: (parts[0] || '').trim(), company: (parts[1] || '').trim(),
-        location: '', startDate: '', endDate: '', current: false, bullets: []
+    if (/[—–]/.test(trimmed) && trimmed.length < 120 && !/^\d+\./.test(trimmed)) {
+      const parts = trimmed.split(/\s*[—–]\s*/)
+      const left  = (parts[0] || '').trim()
+      const right = parts.slice(1).join(' — ').trim()
+
+      let company = '', location = '', role = ''
+      if (/,/.test(left)) {
+        const commaIdx = left.indexOf(',')
+        company  = left.slice(0, commaIdx).trim()
+        location = left.slice(commaIdx + 1).trim()
+        role     = right
+      } else {
+        role    = left
+        company = right
       }
-      entries.push(current)
-    } else if (!current || (current.role && !dateMatch)) {
-      current = {
-        id: uuid(), role: '', company: trimmed,
-        location: '', startDate: '', endDate: '', current: false, bullets: []
-      }
+
+      current = { id: uuid(), role, company, location, startDate: '', endDate: '', current: false, bullets: [] }
       entries.push(current)
     }
   }

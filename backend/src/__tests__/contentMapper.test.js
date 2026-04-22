@@ -84,3 +84,53 @@ describe('mapToContent', () => {
     expect(() => mapToContent('')).not.toThrow()
   })
 })
+
+describe('mapToContent — real-world patterns', () => {
+  test('parses numbered bullet points (1. 2. 3.)', () => {
+    const text = `
+Jane Doe
+jane@example.com
+
+EXPERIENCE
+Acme Corp, New York — Senior Engineer
+Jan 2022 - Present
+1. Led a team of 5 engineers
+2. Reduced deployment time by 40%
+`
+    const content = mapToContent(text)
+    expect(content.experience[0].bullets.length).toBeGreaterThanOrEqual(2)
+    expect(content.experience[0].bullets[0]).toMatch(/Led a team/)
+  })
+
+  test('parses Company, Location — Role format correctly', () => {
+    const text = `
+Jane Doe
+jane@example.com
+
+EXPERIENCE
+Nutanix, Bengaluru — Member of Technical Staff-4
+November 2020 - Present
+1. Built networking interfaces
+`
+    const content = mapToContent(text)
+    const exp = content.experience[0]
+    expect(exp.company).toBe('Nutanix')
+    expect(exp.location).toBe('Bengaluru')
+    expect(exp.role).toBe('Member of Technical Staff-4')
+  })
+
+  test('detects EXTRA-CURRICULARS section', () => {
+    const text = `
+Jane Doe
+jane@example.com
+
+SKILLS
+JavaScript, React
+
+EXTRA-CURRICULARS
+Music Production
+`
+    const content = mapToContent(text)
+    expect(content.sectionOrder).toContain('custom')
+  })
+})
