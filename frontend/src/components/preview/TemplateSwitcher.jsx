@@ -1,19 +1,33 @@
 import { useResumeStore } from '../../store/useResumeStore'
 
-const TEMPLATES = ['classic', 'modern', 'minimal', 'executive', 'creative']
+const TEMPLATES = [
+  { id: 'classic',   label: 'Classic'   },
+  { id: 'modern',    label: 'Modern'    },
+  { id: 'minimal',   label: 'Minimal'   },
+  { id: 'executive', label: 'Executive' },
+  { id: 'creative',  label: 'Creative'  },
+]
 
 export default function TemplateSwitcher() {
-  const templateId    = useResumeStore((s) => s.templateId)
-  const setTemplateId = useResumeStore((s) => s.setTemplateId)
+  const templateId    = useResumeStore(s => s.templateId)
+  const setTemplateId = useResumeStore(s => s.setTemplateId)
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-      {TEMPLATES.map((t) => (
-        <button key={t} onClick={() => setTemplateId(t)}
-          style={{ padding: '8px 14px', borderRadius: '6px', border: templateId === t ? '2px solid #6c63ff' : '1px solid #ddd', background: templateId === t ? '#6c63ff' : '#fff', color: templateId === t ? '#fff' : '#333', fontWeight: 600, cursor: 'pointer', textTransform: 'capitalize', textAlign: 'left' }}>
-          {t}
-        </button>
-      ))}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+      {TEMPLATES.map(({ id, label }) => {
+        const active = templateId === id
+        return (
+          <button key={id} type="button" onClick={() => setTemplateId(id)}
+            style={{
+              padding: '8px 12px', borderRadius: '6px', fontSize: '13px', fontWeight: 600, textAlign: 'left', cursor: 'pointer', transition: 'all 0.15s',
+              background: active ? '#eff6ff' : '#fff',
+              border: `1.5px solid ${active ? '#3b82f6' : '#e2e8f0'}`,
+              color: active ? '#3b82f6' : '#334155',
+            }}>
+            {label}
+          </button>
+        )
+      })}
     </div>
   )
 }

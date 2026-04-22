@@ -22,5 +22,5 @@ test('/build renders BuildPage', () => {
 
 test('/preview renders PreviewPage', () => {
   renderAt('/preview')
-  expect(screen.getByText(/resume preview/i)).toBeInTheDocument()
+  expect(screen.getByText(/← Back to Edit/i)).toBeInTheDocument()
 })
