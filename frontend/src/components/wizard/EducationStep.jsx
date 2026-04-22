@@ -1,34 +1,48 @@
 import { useResumeStore } from '../../store/useResumeStore'
 
-const fs = { width: '100%', padding: '8px 10px', border: '1px solid #ddd', borderRadius: '6px', fontSize: '0.95rem', marginBottom: '8px' }
+const card      = { background: '#fff', borderRadius: '10px', padding: '28px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', maxWidth: '680px' }
+const inp       = { width: '100%', padding: '9px 13px', border: '1px solid #e2e8f0', borderRadius: '6px', fontSize: '14px', color: '#334155', background: '#fff', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit', marginBottom: '10px' }
+const entryCard = { border: '1px solid #e2e8f0', borderRadius: '8px', padding: '20px', marginBottom: '14px' }
+const addBtn    = { width: '100%', padding: '10px', border: '2px dashed #bfdbfe', borderRadius: '8px', background: 'none', color: '#3b82f6', fontWeight: 600, fontSize: '14px', cursor: 'pointer' }
+const rmBtn     = { background: 'none', border: 'none', color: '#ef4444', fontWeight: 600, fontSize: '13px', cursor: 'pointer', padding: '0' }
+
+const focusStyle = e => { e.target.style.borderColor='#3b82f6'; e.target.style.boxShadow='0 0 0 3px #eff6ff' }
+const blurStyle  = e => { e.target.style.borderColor='#e2e8f0'; e.target.style.boxShadow='none' }
 
 export default function EducationStep() {
-  const education      = useResumeStore((s) => s.content.education)
-  const addEducation   = useResumeStore((s) => s.addEducation)
-  const updateEducation  = useResumeStore((s) => s.updateEducation)
-  const removeEducation  = useResumeStore((s) => s.removeEducation)
+  const education       = useResumeStore(s => s.content.education)
+  const addEducation    = useResumeStore(s => s.addEducation)
+  const updateEducation = useResumeStore(s => s.updateEducation)
+  const removeEducation = useResumeStore(s => s.removeEducation)
+
+  const fi = (id, name, value, placeholder) => (
+    <input style={inp} placeholder={placeholder} value={value}
+      onChange={e => updateEducation(id, { [name]: e.target.value })}
+      onFocus={focusStyle} onBlur={blurStyle} />
+  )
 
   return (
-    <div>
+    <div style={card}>
+      <p style={{ margin: '0 0 20px', color: '#64748b', fontSize: '14px' }}>Add your degrees and certifications, most recent first.</p>
       {education.map((edu, i) => (
-        <div key={edu.id} style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '16px', marginBottom: '16px', background: '#fff' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-            <strong>Entry {i + 1}</strong>
-            <button onClick={() => removeEducation(edu.id)} style={{ color: '#e53e3e', background: 'none', border: 'none', cursor: 'pointer' }}>Remove</button>
+        <div key={edu.id} style={entryCard}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+            <span style={{ fontWeight: 700, fontSize: '14px', color: '#0f172a' }}>Entry {i + 1}</span>
+            <button type="button" style={rmBtn} onClick={() => removeEducation(edu.id)}>Remove</button>
           </div>
-          <input style={fs} placeholder="Institution" value={edu.institution} onChange={(e) => updateEducation(edu.id, { institution: e.target.value })} />
-          <input style={fs} placeholder="Degree (e.g. B.S.)" value={edu.degree} onChange={(e) => updateEducation(edu.id, { degree: e.target.value })} />
-          <input style={fs} placeholder="Field of Study" value={edu.field} onChange={(e) => updateEducation(edu.id, { field: e.target.value })} />
-          <div style={{ display: 'flex', gap: '8px' }}>
-            <input style={{ ...fs, flex: 1 }} placeholder="Start Year" value={edu.startDate} onChange={(e) => updateEducation(edu.id, { startDate: e.target.value })} />
-            <input style={{ ...fs, flex: 1 }} placeholder="End Year"   value={edu.endDate}   onChange={(e) => updateEducation(edu.id, { endDate:   e.target.value })} />
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 12px' }}>
+            {fi(edu.id, 'institution', edu.institution, 'Institution')}
+            {fi(edu.id, 'degree',      edu.degree,      'Degree (e.g. B.Tech)')}
+            {fi(edu.id, 'field',       edu.field,       'Field of Study')}
+            {fi(edu.id, 'gpa',         edu.gpa,         'GPA / Grade (optional)')}
+            <input style={{ ...inp, flex: 1 }} placeholder="Start Year" value={edu.startDate}
+              onChange={e => updateEducation(edu.id, { startDate: e.target.value })} onFocus={focusStyle} onBlur={blurStyle} />
+            <input style={{ ...inp, flex: 1 }} placeholder="End Year"   value={edu.endDate}
+              onChange={e => updateEducation(edu.id, { endDate: e.target.value })}   onFocus={focusStyle} onBlur={blurStyle} />
           </div>
-          <input style={fs} placeholder="GPA (optional)" value={edu.gpa} onChange={(e) => updateEducation(edu.id, { gpa: e.target.value })} />
         </div>
       ))}
-      <button onClick={addEducation} style={{ padding: '10px 20px', border: '2px dashed #6c63ff', borderRadius: '6px', color: '#6c63ff', background: 'none', cursor: 'pointer', width: '100%', fontWeight: 600 }}>
-        + Add Education
-      </button>
+      <button type="button" style={addBtn} onClick={addEducation}>+ Add Education</button>
     </div>
   )
 }
