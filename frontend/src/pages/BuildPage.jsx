@@ -10,13 +10,13 @@ import TemplatePickerStep   from '../components/wizard/TemplatePickerStep'
 import PreviewStep          from '../components/wizard/PreviewStep'
 
 const STEPS = [
-  { title: 'Personal Info',       component: PersonalInfoStep     },
-  { title: 'Work Experience',     component: ExperienceStep       },
-  { title: 'Education',           component: EducationStep        },
-  { title: 'Skills',              component: SkillsStep           },
-  { title: 'Optional Sections',   component: OptionalSectionsStep },
-  { title: 'Choose Template',     component: TemplatePickerStep   },
-  { title: 'Preview & Download',  component: PreviewStep          }
+  { title: 'Personal Info',      component: PersonalInfoStep     },
+  { title: 'Work Experience',    component: ExperienceStep       },
+  { title: 'Education',          component: EducationStep        },
+  { title: 'Skills',             component: SkillsStep           },
+  { title: 'Optional Sections',  component: OptionalSectionsStep },
+  { title: 'Choose Template',    component: TemplatePickerStep   },
+  { title: 'Preview',            component: PreviewStep          },
 ]
 
 export default function BuildPage() {
@@ -25,7 +25,11 @@ export default function BuildPage() {
 
   function handleNext() {
     if (currentStep === STEPS.length - 1) navigate('/preview')
-    else setCurrentStep((s) => Math.min(s + 1, STEPS.length - 1))
+    else setCurrentStep(s => Math.min(s + 1, STEPS.length - 1))
+  }
+
+  function handleStepClick(index) {
+    if (index < currentStep) setCurrentStep(index)
   }
 
   return (
@@ -33,7 +37,7 @@ export default function BuildPage() {
       steps={STEPS}
       currentStep={currentStep}
       onNext={handleNext}
-      onBack={() => setCurrentStep((s) => Math.max(s - 1, 0))}
+      onStepClick={handleStepClick}
     />
   )
 }
