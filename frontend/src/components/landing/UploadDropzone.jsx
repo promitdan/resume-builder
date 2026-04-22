@@ -25,7 +25,7 @@ export default function UploadDropzone() {
       form.append('file', file)
       const { data } = await axios.post('/api/upload', form)
       setContent(data.content)
-      navigate('/build')
+      navigate('/preview')
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to parse file. Please try again.')
     } finally {
