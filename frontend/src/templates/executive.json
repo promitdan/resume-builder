@@ -39,7 +39,7 @@
   "header": { "placement": "top-full-bleed", "alignment": "left", "showAvatar": false, "dividerStyle": "thick" },
   "sections": {
     "type": "single-column",
-    "order": ["personal", "experience", "education", "projects", "certifications", "awards", "languages", "custom"],
+    "order": ["personal", "skills", "experience", "education", "projects", "certifications", "awards", "languages", "custom"],
     "dividerStyle": "left-border", "bulletStyle": "bullet", "dateAlignment": "inline-right", "labelWeight": "bold"
   }
 }
