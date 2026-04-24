@@ -3,45 +3,37 @@
   "name": "Minimal",
   "layout": {
     "type": "single-column",
-    "pageMarginTop": "0.75in",
-    "pageMarginSides": "0.75in",
-    "sectionSpacing": "20px",
-    "itemSpacing": "12px"
+    "pageMarginTop": "0",
+    "pageMarginSides": "0",
+    "sectionSpacing": "32px",
+    "itemSpacing": "20px"
   },
   "colors": {
     "mainBackground": "#ffffff",
     "mainText": "#222222",
     "headingText": "#111111",
-    "accentColor": "#888888",
+    "accentColor": "#aaaaaa",
     "dividerColor": "#eeeeee",
     "mutedText": "#999999"
   },
   "typography": {
-    "nameFont": "'Helvetica Neue', Arial, sans-serif",
-    "nameFontSize": "26px",
+    "nameFont": "Inter, sans-serif",
+    "nameFontSize": "32px",
     "nameFontWeight": "300",
-    "titleFont": "'Helvetica Neue', Arial, sans-serif",
-    "titleFontSize": "12px",
-    "sectionLabelFont": "'Helvetica Neue', Arial, sans-serif",
+    "titleFont": "Inter, sans-serif",
+    "titleFontSize": "14px",
+    "sectionLabelFont": "Inter, sans-serif",
     "sectionLabelSize": "9px",
     "sectionLabelStyle": "uppercase",
     "sectionLabelSpacing": "3px",
-    "bodyFont": "'Helvetica Neue', Arial, sans-serif",
-    "bodyFontSize": "10.5px",
-    "bodyLineHeight": "1.6"
+    "bodyFont": "Inter, sans-serif",
+    "bodyFontSize": "11.5px",
+    "bodyLineHeight": "1.65"
   },
-  "header": {
-    "placement": "top-left",
-    "alignment": "left",
-    "showAvatar": false,
-    "dividerStyle": "thin-light"
-  },
+  "header": { "placement": "top-left", "alignment": "left", "showAvatar": false, "dividerStyle": "none" },
   "sections": {
     "type": "single-column",
-    "order": ["personal", "experience", "education", "skills", "projects", "certifications", "awards", "languages", "custom"],
-    "dividerStyle": "none",
-    "bulletStyle": "none",
-    "dateAlignment": "inline-right",
-    "labelWeight": "normal"
+    "order": ["personal", "skills", "experience", "education", "projects", "certifications", "awards", "languages", "custom"],
+    "dividerStyle": "none", "bulletStyle": "none", "dateAlignment": "inline-right", "labelWeight": "normal"
   }
 }

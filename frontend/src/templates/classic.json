@@ -3,45 +3,37 @@
   "name": "Classic",
   "layout": {
     "type": "single-column",
-    "pageMarginTop": "0.75in",
-    "pageMarginSides": "0.75in",
-    "sectionSpacing": "16px",
-    "itemSpacing": "10px"
+    "pageMarginTop": "0",
+    "pageMarginSides": "0",
+    "sectionSpacing": "18px",
+    "itemSpacing": "12px"
   },
   "colors": {
     "mainBackground": "#ffffff",
-    "mainText": "#111111",
+    "mainText": "#1a1a1a",
     "headingText": "#111111",
     "accentColor": "#111111",
-    "dividerColor": "#222222",
+    "dividerColor": "#cccccc",
     "mutedText": "#555555"
   },
   "typography": {
-    "nameFont": "Georgia, serif",
-    "nameFontSize": "24px",
+    "nameFont": "'Playfair Display', Georgia, serif",
+    "nameFontSize": "28px",
     "nameFontWeight": "700",
-    "titleFont": "Georgia, serif",
+    "titleFont": "'Lora', Georgia, serif",
     "titleFontSize": "13px",
-    "sectionLabelFont": "Georgia, serif",
-    "sectionLabelSize": "11px",
+    "sectionLabelFont": "'Playfair Display', Georgia, serif",
+    "sectionLabelSize": "9px",
     "sectionLabelStyle": "uppercase",
-    "sectionLabelSpacing": "1.5px",
-    "bodyFont": "Georgia, serif",
-    "bodyFontSize": "10.5px",
-    "bodyLineHeight": "1.5"
+    "sectionLabelSpacing": "3px",
+    "bodyFont": "'Lora', Georgia, serif",
+    "bodyFontSize": "11px",
+    "bodyLineHeight": "1.6"
   },
-  "header": {
-    "placement": "top-center",
-    "alignment": "center",
-    "showAvatar": false,
-    "dividerStyle": "solid-thick"
-  },
+  "header": { "placement": "top-center", "alignment": "center", "showAvatar": false, "dividerStyle": "solid-thick" },
   "sections": {
     "type": "single-column",
-    "order": ["personal", "experience", "education", "skills", "projects", "certifications", "awards", "languages", "custom"],
-    "dividerStyle": "solid",
-    "bulletStyle": "bullet",
-    "dateAlignment": "inline-right",
-    "labelWeight": "bold"
+    "order": ["personal", "skills", "experience", "education", "projects", "certifications", "awards", "languages", "custom"],
+    "dividerStyle": "solid", "bulletStyle": "bullet", "dateAlignment": "inline-right", "labelWeight": "bold"
   }
 }

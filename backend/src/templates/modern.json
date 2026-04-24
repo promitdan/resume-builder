@@ -4,49 +4,41 @@
   "layout": {
     "type": "two-column",
     "sidebarPosition": "left",
-    "sidebarWidthPercent": 35,
+    "sidebarWidthPercent": 38,
     "pageMarginTop": "0in",
     "pageMarginSides": "0in",
     "sectionSpacing": "14px",
-    "itemSpacing": "8px"
+    "itemSpacing": "12px"
   },
   "colors": {
     "sidebarBackground": "#1e3a5f",
-    "sidebarText": "#ffffff",
-    "sidebarAccent": "#4a9eda",
+    "sidebarText": "#d6e8ff",
+    "sidebarAccent": "#4a9eff",
     "mainBackground": "#ffffff",
     "mainText": "#222222",
     "headingText": "#1e3a5f",
-    "accentColor": "#4a9eda",
-    "dividerColor": "#4a9eda",
+    "accentColor": "#4a9eff",
+    "dividerColor": "#4a9eff",
     "mutedText": "#666666"
   },
   "typography": {
-    "nameFont": "Arial, sans-serif",
-    "nameFontSize": "22px",
+    "nameFont": "Inter, sans-serif",
+    "nameFontSize": "15px",
     "nameFontWeight": "700",
-    "titleFont": "Arial, sans-serif",
-    "titleFontSize": "12px",
-    "sectionLabelFont": "Arial, sans-serif",
-    "sectionLabelSize": "10px",
+    "titleFont": "Inter, sans-serif",
+    "titleFontSize": "11px",
+    "sectionLabelFont": "Inter, sans-serif",
+    "sectionLabelSize": "9px",
     "sectionLabelStyle": "uppercase",
-    "sectionLabelSpacing": "2px",
-    "bodyFont": "Arial, sans-serif",
-    "bodyFontSize": "10px",
-    "bodyLineHeight": "1.5"
+    "sectionLabelSpacing": "2.5px",
+    "bodyFont": "Inter, sans-serif",
+    "bodyFontSize": "11px",
+    "bodyLineHeight": "1.6"
   },
-  "header": {
-    "placement": "sidebar-top",
-    "alignment": "center",
-    "showAvatar": true,
-    "avatarStyle": "circle",
-    "avatarSizePx": 64
-  },
+  "header": { "placement": "sidebar-top", "alignment": "center", "showAvatar": true, "avatarStyle": "circle", "avatarSizePx": 64 },
   "sections": {
-    "dividerStyle": "solid-accent",
-    "bulletStyle": "dash",
-    "dateAlignment": "inline-right",
-    "sidebarSections": ["personal-contact", "skills", "languages", "certifications"],
-    "mainSections": ["experience", "education", "projects", "awards", "custom"]
+    "dividerStyle": "solid-accent", "bulletStyle": "bullet", "dateAlignment": "inline-right",
+    "sidebarSections": ["personal-contact", "skills", "education"],
+    "mainSections": ["experience", "projects", "awards", "custom"]
   }
 }
