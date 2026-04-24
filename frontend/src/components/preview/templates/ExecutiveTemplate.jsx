@@ -21,10 +21,10 @@ export default function ExecutiveTemplate({ content = {} }) {
   return (
     <div style={{ fontFamily: ty.bodyFont, fontSize: ty.bodyFontSize, color: c.mainText, lineHeight: ty.bodyLineHeight }}>
       <div style={{ background: c.headerBackground, color: c.headerText, padding: '40px 52px 32px' }}>
-        <div style={{ fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, letterSpacing: ty.nameLetterSpacing || '1px', textTransform: 'uppercase', color: '#fff', marginBottom: '6px' }}>{personal.name}</div>
+        <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, letterSpacing: ty.nameLetterSpacing || '1px', textTransform: 'uppercase', color: '#fff', marginBottom: '6px' }}>{personal.name}</div>
         {personal.title && <div style={{ fontSize: '13px', fontWeight: '400', color: c.headerMuted, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '20px' }}>{personal.title}</div>}
         <div style={{ display: 'flex', gap: '24px', fontSize: '11px', color: '#cbd5e0', flexWrap: 'wrap' }}>
-          {[personal.email, personal.phone, personal.location].filter(Boolean).map(v => <span key={v}>{v}</span>)}
+          {[personal.email, personal.phone, personal.location].filter(Boolean).map((v, i) => <span key={i}>{v}</span>)}
         </div>
       </div>
 
@@ -41,7 +41,7 @@ export default function ExecutiveTemplate({ content = {} }) {
       <div style={{ padding: '28px 52px 40px' }}>
         {personal.summary && (
           <div>
-            {sectionLabel('Professional Summary', visibleMainKeys.length === 0)}
+            {sectionLabel('Professional Summary', true)}
             <div style={{ fontSize: '11.5px', lineHeight: '1.7', color: '#333' }}>{personal.summary}</div>
           </div>
         )}
