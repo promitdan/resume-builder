@@ -1,9 +1,17 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import UploadDropzone from '../components/landing/UploadDropzone'
+import { useResumeStore } from '../store/useResumeStore'
 
 export default function LandingPage() {
   const [showUpload, setShowUpload] = useState(false)
+  const navigate = useNavigate()
+  const loadMockData = useResumeStore(s => s.loadMockData)
+
+  const handleLoadSample = () => {
+    loadMockData()
+    navigate('/preview')
+  }
 
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
@@ -35,7 +43,7 @@ export default function LandingPage() {
           </p>
 
           {/* CTAs */}
-          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', marginBottom: '16px', flexWrap: 'wrap' }}>
             <Link to="/build" style={{ textDecoration: 'none', background: '#3b82f6', color: '#fff', fontWeight: 600, fontSize: '15px', padding: '12px 24px', borderRadius: '8px', display: 'inline-block' }}
               onMouseEnter={e => e.target.style.background='#2563eb'}
               onMouseLeave={e => e.target.style.background='#3b82f6'}>
@@ -45,6 +53,13 @@ export default function LandingPage() {
               onClick={() => setShowUpload(v => !v)}
               style={{ background: '#fff', color: '#334155', fontWeight: 600, fontSize: '15px', padding: '12px 24px', borderRadius: '8px', border: '1.5px solid #e2e8f0', cursor: 'pointer' }}>
               ⬆ Upload resume
+            </button>
+          </div>
+          <div style={{ marginBottom: '24px' }}>
+            <button
+              onClick={handleLoadSample}
+              style={{ background: 'none', border: 'none', color: '#94a3b8', fontSize: '13px', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
+              or load sample data to preview all templates
             </button>
           </div>
 

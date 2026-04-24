@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useResumeStore } from '../../store/useResumeStore'
 import { v4 as uuid } from 'uuid'
 
@@ -13,10 +14,31 @@ export default function SkillsStep() {
   const skills       = useResumeStore(s => s.content.skills)
   const updateSkills = useResumeStore(s => s.updateSkills)
 
-  const add     = ()          => updateSkills([...skills, { id: uuid(), category: '', items: [] }])
-  const remove  = id          => updateSkills(skills.filter(s => s.id !== id))
-  const update  = (id, k, v)  => updateSkills(skills.map(s => s.id === id ? { ...s, [k]: v } : s))
-  const setItems = (id, raw)  => update(id, 'items', raw.split(',').map(s => s.trim()).filter(Boolean))
+  // Local state for raw comma text — prevents the input from collapsing while typing "React, TypeScript"
+  const [rawItems, setRawItems] = useState(() =>
+    Object.fromEntries(skills.map(sk => [sk.id, sk.items.join(', ')]))
+  )
+
+  const add = () => {
+    const newSkill = { id: uuid(), category: '', items: [] }
+    updateSkills([...skills, newSkill])
+    setRawItems(prev => ({ ...prev, [newSkill.id]: '' }))
+  }
+
+  const remove = (id) => {
+    updateSkills(skills.filter(s => s.id !== id))
+    setRawItems(prev => { const next = { ...prev }; delete next[id]; return next })
+  }
+
+  const update = (id, k, v) => updateSkills(skills.map(s => s.id === id ? { ...s, [k]: v } : s))
+
+  const handleItemsChange = (id, raw) => setRawItems(prev => ({ ...prev, [id]: raw }))
+
+  const handleItemsBlur = (id, raw) => {
+    const items = raw.split(',').map(s => s.trim()).filter(Boolean)
+    update(id, 'items', items)
+    setRawItems(prev => ({ ...prev, [id]: items.join(', ') }))
+  }
 
   return (
     <div style={card}>
@@ -27,10 +49,22 @@ export default function SkillsStep() {
             <span style={{ fontWeight: 700, fontSize: '14px', color: '#0f172a' }}>Category {i + 1}</span>
             <button type="button" style={rmBtn} onClick={() => remove(sk.id)}>Remove</button>
           </div>
-          <input style={inp} placeholder="Category name (e.g. Frontend)" value={sk.category}
-            onChange={e => update(sk.id, 'category', e.target.value)} onFocus={focusStyle} onBlur={blurStyle} />
-          <input style={{ ...inp, marginBottom: 0 }} placeholder="Skills, comma-separated (e.g. React, TypeScript, CSS)" value={sk.items.join(', ')}
-            onChange={e => setItems(sk.id, e.target.value)} onFocus={focusStyle} onBlur={blurStyle} />
+          <input
+            style={inp}
+            placeholder="Category name (e.g. Frontend)"
+            value={sk.category}
+            onChange={e => update(sk.id, 'category', e.target.value)}
+            onFocus={focusStyle}
+            onBlur={blurStyle}
+          />
+          <input
+            style={{ ...inp, marginBottom: 0 }}
+            placeholder="Skills, comma-separated (e.g. React, TypeScript, CSS)"
+            value={rawItems[sk.id] ?? sk.items.join(', ')}
+            onChange={e => handleItemsChange(sk.id, e.target.value)}
+            onBlur={e => { blurStyle(e); handleItemsBlur(sk.id, e.target.value) }}
+            onFocus={focusStyle}
+          />
         </div>
       ))}
       <button type="button" style={addBtn} onClick={add}>+ Add Skill Category</button>
