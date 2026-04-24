@@ -63,8 +63,8 @@ export default function ClassicTemplate({ content = {} }) {
                       {e.role}{e.role && e.location ? ' · ' : ''}{e.location}
                     </div>
                   )}
-                  {e.bullets?.filter(Boolean).map((b, i) => (
-                    <div key={i} style={{ fontSize: '10.5px', lineHeight: '1.6', color: '#333', marginBottom: '3px' }}>• {b}</div>
+                  {e.bullets?.filter(Boolean).map((b, bi) => (
+                    <div key={bi} style={{ fontSize: '10.5px', lineHeight: '1.6', color: '#333', marginBottom: '3px' }}>• {b}</div>
                   ))}
                 </div>
               ))}
@@ -78,7 +78,7 @@ export default function ClassicTemplate({ content = {} }) {
                 <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                     <div style={{ fontSize: '12px', fontWeight: '700', color: c.headingText }}>{e.institution}</div>
-                    <div style={{ fontSize: '10px', color: '#666', fontStyle: 'italic' }}>{e.endDate}</div>
+                    {e.endDate && <div style={{ fontSize: '10px', color: c.mutedText, fontStyle: 'italic' }}>{e.endDate}</div>}
                   </div>
                   <div style={{ fontSize: ty.bodyFontSize, fontStyle: 'italic', color: c.mainText }}>
                     {[e.degree, e.field].filter(Boolean).join(' ')}
