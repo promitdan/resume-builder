@@ -12,7 +12,7 @@ export default function ModernTemplate({ content = {} }) {
     <div style={{ fontSize: '9px', fontWeight: '700', letterSpacing: '2.5px', textTransform: 'uppercase', color: c.headingText, borderBottom: `2px solid ${c.sidebarAccent}`, paddingBottom: '4px', marginBottom: '14px', marginTop: '20px' }}>{text}</div>
   )
 
-  const allSkillItems = skills.flatMap(sk => sk.items)
+  const allSkillItems = skills.flatMap(sk => sk.items ?? [])
 
   return (
     <div style={{ display: 'flex', fontFamily: ty.bodyFont, fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, minHeight: '11in' }}>
@@ -83,6 +83,7 @@ export default function ModernTemplate({ content = {} }) {
               ))}
             </div>
           )
+          // projects, awards, custom not implemented for this template
           return null
         })}
       </div>
