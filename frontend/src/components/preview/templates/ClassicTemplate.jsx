@@ -16,8 +16,8 @@ export default function ClassicTemplate({ content = {} }) {
 
   return (
     <div style={{ fontFamily: ty.bodyFont, fontSize: ty.bodyFontSize, color: c.mainText, lineHeight: ty.bodyLineHeight }}>
-      <div style={{ textAlign: 'center', padding: '36px 56px 18px', borderBottom: `2px solid ${c.headingText}` }}>
-        <div style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, letterSpacing: '3px', textTransform: 'uppercase', color: c.headingText }}>{personal.name}</div>
+      <div style={{ textAlign: 'center', padding: '36px 56px 18px', borderBottom: `2px solid ${c.dividerColor}` }}>
+        <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, letterSpacing: '3px', textTransform: 'uppercase', color: c.headingText }}>{personal.name}</div>
         {personal.title && <div style={{ fontStyle: 'italic', fontSize: ty.titleFontSize, color: '#555', marginTop: '6px', letterSpacing: '0.5px' }}>{personal.title}</div>}
         <div style={{ fontSize: '10.5px', color: '#666', marginTop: '8px' }}>
           {[personal.email, personal.phone, personal.location, personal.linkedin, personal.website].filter(Boolean).join(' · ')}
@@ -40,7 +40,7 @@ export default function ClassicTemplate({ content = {} }) {
                 {sectionLabel('Core Competencies')}
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
                   {allItems.map((item, i) => (
-                    <span key={i} style={{ background: '#f2f2f2', border: '1px solid #ccc', borderRadius: '3px', padding: '3px 10px', fontSize: '10px', fontFamily: 'Inter, sans-serif', color: '#333' }}>{item}</span>
+                    <span key={i} style={{ display: 'inline-block', background: '#f2f2f2', border: '1px solid #ccc', borderRadius: '3px', padding: '3px 10px', fontSize: '10px', color: '#333' }}>{item}</span>
                   ))}
                 </div>
               </div>
@@ -64,7 +64,7 @@ export default function ClassicTemplate({ content = {} }) {
                     </div>
                   )}
                   {e.bullets?.filter(Boolean).map((b, i) => (
-                    <div key={i} style={{ fontSize: '10.5px', lineHeight: '1.6', color: '#333', fontFamily: 'Inter, sans-serif', marginBottom: '3px' }}>• {b}</div>
+                    <div key={i} style={{ fontSize: '10.5px', lineHeight: '1.6', color: '#333', marginBottom: '3px' }}>• {b}</div>
                   ))}
                 </div>
               ))}
