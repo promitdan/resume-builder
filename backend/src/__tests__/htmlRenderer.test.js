@@ -51,4 +51,38 @@ describe('renderToHtml', () => {
   test('throws for unknown templateId', () => {
     expect(() => renderToHtml(sampleContent, 'nonexistent')).toThrow()
   })
+
+  test.each(['classic', 'modern', 'minimal', 'executive', 'creative'])(
+    '%s template includes name, company, institution, and skill',
+    (templateId) => {
+      const html = renderToHtml(sampleContent, templateId)
+      expect(html).toContain('Jane Doe')
+      expect(html).toContain('Acme')
+      expect(html).toContain('State U')
+      expect(html).toContain('JavaScript')
+    }
+  )
+
+  test('modern template output contains sidebar element', () => {
+    const html = renderToHtml(sampleContent, 'modern')
+    expect(html).toContain('sidebar')
+  })
+
+  test('executive template skills appear as badge spans', () => {
+    const html = renderToHtml(sampleContent, 'executive')
+    expect(html).toContain('JavaScript')
+    expect(html).toContain('border-radius:3px')
+  })
+
+  test('creative template skills appear as rounded pill spans', () => {
+    const html = renderToHtml(sampleContent, 'creative')
+    expect(html).toContain('JavaScript')
+    expect(html).toContain('border-radius:20px')
+  })
+
+  test('classic template skills appear as pill spans', () => {
+    const html = renderToHtml(sampleContent, 'classic')
+    expect(html).toContain('JavaScript')
+    expect(html).toContain('border-radius:3px')
+  })
 })

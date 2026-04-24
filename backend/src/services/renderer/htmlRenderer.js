@@ -9,10 +9,13 @@ function loadTemplate(templateId) {
 
 function esc(str) {
   return String(str || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+}
+
+function renderBullets(bullets = []) {
+  const items = bullets.filter(Boolean)
+  if (!items.length) return ''
+  return items.map(b => `<div style="margin-bottom:2px;">• ${esc(b)}</div>`).join('')
 }
 
 function renderContact(personal) {
@@ -20,243 +23,352 @@ function renderContact(personal) {
     .filter(Boolean).map(esc).join(' &nbsp;·&nbsp; ')
 }
 
-function renderBullets(bullets = [], bulletStyle) {
-  if (!bullets.length) return ''
-  const marker = bulletStyle === 'dash' ? '–' : '•'
-  return `<ul style="margin:4px 0 0 16px;padding:0;list-style:none;">
-    ${bullets.map((b) => `<li style="margin-bottom:2px;">${marker} ${esc(b)}</li>`).join('')}
-  </ul>`
-}
-
-function renderSectionLabel(label, t) {
-  const { colors, typography } = t
-  return `<div style="
-    font-family:${typography.sectionLabelFont};
-    font-size:${typography.sectionLabelSize};
-    font-weight:${t.sections.labelWeight || 'bold'};
-    text-transform:${typography.sectionLabelStyle};
-    letter-spacing:${typography.sectionLabelSpacing};
-    color:${colors.headingText};
-    border-bottom:${t.sections.dividerStyle === 'none' ? 'none' : `1px solid ${colors.dividerColor}`};
-    margin-bottom:6px;padding-bottom:3px;margin-top:14px;
-  ">${esc(label)}</div>`
-}
-
-function renderExperience(entries, t) {
-  if (!entries.length) return ''
-  return renderSectionLabel('Experience', t) + entries.map((e) => `
-    <div style="margin-bottom:${t.layout.itemSpacing};">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;">
-        <span style="font-weight:bold;font-size:${t.typography.bodyFontSize};color:${t.colors.mainText};">${esc(e.role)}${e.role && e.company ? ' — ' : ''}${esc(e.company)}</span>
-        <span style="font-size:${t.typography.bodyFontSize};color:${t.colors.mutedText};">${esc(e.startDate)}${e.startDate ? ' – ' : ''}${esc(e.current ? 'Present' : e.endDate)}</span>
-      </div>
-      ${e.location ? `<div style="font-size:${t.typography.bodyFontSize};color:${t.colors.mutedText};">${esc(e.location)}</div>` : ''}
-      ${renderBullets(e.bullets, t.sections.bulletStyle)}
-    </div>`).join('')
-}
-
-function renderEducation(entries, t) {
-  if (!entries.length) return ''
-  return renderSectionLabel('Education', t) + entries.map((e) => `
-    <div style="margin-bottom:${t.layout.itemSpacing};">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;">
-        <span style="font-weight:bold;font-size:${t.typography.bodyFontSize};color:${t.colors.mainText};">${esc(e.degree)} ${esc(e.field)}</span>
-        <span style="font-size:${t.typography.bodyFontSize};color:${t.colors.mutedText};">${esc(e.endDate)}</span>
-      </div>
-      <div style="font-size:${t.typography.bodyFontSize};color:${t.colors.mutedText};">${esc(e.institution)}</div>
-      ${e.gpa ? `<div style="font-size:${t.typography.bodyFontSize};color:${t.colors.mutedText};">GPA: ${esc(e.gpa)}</div>` : ''}
-    </div>`).join('')
-}
-
-function renderSkills(skills, t) {
-  if (!skills.length) return ''
-  return renderSectionLabel('Skills', t) + skills.map((s) => `
-    <div style="margin-bottom:6px;">
-      ${s.category ? `<span style="font-weight:bold;font-size:${t.typography.bodyFontSize};color:${t.colors.mainText};">${esc(s.category)}: </span>` : ''}
-      <span style="font-size:${t.typography.bodyFontSize};color:${t.colors.mainText};">${s.items.map(esc).join(', ')}</span>
-    </div>`).join('')
-}
-
-function renderProjects(projects, t) {
-  if (!projects.length) return ''
-  return renderSectionLabel('Projects', t) + projects.map((p) => `
-    <div style="margin-bottom:${t.layout.itemSpacing};">
-      <div style="font-weight:bold;font-size:${t.typography.bodyFontSize};color:${t.colors.mainText};">${esc(p.name)}${p.url ? ` — <a href="${esc(p.url)}" style="color:${t.colors.accentColor};">${esc(p.url)}</a>` : ''}</div>
-      ${p.description ? `<div style="font-size:${t.typography.bodyFontSize};color:${t.colors.mainText};">${esc(p.description)}</div>` : ''}
-      ${renderBullets(p.bullets, t.sections.bulletStyle)}
-    </div>`).join('')
-}
-
-function renderCertifications(certs, t) {
-  if (!certs.length) return ''
-  return renderSectionLabel('Certifications', t) + certs.map((c) => `
-    <div style="margin-bottom:4px;font-size:${t.typography.bodyFontSize};color:${t.colors.mainText};">
-      <strong>${esc(c.name)}</strong>${c.issuer ? ` — ${esc(c.issuer)}` : ''}${c.date ? `, ${esc(c.date)}` : ''}
-    </div>`).join('')
-}
-
-function renderLanguages(langs, t) {
-  if (!langs.length) return ''
-  return renderSectionLabel('Languages', t) + langs.map((l) => `
-    <div style="font-size:${t.typography.bodyFontSize};color:${t.colors.mainText};">${esc(l.language)}${l.proficiency ? ` — ${esc(l.proficiency)}` : ''}</div>`).join('')
-}
-
-function renderAwards(awards, t) {
-  if (!awards.length) return ''
-  return renderSectionLabel('Awards', t) + awards.map((a) => `
-    <div style="margin-bottom:4px;">
-      <div style="font-weight:bold;font-size:${t.typography.bodyFontSize};color:${t.colors.mainText};">${esc(a.title)}${a.issuer ? ` — ${esc(a.issuer)}` : ''}</div>
-      ${a.description ? `<div style="font-size:${t.typography.bodyFontSize};color:${t.colors.mutedText};">${esc(a.description)}</div>` : ''}
-    </div>`).join('')
-}
-
-function renderCustom(items, t) {
-  if (!items.length) return ''
-  const label = items[0]?.label || 'Other'
-  return renderSectionLabel(label, t) + items.map((i) => `
-    <div style="font-size:${t.typography.bodyFontSize};color:${t.colors.mainText};">${esc(i.content)}</div>`).join('')
-}
-
-function renderSection(key, content, t) {
-  switch (key) {
-    case 'experience':     return renderExperience(content.experience, t)
-    case 'education':      return renderEducation(content.education, t)
-    case 'skills':         return renderSkills(content.skills, t)
-    case 'projects':       return renderProjects(content.projects, t)
-    case 'certifications': return renderCertifications(content.certifications, t)
-    case 'languages':      return renderLanguages(content.languages, t)
-    case 'awards':         return renderAwards(content.awards, t)
-    case 'custom':         return renderCustom(content.custom, t)
-    default:               return ''
-  }
-}
-
-function renderSingleColumn(content, t) {
-  const { personal } = content
-  const { colors, typography, header, layout } = t
-
-  const headerHtml = header.placement === 'top-full-bleed'
-    ? `<div style="background:${colors.headerBackground};color:${colors.headerText};padding:24px ${layout.contentPaddingSides || '0.75in'};">
-        <div style="font-family:${typography.nameFont};font-size:${typography.nameFontSize};font-weight:${typography.nameFontWeight};letter-spacing:${typography.nameLetterSpacing || 'normal'};">${esc(personal.name)}</div>
-        <div style="font-size:${typography.titleFontSize};color:${colors.headerMuted || colors.headerText};margin-top:4px;">${esc(personal.title)}</div>
-        <div style="font-size:11px;margin-top:6px;color:${colors.headerMuted || colors.headerText};">${renderContact(personal)}</div>
-      </div>`
-    : `<div style="text-align:${header.alignment};padding-bottom:12px;border-bottom:${t.sections.dividerStyle === 'solid-thick' ? '2px' : '1px'} solid ${colors.dividerColor};margin-bottom:14px;">
-        <div style="font-family:${typography.nameFont};font-size:${typography.nameFontSize};font-weight:${typography.nameFontWeight};color:${colors.headingText};">${esc(personal.name)}</div>
-        ${personal.title ? `<div style="font-size:${typography.titleFontSize};color:${colors.mutedText};margin-top:2px;">${esc(personal.title)}</div>` : ''}
-        <div style="font-size:11px;color:${colors.mutedText};margin-top:4px;">${renderContact(personal)}</div>
-      </div>`
-
-  const contentPad = layout.contentPaddingSides ? `padding:${layout.contentPaddingTop || '0'} ${layout.contentPaddingSides};` : ''
-
-  const sectionsHtml = content.sectionOrder
-    .filter((k) => k !== 'personal')
-    .map((k) => renderSection(k, content, t))
-    .join('')
-
-  const summaryHtml = personal.summary
-    ? `<div style="font-size:${typography.bodyFontSize};color:${colors.mainText};font-style:${typography.summaryFontStyle || 'normal'};margin-bottom:12px;">${esc(personal.summary)}</div>`
-    : ''
-
-  return `
-    ${headerHtml}
-    <div style="${contentPad}">
-      ${summaryHtml}
-      ${sectionsHtml}
-    </div>`
-}
-
-function renderTwoColumn(content, t) {
-  const { personal } = content
-  const { colors, typography, header, layout, sections } = t
-  const sidebarW = layout.sidebarWidthPercent
-  const mainW    = 100 - sidebarW
-
-  const sidebarSections = sections.sidebarSections || []
-  const mainSections    = sections.mainSections    || []
-
-  let headerHtml = ''
-  if (header.placement === 'top-full-bleed-gradient') {
-    headerHtml = `<div style="background:linear-gradient(135deg,${colors.headerGradientStart},${colors.headerGradientEnd});color:#fff;padding:20px 24px;">
-      <div style="font-family:${typography.nameFont};font-size:${typography.nameFontSize};font-weight:${typography.nameFontWeight};">${esc(personal.name)}</div>
-      <div style="font-size:${typography.titleFontSize};opacity:0.9;margin-top:3px;">${esc(personal.title)}</div>
-    </div>`
-  }
-
-  const sidebarHeader = header.placement === 'sidebar-top'
-    ? `<div style="text-align:${header.alignment};margin-bottom:14px;">
-        <div style="width:${header.avatarSizePx || 56}px;height:${header.avatarSizePx || 56}px;background:${colors.sidebarAccent};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;color:#fff;margin:0 auto 8px;">${esc((personal.name || '?')[0])}</div>
-        <div style="font-family:${typography.nameFont};font-size:${typography.nameFontSize};font-weight:${typography.nameFontWeight};color:${colors.sidebarText};">${esc(personal.name)}</div>
-        <div style="font-size:${typography.titleFontSize};color:${colors.sidebarAccent};margin-top:3px;">${esc(personal.title)}</div>
-      </div>`
-    : ''
-
-  const sidebarContactHtml = `<div style="font-size:10px;color:${colors.sidebarText || '#fff'};margin-bottom:12px;">
-    ${[personal.email, personal.phone, personal.location].filter(Boolean).map((v) => `<div>${esc(v)}</div>`).join('')}
-  </div>`
-
-  const sidebarBody = sidebarSections.map((key) => {
-    if (key === 'personal-contact') return sidebarContactHtml
-    return renderSection(key, content, { ...t, colors: { ...t.colors, mainText: colors.sidebarText, headingText: colors.sidebarAccent, mutedText: colors.sidebarText, dividerColor: colors.sidebarAccent } })
-  }).join('')
-
-  const mainBody = content.sectionOrder
-    .filter((k) => k !== 'personal' && mainSections.includes(k))
-    .map((k) => renderSection(k, content, t))
-    .join('')
-
-  return `
-    ${headerHtml}
-    <div style="display:flex;min-height:100%;" class="two-column-body">
-      <div class="sidebar" style="width:${sidebarW}%;background:${colors.sidebarBackground};color:${colors.sidebarText};padding:20px 16px;box-sizing:border-box;">
-        ${sidebarHeader}
-        ${sidebarBody}
-      </div>
-      <div style="width:${mainW}%;background:${colors.mainBackground};color:${colors.mainText};padding:20px 20px;box-sizing:border-box;">
-        ${personal.summary ? `<div style="font-size:${typography.bodyFontSize};margin-bottom:12px;">${esc(personal.summary)}</div>` : ''}
-        ${mainBody}
-      </div>
-    </div>`
-}
-
-function renderToHtml(content, templateId) {
-  const t = loadTemplate(templateId)
-  const { colors, typography, layout } = t
-
-  const body = layout.type === 'two-column'
-    ? renderTwoColumn(content, t)
-    : renderSingleColumn(content, t)
-
+function wrapHtml(fontLink, bodyFont, body) {
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  ${fontLink}
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: ${typography.bodyFont};
-      font-size: ${typography.bodyFontSize};
-      line-height: ${typography.bodyLineHeight};
-      background: ${colors.mainBackground};
-      color: ${colors.mainText};
-      width: 8.5in;
-      min-height: 11in;
-    }
-    .resume-wrap {
-      margin: ${layout.pageMarginTop} ${layout.pageMarginSides};
-    }
+    body { font-family: ${bodyFont}; background: #fff; width: 8.5in; }
     ul { list-style: none; }
-    a  { text-decoration: none; }
-    .two-column-body { min-height: 11in; }
+    a { text-decoration: none; }
   </style>
 </head>
-<body>
-  <div class="${layout.type === 'two-column' ? '' : 'resume-wrap'}">
-    ${body}
-  </div>
-</body>
+<body>${body}</body>
 </html>`
+}
+
+const INTER_FONT = `<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">`
+const CLASSIC_FONT = `<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lora:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">`
+
+/* ─── CLASSIC ─────────────────────────────────────────────────── */
+function renderClassic(content, t) {
+  const { personal = {}, experience = [], education = [], skills = [], sectionOrder = [] } = content
+  const c = t.colors, ty = t.typography, l = t.layout
+
+  const label = (text) => `<div style="font-family:'Playfair Display',Georgia,serif;font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:3px;color:${c.headingText};border-bottom:1.5px solid ${c.dividerColor};padding-bottom:4px;margin-bottom:10px;margin-top:18px;">${esc(text)}</div>`
+
+  const allSkillItems = skills.flatMap(sk => sk.items ?? [])
+
+  const skillsHtml = allSkillItems.length > 0 ? `
+    ${label('Core Competencies')}
+    <div style="display:flex;flex-wrap:wrap;gap:5px;">
+      ${allSkillItems.map(item => `<span style="background:#f2f2f2;border:1px solid ${c.dividerColor};border-radius:3px;padding:3px 10px;font-size:10px;color:${c.mainText};">${esc(item)}</span>`).join('')}
+    </div>` : ''
+
+  const expHtml = experience.length > 0 ? `
+    ${label('Work History')}
+    ${experience.map(e => `
+      <div style="margin-bottom:${l.itemSpacing};">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <div style="font-size:12px;font-weight:700;color:${c.headingText};">${esc(e.company)}</div>
+          <div style="font-size:10px;color:${c.mutedText};font-style:italic;">${[e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' – ')}</div>
+        </div>
+        ${(e.role || e.location) ? `<div style="font-size:${ty.bodyFontSize};font-style:italic;color:${c.mainText};margin:2px 0 5px;">${esc(e.role)}${e.role && e.location ? ' · ' : ''}${esc(e.location)}</div>` : ''}
+        <div style="font-size:10.5px;line-height:1.6;color:${c.mainText};">${renderBullets(e.bullets)}</div>
+      </div>`).join('')}` : ''
+
+  const eduHtml = education.length > 0 ? `
+    ${label('Education')}
+    ${education.map(e => `
+      <div style="margin-bottom:${l.itemSpacing};">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <div style="font-size:12px;font-weight:700;color:${c.headingText};">${esc(e.institution)}</div>
+          ${e.endDate ? `<div style="font-size:10px;color:${c.mutedText};font-style:italic;">${esc(e.endDate)}</div>` : ''}
+        </div>
+        <div style="font-size:${ty.bodyFontSize};font-style:italic;color:${c.mainText};">${esc([e.degree, e.field].filter(Boolean).join(' '))}</div>
+      </div>`).join('')}` : ''
+
+  const summaryHtml = personal.summary ? `
+    ${label('Professional Summary')}
+    <div style="font-size:${ty.bodyFontSize};line-height:1.65;color:${c.mainText};text-align:justify;">${esc(personal.summary)}</div>` : ''
+
+  const sectionsHtml = sectionOrder.filter(k => k !== 'personal').map(key => {
+    if (key === 'skills') return skillsHtml
+    if (key === 'experience') return expHtml
+    if (key === 'education') return eduHtml
+    return ''
+  }).join('')
+
+  const header = `<div style="text-align:center;padding:36px 56px 18px;border-bottom:2px solid ${c.dividerColor};">
+    <div style="font-family:${ty.nameFont};font-size:${ty.nameFontSize};font-weight:${ty.nameFontWeight};letter-spacing:3px;text-transform:uppercase;color:${c.headingText};">${esc(personal.name)}</div>
+    ${personal.title ? `<div style="font-family:${ty.titleFont};font-style:italic;font-size:${ty.titleFontSize};color:${c.mutedText};margin-top:6px;">${esc(personal.title)}</div>` : ''}
+    <div style="font-size:10.5px;color:${c.mutedText};margin-top:8px;">${renderContact(personal)}</div>
+  </div>`
+
+  const body = `${header}<div style="padding:22px 56px 40px;">${summaryHtml}${sectionsHtml}</div>`
+  return wrapHtml(CLASSIC_FONT, `'Lora', Georgia, serif`, body)
+}
+
+/* ─── MODERN ──────────────────────────────────────────────────── */
+function renderModern(content, t) {
+  const { personal = {}, experience = [], education = [], skills = [], sectionOrder = [] } = content
+  const c = t.colors, ty = t.typography, l = t.layout
+
+  const sidebarLabel = (text) => `<div style="font-size:8.5px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${c.sidebarAccent};border-bottom:1px solid #2d5080;padding-bottom:4px;margin-bottom:10px;margin-top:18px;">${esc(text)}</div>`
+  const mainLabel    = (text) => `<div style="font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:${c.headingText};border-bottom:2px solid ${c.sidebarAccent};padding-bottom:4px;margin-bottom:14px;margin-top:20px;">${esc(text)}</div>`
+
+  const allSkillItems = skills.flatMap(sk => sk.items ?? [])
+
+  const skillPills = allSkillItems.length > 0 ? `
+    ${sidebarLabel('Skills')}
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:4px;">
+      ${allSkillItems.map(item => `<span style="background:#1a4d7a;border:1px solid #2d6a9f;color:#cce4ff;font-size:9.5px;padding:3px 9px;border-radius:12px;">${esc(item)}</span>`).join('')}
+    </div>` : ''
+
+  const eduSidebar = education.length > 0 ? `
+    ${sidebarLabel('Education')}
+    ${education.map(e => `<div style="margin-bottom:10px;font-size:10px;line-height:1.7;">
+      <div style="font-weight:600;color:#fff;">${esc(e.institution)}</div>
+      <div style="color:#90b8e0;">${esc([e.degree, e.field].filter(Boolean).join(': '))}</div>
+      ${e.endDate ? `<div style="color:#7aa0c0;">${esc(e.endDate)}</div>` : ''}
+    </div>`).join('')}` : ''
+
+  const sidebarHtml = `
+    <div class="sidebar" style="width:${l.sidebarWidthPercent}%;background:${c.sidebarBackground};color:${c.sidebarText};padding:32px 20px;box-sizing:border-box;flex-shrink:0;">
+      <div style="text-align:center;margin-bottom:20px;">
+        <div style="width:64px;height:64px;background:${c.sidebarAccent};border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;margin:0 auto 12px;">${esc((personal.name || '?')[0])}</div>
+        <div style="font-size:15px;font-weight:700;color:#fff;">${esc(personal.name)}</div>
+        ${personal.title ? `<div style="font-size:11px;color:#90b8e0;margin-top:4px;">${esc(personal.title)}</div>` : ''}
+      </div>
+      ${sidebarLabel('Contact')}
+      <div style="font-size:10.5px;line-height:1.7;word-break:break-word;margin-bottom:4px;">
+        ${[personal.email, personal.phone, personal.location].filter(Boolean).map(v => `<div>${esc(v)}</div>`).join('')}
+      </div>
+      ${skillPills}
+      ${eduSidebar}
+    </div>`
+
+  const expHtml = experience.length > 0 ? `
+    ${mainLabel('Work History')}
+    ${experience.map(e => `
+      <div style="margin-bottom:${l.itemSpacing};">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <div style="font-size:12px;font-weight:700;color:${c.headingText};">${esc(e.company)}</div>
+          <div style="font-size:10px;color:#888;">${[e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' – ')}</div>
+        </div>
+        ${(e.role || e.location) ? `<div style="font-size:11px;font-weight:600;color:${c.sidebarAccent};margin:2px 0 5px;">${esc(e.role)}${e.role && e.location ? ' · ' : ''}${esc(e.location)}</div>` : ''}
+        <div style="font-size:10.5px;line-height:1.65;color:#333;">${renderBullets(e.bullets)}</div>
+      </div>`).join('')}` : ''
+
+  const summaryHtml = personal.summary ? `
+    ${mainLabel('Professional Summary')}
+    <div style="font-size:${ty.bodyFontSize};line-height:1.65;color:#333;margin-bottom:4px;">${esc(personal.summary)}</div>` : ''
+
+  const mainHtml = `<div style="flex:1;background:${c.mainBackground};color:${c.mainText};padding:32px 28px;box-sizing:border-box;">${summaryHtml}${expHtml}</div>`
+
+  const body = `<div style="display:flex;min-height:11in;">${sidebarHtml}${mainHtml}</div>`
+  return wrapHtml(INTER_FONT, 'Inter, sans-serif', body)
+}
+
+/* ─── MINIMAL ─────────────────────────────────────────────────── */
+function renderMinimal(content, t) {
+  const { personal = {}, experience = [], education = [], skills = [], sectionOrder = [] } = content
+  const c = t.colors, ty = t.typography, l = t.layout
+
+  const label = (text) => `<div style="font-size:9px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:#aaa;margin-bottom:10px;margin-top:32px;">${esc(text)}</div>`
+
+  const allSkillItems = skills.flatMap(sk => sk.items ?? [])
+
+  const skillsHtml = allSkillItems.length > 0 ? `
+    ${label('Skills')}
+    <div style="font-size:11px;color:#555;line-height:2;">${allSkillItems.map(esc).join(' · ')}</div>` : ''
+
+  const expHtml = experience.length > 0 ? `
+    ${label('Experience')}
+    ${experience.map(e => `
+      <div style="margin-bottom:${l.itemSpacing};">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px;">
+          <div style="font-size:13px;font-weight:600;color:${c.headingText};">${esc(e.company)}</div>
+          <div style="font-size:10.5px;color:#999;">${[e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' – ')}</div>
+        </div>
+        ${(e.role || e.location) ? `<div style="font-size:11px;color:#666;margin-bottom:8px;">${esc(e.role)}${e.role && e.location ? ' · ' : ''}${esc(e.location)}</div>` : ''}
+        <div style="font-size:${ty.bodyFontSize};line-height:1.7;color:#444;">${renderBullets(e.bullets)}</div>
+      </div>`).join('')}` : ''
+
+  const eduHtml = education.length > 0 ? `
+    ${label('Education')}
+    <div style="display:flex;gap:40px;flex-wrap:wrap;">
+      ${education.map(e => `
+        <div>
+          <div style="font-size:12px;font-weight:600;color:${c.headingText};">${esc(e.institution)}</div>
+          <div style="font-size:11px;color:#666;">${esc([e.degree, e.field].filter(Boolean).join(': '))}</div>
+          ${e.endDate ? `<div style="font-size:10.5px;color:#999;">${esc(e.endDate)}</div>` : ''}
+        </div>`).join('')}
+    </div>` : ''
+
+  const summaryHtml = personal.summary ? `
+    ${label('Summary')}
+    <div style="font-size:${ty.bodyFontSize};line-height:1.7;color:#444;max-width:580px;">${esc(personal.summary)}</div>` : ''
+
+  const sectionsHtml = sectionOrder.filter(k => k !== 'personal').map(key => {
+    if (key === 'skills') return skillsHtml
+    if (key === 'experience') return expHtml
+    if (key === 'education') return eduHtml
+    return ''
+  }).join('')
+
+  const header = `<div style="margin-bottom:36px;">
+    <div style="font-size:${ty.nameFontSize};font-weight:${ty.nameFontWeight};color:${c.headingText};letter-spacing:-0.5px;">${esc(personal.name)}</div>
+    ${personal.title ? `<div style="font-size:${ty.titleFontSize};font-weight:400;color:#666;margin-top:4px;">${esc(personal.title)}</div>` : ''}
+    <div style="font-size:11px;color:#999;margin-top:8px;">${renderContact(personal)}</div>
+  </div>`
+
+  const body = `<div style="padding:52px 64px;">${header}${summaryHtml}${sectionsHtml}</div>`
+  return wrapHtml(INTER_FONT, 'Inter, sans-serif', body)
+}
+
+/* ─── EXECUTIVE ───────────────────────────────────────────────── */
+function renderExecutive(content, t) {
+  const { personal = {}, experience = [], education = [], skills = [], sectionOrder = [] } = content
+  const c = t.colors, ty = t.typography, l = t.layout
+
+  const label = (text) => `<div style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:${c.headingText};border-left:3px solid ${c.headingText};padding-left:10px;margin-bottom:12px;margin-top:24px;">${esc(text)}</div>`
+
+  const allSkillItems = skills.flatMap(sk => sk.items ?? [])
+
+  const skillsBar = allSkillItems.length > 0 ? `
+    <div style="background:#f7f7fa;padding:16px 52px;border-bottom:1px solid #e2e8f0;">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;">
+        ${allSkillItems.map(item => `<span style="background:${c.headingText};color:#e0e0f0;font-size:9.5px;font-weight:500;padding:4px 11px;border-radius:3px;">${esc(item)}</span>`).join('')}
+      </div>
+    </div>` : ''
+
+  const expHtml = experience.length > 0 ? `
+    ${label('Work History')}
+    ${experience.map(e => `
+      <div style="margin-bottom:${l.itemSpacing};">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <div style="font-size:13px;font-weight:700;color:${c.headingText};">${esc(e.company)}</div>
+          <div style="font-size:10px;color:#888;font-weight:500;">${[e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' – ')}</div>
+        </div>
+        ${(e.role || e.location) ? `<div style="font-size:10px;font-weight:600;color:#4a5568;margin:2px 0 6px;text-transform:uppercase;letter-spacing:0.5px;">${esc(e.role)}${e.role && e.location ? ' · ' : ''}${esc(e.location)}</div>` : ''}
+        <div style="font-size:11px;line-height:1.65;color:#444;">${renderBullets(e.bullets)}</div>
+      </div>`).join('')}` : ''
+
+  const eduHtml = education.length > 0 ? `
+    ${label('Education')}
+    ${education.map(e => `
+      <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+        <div>
+          <span style="font-size:12px;font-weight:700;color:${c.headingText};">${esc(e.institution)}</span>
+          <span style="font-size:11px;color:#555;margin-left:10px;">${esc([e.degree, e.field].filter(Boolean).join(': '))}</span>
+        </div>
+        ${e.endDate ? `<div style="font-size:10.5px;color:#888;">${esc(e.endDate)}</div>` : ''}
+      </div>`).join('')}` : ''
+
+  const summaryHtml = personal.summary ? `
+    ${label('Professional Summary')}
+    <div style="font-size:11.5px;line-height:1.7;color:#333;">${esc(personal.summary)}</div>` : ''
+
+  const sectionsHtml = sectionOrder.filter(k => k !== 'personal' && k !== 'skills').map(key => {
+    if (key === 'experience') return expHtml
+    if (key === 'education') return eduHtml
+    return ''
+  }).join('')
+
+  const header = `<div style="background:${c.headerBackground};color:${c.headerText};padding:40px 52px 32px;">
+    <div style="font-family:${ty.nameFont};font-size:${ty.nameFontSize};font-weight:${ty.nameFontWeight};letter-spacing:${ty.nameLetterSpacing || '1px'};text-transform:uppercase;color:#fff;margin-bottom:6px;">${esc(personal.name)}</div>
+    ${personal.title ? `<div style="font-size:13px;font-weight:400;color:${c.headerMuted};letter-spacing:3px;text-transform:uppercase;margin-bottom:20px;">${esc(personal.title)}</div>` : ''}
+    <div style="display:flex;gap:24px;font-size:11px;color:#cbd5e0;flex-wrap:wrap;">
+      ${[personal.email, personal.phone, personal.location].filter(Boolean).map(v => `<span>${esc(v)}</span>`).join('')}
+    </div>
+  </div>`
+
+  const body = `${header}${skillsBar}<div style="padding:28px 52px 40px;">${summaryHtml}${sectionsHtml}</div>`
+  return wrapHtml(INTER_FONT, 'Inter, sans-serif', body)
+}
+
+/* ─── CREATIVE ────────────────────────────────────────────────── */
+function renderCreative(content, t) {
+  const { personal = {}, experience = [], education = [], skills = [], sectionOrder = [] } = content
+  const c = t.colors, ty = t.typography, l = t.layout
+
+  const gradient = `linear-gradient(90deg,${c.accentStart},${c.accentEnd})`
+
+  const label = (text) => `
+    <div style="margin-bottom:14px;">
+      <div style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:${c.accentStart};margin-bottom:4px;">${esc(text)}</div>
+      <div style="height:2px;background:${gradient};border-radius:1px;"></div>
+    </div>`
+
+  const allSkillItems = skills.flatMap(sk => sk.items ?? [])
+  const pillColors = [
+    { bg: '#ede9fe', color: '#5b21b6' },
+    { bg: '#fce7f3', color: '#9d174d' },
+  ]
+  const borderColors = [c.accentStart, c.accentEnd]
+
+  const skillsHtml = allSkillItems.length > 0 ? `
+    ${label('Skills')}
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:24px;">
+      ${allSkillItems.map((item, i) => {
+        const p = pillColors[i % 2]
+        return `<span style="background:${p.bg};color:${p.color};font-size:10px;font-weight:500;padding:4px 12px;border-radius:20px;">${esc(item)}</span>`
+      }).join('')}
+    </div>` : ''
+
+  const expHtml = experience.length > 0 ? `
+    ${label('Experience')}
+    ${experience.map((e, idx) => {
+      const bc = borderColors[idx % 2]
+      return `<div style="margin-bottom:${l.itemSpacing};padding-left:14px;border-left:3px solid ${bc};">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;">
+          <div style="font-size:12.5px;font-weight:700;color:${c.headingText};">${esc(e.company)}</div>
+          <div style="font-size:10px;color:#888;">${[e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' – ')}</div>
+        </div>
+        ${(e.role || e.location) ? `<div style="font-size:11px;font-weight:600;color:${bc};margin:2px 0 6px;">${esc(e.role)}${e.role && e.location ? ' · ' : ''}${esc(e.location)}</div>` : ''}
+        <div style="font-size:11px;line-height:1.65;color:#444;">${renderBullets(e.bullets)}</div>
+      </div>`
+    }).join('')}` : ''
+
+  const eduHtml = education.length > 0 ? `
+    ${label('Education')}
+    <div style="display:flex;gap:32px;flex-wrap:wrap;">
+      ${education.map((e, idx) => {
+        const bc = borderColors[idx % 2]
+        return `<div style="padding-left:14px;border-left:3px solid ${bc};">
+          <div style="font-size:12px;font-weight:700;color:${c.headingText};">${esc(e.institution)}</div>
+          <div style="font-size:11px;color:#555;">${esc([e.degree, e.field].filter(Boolean).join(': '))}</div>
+          ${e.endDate ? `<div style="font-size:10.5px;color:#999;">${esc(e.endDate)}</div>` : ''}
+        </div>`
+      }).join('')}
+    </div>` : ''
+
+  const summaryHtml = personal.summary ? `
+    ${label('About')}
+    <div style="font-size:11.5px;line-height:1.7;color:#444;margin-bottom:24px;">${esc(personal.summary)}</div>` : ''
+
+  const sectionsHtml = sectionOrder.filter(k => k !== 'personal' && k !== 'skills').map(key => {
+    if (key === 'experience') return expHtml
+    if (key === 'education') return eduHtml
+    return ''
+  }).join('')
+
+  const header = `<div style="background:linear-gradient(135deg,${c.accentStart},#7c3aed,${c.accentEnd});color:#fff;padding:40px 52px 32px;">
+    <div style="font-size:${ty.nameFontSize};font-weight:${ty.nameFontWeight};color:#fff;letter-spacing:-0.5px;margin-bottom:4px;">${esc(personal.name)}</div>
+    ${personal.title ? `<div style="font-size:${ty.titleFontSize};font-weight:400;color:#e0d9ff;letter-spacing:1px;margin-bottom:18px;">${esc(personal.title)}</div>` : ''}
+    <div style="display:flex;gap:20px;font-size:11px;color:#d1c4ff;flex-wrap:wrap;">
+      ${personal.email ? `<span>&#9993; ${esc(personal.email)}</span>` : ''}
+      ${personal.phone ? `<span>${esc(personal.phone)}</span>` : ''}
+      ${personal.location ? `<span>${esc(personal.location)}</span>` : ''}
+    </div>
+  </div>`
+
+  const body = `${header}<div style="padding:28px 52px 40px;">${summaryHtml}${skillsHtml}${sectionsHtml}</div>`
+  return wrapHtml(INTER_FONT, 'Inter, sans-serif', body)
+}
+
+/* ─── DISPATCH ────────────────────────────────────────────────── */
+const RENDERERS = { classic: renderClassic, modern: renderModern, minimal: renderMinimal, executive: renderExecutive, creative: renderCreative }
+
+function renderToHtml(content, templateId) {
+  const t = loadTemplate(templateId)
+  const fn = RENDERERS[templateId]
+  if (!fn) throw new Error(`Unknown template: ${templateId}`)
+  return fn(content, t)
 }
 
 module.exports = { renderToHtml }
