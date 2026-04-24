@@ -64,7 +64,7 @@ function renderClassic(content, t) {
       <div style="margin-bottom:${l.itemSpacing};">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
           <div style="font-size:12px;font-weight:700;color:${c.headingText};">${esc(e.company)}</div>
-          <div style="font-size:10px;color:${c.mutedText};font-style:italic;">${[e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' – ')}</div>
+          <div style="font-size:10px;color:${c.mutedText};font-style:italic;">${[esc(e.startDate), e.current ? 'Present' : esc(e.endDate)].filter(Boolean).join(' – ')}</div>
         </div>
         ${(e.role || e.location) ? `<div style="font-size:${ty.bodyFontSize};font-style:italic;color:${c.mainText};margin:2px 0 5px;">${esc(e.role)}${e.role && e.location ? ' · ' : ''}${esc(e.location)}</div>` : ''}
         <div style="font-size:10.5px;line-height:1.6;color:${c.mainText};">${renderBullets(e.bullets)}</div>
@@ -147,7 +147,7 @@ function renderModern(content, t) {
       <div style="margin-bottom:${l.itemSpacing};">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
           <div style="font-size:12px;font-weight:700;color:${c.headingText};">${esc(e.company)}</div>
-          <div style="font-size:10px;color:#888;">${[e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' – ')}</div>
+          <div style="font-size:10px;color:#888;">${[esc(e.startDate), e.current ? 'Present' : esc(e.endDate)].filter(Boolean).join(' – ')}</div>
         </div>
         ${(e.role || e.location) ? `<div style="font-size:11px;font-weight:600;color:${c.sidebarAccent};margin:2px 0 5px;">${esc(e.role)}${e.role && e.location ? ' · ' : ''}${esc(e.location)}</div>` : ''}
         <div style="font-size:10.5px;line-height:1.65;color:#333;">${renderBullets(e.bullets)}</div>
@@ -157,7 +157,11 @@ function renderModern(content, t) {
     ${mainLabel('Professional Summary')}
     <div style="font-size:${ty.bodyFontSize};line-height:1.65;color:#333;margin-bottom:4px;">${esc(personal.summary)}</div>` : ''
 
-  const mainHtml = `<div style="flex:1;background:${c.mainBackground};color:${c.mainText};padding:32px 28px;box-sizing:border-box;">${summaryHtml}${expHtml}</div>`
+  const sectionsHtml = sectionOrder.filter(k => k !== 'personal' && k !== 'education' && k !== 'skills').map(key => {
+    if (key === 'experience') return expHtml
+    return ''
+  }).join('')
+  const mainHtml = `<div style="flex:1;background:${c.mainBackground};color:${c.mainText};padding:32px 28px;box-sizing:border-box;">${summaryHtml}${sectionsHtml}</div>`
 
   const body = `<div style="display:flex;min-height:11in;">${sidebarHtml}${mainHtml}</div>`
   return wrapHtml(INTER_FONT, 'Inter, sans-serif', body)
@@ -182,7 +186,7 @@ function renderMinimal(content, t) {
       <div style="margin-bottom:${l.itemSpacing};">
         <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:2px;">
           <div style="font-size:13px;font-weight:600;color:${c.headingText};">${esc(e.company)}</div>
-          <div style="font-size:10.5px;color:#999;">${[e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' – ')}</div>
+          <div style="font-size:10.5px;color:#999;">${[esc(e.startDate), e.current ? 'Present' : esc(e.endDate)].filter(Boolean).join(' – ')}</div>
         </div>
         ${(e.role || e.location) ? `<div style="font-size:11px;color:#666;margin-bottom:8px;">${esc(e.role)}${e.role && e.location ? ' · ' : ''}${esc(e.location)}</div>` : ''}
         <div style="font-size:${ty.bodyFontSize};line-height:1.7;color:#444;">${renderBullets(e.bullets)}</div>
@@ -242,7 +246,7 @@ function renderExecutive(content, t) {
       <div style="margin-bottom:${l.itemSpacing};">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
           <div style="font-size:13px;font-weight:700;color:${c.headingText};">${esc(e.company)}</div>
-          <div style="font-size:10px;color:#888;font-weight:500;">${[e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' – ')}</div>
+          <div style="font-size:10px;color:#888;font-weight:500;">${[esc(e.startDate), e.current ? 'Present' : esc(e.endDate)].filter(Boolean).join(' – ')}</div>
         </div>
         ${(e.role || e.location) ? `<div style="font-size:10px;font-weight:600;color:#4a5568;margin:2px 0 6px;text-transform:uppercase;letter-spacing:0.5px;">${esc(e.role)}${e.role && e.location ? ' · ' : ''}${esc(e.location)}</div>` : ''}
         <div style="font-size:11px;line-height:1.65;color:#444;">${renderBullets(e.bullets)}</div>
@@ -317,7 +321,7 @@ function renderCreative(content, t) {
       return `<div style="margin-bottom:${l.itemSpacing};padding-left:14px;border-left:3px solid ${bc};">
         <div style="display:flex;justify-content:space-between;align-items:baseline;">
           <div style="font-size:12.5px;font-weight:700;color:${c.headingText};">${esc(e.company)}</div>
-          <div style="font-size:10px;color:#888;">${[e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' – ')}</div>
+          <div style="font-size:10px;color:#888;">${[esc(e.startDate), e.current ? 'Present' : esc(e.endDate)].filter(Boolean).join(' – ')}</div>
         </div>
         ${(e.role || e.location) ? `<div style="font-size:11px;font-weight:600;color:${bc};margin:2px 0 6px;">${esc(e.role)}${e.role && e.location ? ' · ' : ''}${esc(e.location)}</div>` : ''}
         <div style="font-size:11px;line-height:1.65;color:#444;">${renderBullets(e.bullets)}</div>
