@@ -8,6 +8,7 @@ import SkillsStep           from '../components/wizard/SkillsStep'
 import OptionalSectionsStep from '../components/wizard/OptionalSectionsStep'
 import TemplatePickerStep   from '../components/wizard/TemplatePickerStep'
 import PreviewStep          from '../components/wizard/PreviewStep'
+import { useResumeStore }   from '../store/useResumeStore'
 
 const STEPS = [
   { title: 'Personal Info',      component: PersonalInfoStep     },
@@ -21,7 +22,9 @@ const STEPS = [
 
 export default function BuildPage() {
   const [currentStep, setCurrentStep] = useState(0)
-  const navigate = useNavigate()
+  const navigate    = useNavigate()
+  const personalName = useResumeStore(s => s.content.personal.name)
+  const hasContent  = !!personalName
 
   function handleNext() {
     if (currentStep === STEPS.length - 1) navigate('/preview')
@@ -29,7 +32,7 @@ export default function BuildPage() {
   }
 
   function handleStepClick(index) {
-    if (index < currentStep) setCurrentStep(index)
+    if (hasContent || index < currentStep) setCurrentStep(index)
   }
 
   return (
@@ -38,6 +41,7 @@ export default function BuildPage() {
       currentStep={currentStep}
       onNext={handleNext}
       onStepClick={handleStepClick}
+      hasContent={hasContent}
     />
   )
 }

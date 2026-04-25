@@ -1,4 +1,4 @@
-export default function WizardLayout({ steps = [], currentStep = 0, onNext, onStepClick }) {
+export default function WizardLayout({ steps = [], currentStep = 0, onNext, onStepClick, hasContent = false }) {
   const step   = steps[currentStep]
   const isLast = currentStep === steps.length - 1
 
@@ -20,7 +20,7 @@ export default function WizardLayout({ steps = [], currentStep = 0, onNext, onSt
           {steps.map((s, i) => {
             const done     = i < currentStep
             const active   = i === currentStep
-            const canClick = done
+            const canClick = done || hasContent
 
             return (
               <div

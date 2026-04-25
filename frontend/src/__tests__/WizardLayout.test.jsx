@@ -52,3 +52,19 @@ test('all step titles rendered in sidebar', () => {
   expect(screen.getByText('Work')).toBeInTheDocument()
   expect(screen.getByText('Done')).toBeInTheDocument()
 })
+
+test('when hasContent is true, clicking any step (including future) calls onStepClick', () => {
+  const onStepClick = vi.fn()
+  render(
+    <WizardLayout
+      steps={mockSteps}
+      currentStep={0}
+      onNext={() => {}}
+      onStepClick={onStepClick}
+      hasContent={true}
+    />
+  )
+  // Step 2 (Done) is a future step — should be clickable when hasContent=true
+  fireEvent.click(screen.getByText('Done'))
+  expect(onStepClick).toHaveBeenCalledWith(2)
+})
