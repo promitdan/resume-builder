@@ -1,0 +1,10 @@
+.ProseMirror {
+  outline: none;
+}
+.ProseMirror p {
+  margin: 0;
+}
+.ProseMirror a {
+  color: #2563eb;
+  text-decoration: underline;
+}
