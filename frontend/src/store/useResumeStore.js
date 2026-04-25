@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { v4 as uuid } from 'uuid'
+import { set as lodashSet } from 'lodash'
 
 const emptyContent = () => ({
   meta: { version: '1.0', updatedAt: new Date().toISOString() },
@@ -217,7 +218,14 @@ export const useResumeStore = create((set) => ({
 
   loadMockData: () => set({ content: mockContent(), templateId: 'classic' }),
 
-  resetResume: () => set({ content: emptyContent(), templateId: 'classic' })
+  resetResume: () => set({ content: emptyContent(), templateId: 'classic' }),
+
+  setField: (path, value) =>
+    set((s) => {
+      const content = structuredClone(s.content)
+      lodashSet(content, path, value)
+      return { content }
+    }),
 }))
 
 useResumeStore.getInitialState = () => ({ content: emptyContent(), templateId: 'classic' })
