@@ -10,24 +10,27 @@ function renderLanding() {
   return render(<MemoryRouter><LandingPage /></MemoryRouter>)
 }
 
-test('renders Start from scratch button', () => {
+test('renders Start from scratch card', () => {
   renderLanding()
   expect(screen.getByText(/start from scratch/i)).toBeInTheDocument()
 })
 
-test('renders Upload resume button', () => {
+test('renders Upload resume card', () => {
   renderLanding()
   expect(screen.getByText(/upload resume/i)).toBeInTheDocument()
 })
 
-test('shows upload dropzone when Upload resume is clicked', () => {
+test('upload dropzone is always visible (no toggle needed)', () => {
   renderLanding()
-  expect(screen.queryByTestId('upload-dropzone')).not.toBeInTheDocument()
-  fireEvent.click(screen.getByText(/upload resume/i))
   expect(screen.getByTestId('upload-dropzone')).toBeInTheDocument()
 })
 
-test('Start from scratch navigates to /build', () => {
+test('Start from scratch link navigates to /build', () => {
   renderLanding()
   expect(screen.getByText(/start from scratch/i).closest('a')).toHaveAttribute('href', '/build')
+})
+
+test('renders load sample data link', () => {
+  renderLanding()
+  expect(screen.getByText(/load sample data/i)).toBeInTheDocument()
 })
