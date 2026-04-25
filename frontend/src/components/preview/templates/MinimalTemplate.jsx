@@ -104,8 +104,9 @@ export default function MinimalTemplate({ content = {} }) {
                     </div>
                   )}
                   {e.bullets?.filter(Boolean).map((b, bi) => (
-                    <div key={bi} style={{ fontSize: ty.bodyFontSize, lineHeight: '1.7', color: '#444' }}>
-                      • <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
+                    <div key={bi} style={{ display: 'flex', alignItems: 'baseline', fontSize: ty.bodyFontSize, lineHeight: '1.7', color: '#444' }}>
+                      <span style={{ flexShrink: 0, marginRight: '2px' }}>•</span>
+                      <div style={{ flex: 1, minWidth: 0 }}><RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} /></div>
                     </div>
                   ))}
                 </div>

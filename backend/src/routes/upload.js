@@ -3,10 +3,26 @@ const multer   = require('multer')
 const { extractTextFromPdf }    = require('../services/parser/pdfParser')
 const { extractTextFromDocx }   = require('../services/parser/docxParser')
 const { mapToContent }          = require('../services/parser/contentMapper')
-const { parseWithOllama, OllamaUnavailableError } = require('../services/parser/ollamaParser')
+const { parseWithGroq, GroqUnavailableError } = require('../services/parser/groqParser')
 const { normalizeLlmContent }   = require('../services/parser/llmContentMapper')
 
 const router  = express.Router()
+
+const URL_RE = /https?:\/\/[^\s<>"]+/g
+
+function linkifyContent(content) {
+  const linkify = (text) => {
+    if (!text || typeof text !== 'string' || text.includes('<')) return text
+    return text.replace(URL_RE, url => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`)
+  }
+  if (content.personal?.summary) content.personal.summary = linkify(content.personal.summary)
+  content.experience?.forEach(exp => { exp.bullets = exp.bullets?.map(linkify) ?? [] })
+  content.projects?.forEach(proj => {
+    if (proj.description) proj.description = linkify(proj.description)
+    proj.bullets = proj.bullets?.map(linkify) ?? []
+  })
+  return content
+}
 const storage = multer.memoryStorage()
 
 const upload = multer({
@@ -46,19 +62,18 @@ router.post('/', (req, res, next) => {
     let content, parseMethod
 
     try {
-      const llmRaw = await parseWithOllama(rawText)
+      const llmRaw = await parseWithGroq(rawText)
+      console.log('[groq] result:', JSON.stringify(llmRaw, null, 2))
       content     = normalizeLlmContent(llmRaw, rawText)
-      parseMethod = 'ollama'
-    } catch (ollamaErr) {
-      if (!(ollamaErr instanceof OllamaUnavailableError)) {
-        console.warn('Ollama parse failed, falling back to regex:', ollamaErr.message)
-      }
+      parseMethod = 'groq'
+    } catch (groqErr) {
+      console.warn('[groq] fallback to regex —', groqErr.name + ':', groqErr.message)
       content     = mapToContent(rawText)
       parseMethod = 'regex-fallback'
     }
 
     res.set('X-Parse-Method', parseMethod)
-    return res.json({ content })
+    return res.json({ content: linkifyContent(content) })
   } catch (err) {
     console.error('Parse error:', err)
     return res.status(422).json({ error: 'Failed to parse file', code: 'PARSE_ERROR' })
