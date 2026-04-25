@@ -81,4 +81,15 @@ describe('normalizeLlmContent', () => {
     expect(result.projects[0].id).toBeTruthy()
     expect(result.custom[0].id).toBeTruthy()
   })
+
+  test('skills appears before education in sectionOrder when both are populated', () => {
+    const result = normalizeLlmContent({
+      experience: [{ company: 'Acme', role: 'Eng', bullets: [] }],
+      skills: [{ category: 'Tech', items: ['JS'] }],
+      education: [{ institution: 'MIT', degree: 'B.S.', field: 'CS', startDate: '', endDate: '', gpa: '' }]
+    }, '')
+    const skillsIdx = result.sectionOrder.indexOf('skills')
+    const educationIdx = result.sectionOrder.indexOf('education')
+    expect(skillsIdx).toBeLessThan(educationIdx)
+  })
 })
