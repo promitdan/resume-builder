@@ -19,22 +19,22 @@
   },
   "typography": {
     "nameFont": "Inter, sans-serif",
-    "nameFontSize": "30px",
+    "nameFontSize": "38px",
     "nameFontWeight": "800",
     "titleFont": "Inter, sans-serif",
-    "titleFontSize": "14px",
+    "titleFontSize": "17px",
     "sectionLabelFont": "Inter, sans-serif",
-    "sectionLabelSize": "9px",
+    "sectionLabelSize": "11px",
     "sectionLabelStyle": "uppercase",
     "sectionLabelSpacing": "3px",
     "bodyFont": "Inter, sans-serif",
-    "bodyFontSize": "11px",
+    "bodyFontSize": "14px",
     "bodyLineHeight": "1.6"
   },
   "header": { "placement": "top-full-bleed-gradient", "alignment": "left", "showAvatar": false },
   "sections": {
     "type": "single-column",
-    "order": ["personal", "skills", "experience", "education", "projects", "certifications", "awards", "languages", "custom"],
+    "order": ["personal", "experience", "skills", "education", "projects", "certifications", "awards", "languages", "custom"],
     "dividerStyle": "gradient", "bulletStyle": "bullet", "dateAlignment": "inline-right", "skillStyle": "pill-alternating"
   }
 }

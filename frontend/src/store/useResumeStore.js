@@ -12,7 +12,7 @@ const emptyContent = () => ({
   languages: [],
   awards: [],
   custom: [],
-  sectionOrder: ['personal', 'experience', 'education', 'skills'],
+  sectionOrder: ['personal', 'experience', 'skills', 'education'],
   _raw: ''
 })
 
@@ -105,7 +105,7 @@ const mockContent = () => ({
   languages: [],
   awards: [],
   custom: [],
-  sectionOrder: ['personal', 'experience', 'education', 'skills'],
+  sectionOrder: ['personal', 'experience', 'skills', 'education'],
   _raw: ''
 })
 

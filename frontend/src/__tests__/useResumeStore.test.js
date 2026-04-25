@@ -11,7 +11,7 @@ describe('useResumeStore', () => {
     expect(result.current.templateId).toBe('classic')
     expect(result.current.content.personal.name).toBe('')
     expect(result.current.content.experience).toEqual([])
-    expect(result.current.content.sectionOrder).toEqual(['personal', 'experience', 'education', 'skills'])
+    expect(result.current.content.sectionOrder).toEqual(['personal', 'experience', 'skills', 'education'])
   })
 
   test('updatePersonal merges fields into personal', () => {

@@ -18,22 +18,22 @@
   },
   "typography": {
     "nameFont": "'Playfair Display', Georgia, serif",
-    "nameFontSize": "28px",
+    "nameFontSize": "36px",
     "nameFontWeight": "700",
     "titleFont": "'Lora', Georgia, serif",
-    "titleFontSize": "13px",
+    "titleFontSize": "17px",
     "sectionLabelFont": "'Playfair Display', Georgia, serif",
-    "sectionLabelSize": "9px",
+    "sectionLabelSize": "11px",
     "sectionLabelStyle": "uppercase",
     "sectionLabelSpacing": "3px",
     "bodyFont": "'Lora', Georgia, serif",
-    "bodyFontSize": "11px",
+    "bodyFontSize": "14px",
     "bodyLineHeight": "1.6"
   },
   "header": { "placement": "top-center", "alignment": "center", "showAvatar": false, "dividerStyle": "solid-thick" },
   "sections": {
     "type": "single-column",
-    "order": ["personal", "skills", "experience", "education", "projects", "certifications", "awards", "languages", "custom"],
+    "order": ["personal", "experience", "skills", "education", "projects", "certifications", "awards", "languages", "custom"],
     "dividerStyle": "solid", "bulletStyle": "bullet", "dateAlignment": "inline-right", "labelWeight": "bold"
   }
 }

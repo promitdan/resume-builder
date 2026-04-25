@@ -70,8 +70,16 @@ function normalizeProjects(list) {
   return arr(list).map(p => ({ id: uuid(), title: str(p.title), description: str(p.description), url: str(p.url) }))
 }
 
+const EXPERIENCE_HEADINGS = /^(experience|experiences|work experience|professional experience|internship|work history|employment)$/i
+
 function normalizeCustom(list) {
-  return arr(list).map(c => ({ id: uuid(), title: str(c.title), description: str(c.description) }))
+  return arr(list)
+    .filter(c => !EXPERIENCE_HEADINGS.test(str(c.title).trim()))
+    .map(c => {
+      const bullets = Array.isArray(c.bullets) ? c.bullets.map(str).filter(Boolean) : []
+      const description = bullets.length > 0 ? bullets.join('\n') : str(c.description)
+      return { id: uuid(), title: str(c.title), description }
+    })
 }
 
 function normalizeLlmContent(raw, rawText) {
@@ -89,8 +97,8 @@ function normalizeLlmContent(raw, rawText) {
 
   const sectionOrder = ['personal']
   if (experience.length)     sectionOrder.push('experience')
-  if (education.length)      sectionOrder.push('education')
   if (skills.length)         sectionOrder.push('skills')
+  if (education.length)      sectionOrder.push('education')
   if (projects.length)       sectionOrder.push('projects')
   if (certifications.length) sectionOrder.push('certifications')
   if (languages.length)      sectionOrder.push('languages')
