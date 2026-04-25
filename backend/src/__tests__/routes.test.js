@@ -12,6 +12,16 @@ jest.mock('../services/parser/docxParser', () => ({
   )
 }))
 
+jest.mock('../services/parser/ollamaParser', () => {
+  class OllamaUnavailableError extends Error {
+    constructor(msg) { super(msg); this.name = 'OllamaUnavailableError' }
+  }
+  return {
+    OllamaUnavailableError,
+    parseWithOllama: jest.fn().mockRejectedValue(new OllamaUnavailableError('Ollama not available in tests'))
+  }
+})
+
 const app = require('../index')
 
 describe('POST /api/upload', () => {

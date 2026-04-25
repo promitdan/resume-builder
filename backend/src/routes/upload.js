@@ -1,8 +1,10 @@
 const express  = require('express')
 const multer   = require('multer')
-const { extractTextFromPdf }  = require('../services/parser/pdfParser')
-const { extractTextFromDocx } = require('../services/parser/docxParser')
-const { mapToContent }        = require('../services/parser/contentMapper')
+const { extractTextFromPdf }    = require('../services/parser/pdfParser')
+const { extractTextFromDocx }   = require('../services/parser/docxParser')
+const { mapToContent }          = require('../services/parser/contentMapper')
+const { parseWithOllama, OllamaUnavailableError } = require('../services/parser/ollamaParser')
+const { normalizeLlmContent }   = require('../services/parser/llmContentMapper')
 
 const router  = express.Router()
 const storage = multer.memoryStorage()
@@ -41,7 +43,21 @@ router.post('/', (req, res, next) => {
       ? await extractTextFromPdf(req.file.buffer)
       : await extractTextFromDocx(req.file.buffer)
 
-    const content = mapToContent(rawText)
+    let content, parseMethod
+
+    try {
+      const llmRaw = await parseWithOllama(rawText)
+      content     = normalizeLlmContent(llmRaw, rawText)
+      parseMethod = 'ollama'
+    } catch (ollamaErr) {
+      if (!(ollamaErr instanceof OllamaUnavailableError)) {
+        console.warn('Ollama parse failed, falling back to regex:', ollamaErr.message)
+      }
+      content     = mapToContent(rawText)
+      parseMethod = 'regex-fallback'
+    }
+
+    res.set('X-Parse-Method', parseMethod)
     return res.json({ content })
   } catch (err) {
     console.error('Parse error:', err)
