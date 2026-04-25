@@ -50,6 +50,7 @@ export default function LandingPage() {
             {/* Scratch card */}
             <div style={{ flex: 1, background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: '12px', padding: '24px 20px', textAlign: 'left', display: 'flex', flexDirection: 'column' }}>
               <div style={{ fontSize: '28px', marginBottom: '8px' }}>✏️</div>
+              <div style={{ fontSize: '15px', fontWeight: 700, color: '#0f172a', marginBottom: '4px' }}>Start from scratch</div>
               <div style={{ fontSize: '13px', color: '#64748b', marginBottom: '16px', flex: 1 }}>Step-by-step guided builder</div>
               <Link
                 to="/build"
