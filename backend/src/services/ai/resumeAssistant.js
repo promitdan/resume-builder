@@ -37,7 +37,9 @@ async function assistWithGroq(text, action) {
     })
     if (!res.ok) throw new AiUnavailableError(`Groq responded with ${res.status}`)
     const data = await res.json()
-    return data.choices[0].message.content.trim()
+    const content = data.choices?.[0]?.message?.content
+    if (!content) throw new AiUnavailableError('Groq returned an empty response')
+    return content.trim()
   } catch (err) {
     if (err.name === 'AiUnavailableError') throw err
     throw new AiUnavailableError(err.message)
