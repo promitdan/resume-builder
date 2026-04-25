@@ -1,5 +1,6 @@
 import t from '../../../templates/minimal.json'
 import InlineEditor from '../InlineEditor'
+import RichTextEditor from '../RichTextEditor'
 
 export default function MinimalTemplate({ content = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
@@ -46,7 +47,7 @@ export default function MinimalTemplate({ content = {} }) {
         <div>
           {sectionLabel('Summary')}
           <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.7', color: '#444', maxWidth: '580px' }}>
-            <InlineEditor path="personal.summary" value={personal.summary} multiline>{personal.summary}</InlineEditor>
+            <RichTextEditor path="personal.summary" value={personal.summary} />
           </div>
         </div>
       )}
@@ -104,7 +105,7 @@ export default function MinimalTemplate({ content = {} }) {
                   )}
                   {e.bullets?.filter(Boolean).map((b, bi) => (
                     <div key={bi} style={{ fontSize: ty.bodyFontSize, lineHeight: '1.7', color: '#444' }}>
-                      • <InlineEditor path={`experience.${i}.bullets.${bi}`} value={b}>{b}</InlineEditor>
+                      • <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                     </div>
                   ))}
                 </div>
@@ -214,7 +215,7 @@ export default function MinimalTemplate({ content = {} }) {
                   </div>
                   {proj.description && (
                     <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.7', color: '#444', marginTop: '2px' }}>
-                      <InlineEditor path={`projects.${i}.description`} value={proj.description} multiline>{proj.description}</InlineEditor>
+                      <RichTextEditor path={`projects.${i}.description`} value={proj.description} />
                     </div>
                   )}
                   {proj.url && (

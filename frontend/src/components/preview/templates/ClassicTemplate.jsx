@@ -1,5 +1,6 @@
 import t from '../../../templates/classic.json'
 import InlineEditor from '../InlineEditor'
+import RichTextEditor from '../RichTextEditor'
 
 export default function ClassicTemplate({ content = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
@@ -51,7 +52,7 @@ export default function ClassicTemplate({ content = {} }) {
           <div>
             {sectionLabel('Professional Summary')}
             <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.65', color: c.mainText, textAlign: 'justify' }}>
-              <InlineEditor path="personal.summary" value={personal.summary} multiline>{personal.summary}</InlineEditor>
+              <RichTextEditor path="personal.summary" value={personal.summary} />
             </div>
           </div>
         )}
@@ -99,7 +100,7 @@ export default function ClassicTemplate({ content = {} }) {
                   )}
                   {e.bullets?.filter(Boolean).map((b, bi) => (
                     <div key={bi} style={{ fontSize: ty.bodyFontSize, lineHeight: '1.6', color: '#333', marginBottom: '3px' }}>
-                      • <InlineEditor path={`experience.${i}.bullets.${bi}`} value={b}>{b}</InlineEditor>
+                      • <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                     </div>
                   ))}
                 </div>
@@ -213,7 +214,7 @@ export default function ClassicTemplate({ content = {} }) {
                   </div>
                   {proj.description && (
                     <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.6', color: '#333', marginTop: '2px' }}>
-                      <InlineEditor path={`projects.${i}.description`} value={proj.description} multiline>{proj.description}</InlineEditor>
+                      <RichTextEditor path={`projects.${i}.description`} value={proj.description} />
                     </div>
                   )}
                   {proj.url && (

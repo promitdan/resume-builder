@@ -1,5 +1,6 @@
 import t from '../../../templates/creative.json'
 import InlineEditor from '../InlineEditor'
+import RichTextEditor from '../RichTextEditor'
 
 export default function CreativeTemplate({ content = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
@@ -52,7 +53,7 @@ export default function CreativeTemplate({ content = {} }) {
           <div style={{ marginBottom: '24px' }}>
             {sectionLabel('About')}
             <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.7', color: '#444' }}>
-              <InlineEditor path="personal.summary" value={personal.summary} multiline>{personal.summary}</InlineEditor>
+              <RichTextEditor path="personal.summary" value={personal.summary} />
             </div>
           </div>
         )}
@@ -103,7 +104,7 @@ export default function CreativeTemplate({ content = {} }) {
                     )}
                     {e.bullets?.filter(Boolean).map((b, bi) => (
                       <div key={bi} style={{ fontSize: ty.bodyFontSize, lineHeight: '1.65', color: '#444', marginBottom: '2px' }}>
-                        • <InlineEditor path={`experience.${i}.bullets.${bi}`} value={b}>{b}</InlineEditor>
+                        • <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                       </div>
                     ))}
                   </div>
@@ -214,7 +215,7 @@ export default function CreativeTemplate({ content = {} }) {
                     </div>
                     {proj.description && (
                       <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.65', color: '#444', marginTop: '2px' }}>
-                        <InlineEditor path={`projects.${i}.description`} value={proj.description} multiline>{proj.description}</InlineEditor>
+                        <RichTextEditor path={`projects.${i}.description`} value={proj.description} />
                       </div>
                     )}
                     {proj.url && (
