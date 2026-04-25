@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const uploadRouter = require('./routes/upload')
 const exportRouter = require('./routes/export')
+const assistRouter = require('./routes/assist')
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -11,6 +13,7 @@ app.use(express.json({ limit: '10mb' }))
 
 app.use('/api/upload', uploadRouter)
 app.use('/api/export', exportRouter)
+app.use('/api/ai/assist', assistRouter)
 app.use('/api/agents', (req, res) => res.status(501).json({ error: 'Agents not yet implemented', code: 'NOT_IMPLEMENTED' }))
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }))
