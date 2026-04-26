@@ -39,9 +39,9 @@ const COMPONENT_MAP = {
   'creative-minimal':    CreativeMinimalTemplate,
 }
 
-const PAGE_HEIGHT_PX = 10.5 * 96
 const PAGE_INSET = 48
-const CONTENT_HEIGHT = PAGE_HEIGHT_PX - 2 * PAGE_INSET
+const CONTENT_HEIGHT = 11 * 96           // 1056px — letter page at 96dpi
+const PAGE_HEIGHT_PX = CONTENT_HEIGHT + 2 * PAGE_INSET  // 1152px — frame including margins
 
 export default function ResumePreview({ content, templateId, paletteIndex = 0, fontScale = 1.0, onBreaksChange, currentPage = 1 }) {
   const Template      = COMPONENT_MAP[templateId]
