@@ -2,7 +2,7 @@ const fetch = require('node-fetch')
 
 const OLLAMA_URL   = process.env.OLLAMA_URL   || 'http://localhost:11434'
 const OLLAMA_MODEL = () => process.env.OLLAMA_MODEL || 'llama3'
-const TIMEOUT_MS   = 120_000
+const TIMEOUT_MS   = 300_000
 
 class OllamaUnavailableError extends Error {
   constructor(msg) { super(msg); this.name = 'OllamaUnavailableError' }
