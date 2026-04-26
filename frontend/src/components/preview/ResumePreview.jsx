@@ -39,8 +39,10 @@ const COMPONENT_MAP = {
   'creative-minimal':    CreativeMinimalTemplate,
 }
 
-export const CONTENT_HEIGHT = 11 * 96  // 1056px — letter page at 96dpi
-export const PAGE_GAP = 24             // gray gap between page cards
+export const CONTENT_HEIGHT = 11 * 96         // 1056px — letter page at 96dpi
+export const PAGE_GAP = 24                    // gray gap between page cards
+const PAGE_INSET = 48                         // top/bottom padding inside each card
+const VISIBLE_HEIGHT = CONTENT_HEIGHT - 2 * PAGE_INSET  // 960px of content per card
 
 export default function ResumePreview({ content, templateId, paletteIndex = 0, fontScale = 1.0, onBreaksChange }) {
   const Template      = COMPONENT_MAP[templateId]
@@ -55,7 +57,7 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
     const el = measureRef.current
     const compute = () => {
       const h = el.scrollHeight
-      const pages = Math.max(1, Math.ceil(h / CONTENT_HEIGHT))
+      const pages = Math.max(1, Math.ceil(h / VISIBLE_HEIGHT))
       setTotalPages(pages)
       onBreaksChange?.(pages)
     }
@@ -90,9 +92,11 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
             background: '#fff',
             boxShadow: '0 2px 16px rgba(0,0,0,0.15)',
             marginBottom: i < totalPages - 1 ? `${PAGE_GAP}px` : 0,
+            padding: `${PAGE_INSET}px 0`,
+            boxSizing: 'border-box',
           }}
         >
-          <div style={{ transform: `translateY(${-i * CONTENT_HEIGHT}px)` }}>
+          <div style={{ transform: `translateY(${-i * VISIBLE_HEIGHT}px)` }}>
             <div style={{ zoom: fontScale }}>
               <Template content={content} paletteColors={paletteColors} />
             </div>
