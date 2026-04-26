@@ -1,4 +1,5 @@
 {
+  "layoutType": "two-column",
   "id": "minimal-boxed",
   "name": "Boxed",
   "category": "minimal",
