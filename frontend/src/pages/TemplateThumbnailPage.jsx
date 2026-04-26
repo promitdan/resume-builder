@@ -114,7 +114,7 @@ export default function TemplateThumbnailPage() {
   if (!Template) return null
 
   return (
-    <div style={{ width: `${8.5 * 96}px`, margin: 0, padding: 0, ...FONT_VARS }}>
+    <div style={{ width: '745px', margin: 0, padding: 0, ...FONT_VARS }}>
       <Template content={SAMPLE} paletteColors={paletteColors} pageIndex={0} />
     </div>
   )

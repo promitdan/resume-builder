@@ -21,7 +21,7 @@ export default function ModernTemplate({ content = {}, paletteColors = {}, pageI
   const hasSkillItems = skills.some(sk => (sk.items ?? []).length > 0)
 
   return (
-    <div style={{ display: 'flex', fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, minHeight: '11in' }}>
+    <div style={{ display: 'flex', fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, minHeight: '1054px' }}>
       <div data-col="left" style={{ width: `${l.sidebarWidthPercent}%`, background: c.sidebarBackground, color: c.sidebarText, padding: '32px 20px', boxSizing: 'border-box', flexShrink: 0 }}>
         {pageIndex === 0 && (
           <div style={{ textAlign: 'center', marginBottom: '20px' }}>

@@ -259,9 +259,9 @@ export default function ModernBannerTemplate({ content = {}, paletteColors = {},
   )
 
   return (
-    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, minHeight: '11in', background: c.mainBg }}>
+    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, minHeight: '1054px', background: c.mainBg }}>
       {pageIndex === 0 && header}
-      <div style={{ display: 'flex', minHeight: 'calc(11in - 100px)' }}>
+      <div style={{ display: 'flex', minHeight: '954px' }}>
         {leftCol}
         {rightCol}
       </div>

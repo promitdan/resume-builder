@@ -249,7 +249,7 @@ export default function ModernSplitTemplate({ content = {}, paletteColors = {}, 
   )
 
   return (
-    <div style={{ display: 'flex', minHeight: '11in', fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight }}>
+    <div style={{ display: 'flex', minHeight: '1054px', fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight }}>
       {sidebar}
       {main}
     </div>

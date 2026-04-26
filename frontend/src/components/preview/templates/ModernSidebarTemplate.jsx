@@ -254,7 +254,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
   )
 
   return (
-    <div style={{ display: 'flex', minHeight: '11in', fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg }}>
+    <div style={{ display: 'flex', minHeight: '1054px', fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg }}>
       {sidebar}
       {main}
     </div>

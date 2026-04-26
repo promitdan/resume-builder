@@ -189,7 +189,7 @@ export default function ExecutiveBandTemplate({ content = {}, paletteColors = {}
   )
 
   return (
-    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in' }}>
+    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '1054px' }}>
       {/* Colored band header */}
       {pageIndex === 0 && <div data-page-header style={{ background: c.bannerBg, padding: '28px 28px 22px 28px' }}>
         <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: c.bannerText, lineHeight: 1.1, letterSpacing: '-0.5px' }}>

@@ -1,5 +1,6 @@
-export const CONTENT_HEIGHT   = 11 * 96             // 1056px
-export const PAGE_CONTENT_MAX = CONTENT_HEIGHT - 48  // 1008px — 48px bottom buffer
+export const PAGE_WIDTH       = 745
+export const CONTENT_HEIGHT   = 1054
+export const PAGE_CONTENT_MAX = CONTENT_HEIGHT - 48  // 1006px — 48px bottom buffer
 export const PAGE_GAP         = 24
 
 function measureSectionsInEl(el, containerEl) {

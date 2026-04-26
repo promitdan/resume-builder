@@ -193,7 +193,7 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
   )
 
   return (
-    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in' }}>
+    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '1054px' }}>
       {/* Dark banner header */}
       {pageIndex === 0 && (
         <div data-page-header style={{ background: c.bannerBg, padding: '22px 24px 18px' }}>

@@ -191,7 +191,7 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
   )
 
   return (
-    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in' }}>
+    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '1054px' }}>
       {/* Name header */}
       {pageIndex === 0 && (
         <div data-page-header>

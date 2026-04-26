@@ -19,7 +19,7 @@ import CreativeMinimalTemplate  from './templates/CreativeMinimalTemplate'
 import { TEMPLATE_CONFIGS }     from '../../registry/templateRegistry'
 import {
   measureAndDistribute, sliceContent,
-  CONTENT_HEIGHT, PAGE_GAP,
+  CONTENT_HEIGHT, PAGE_GAP, PAGE_WIDTH,
 } from '../../utils/pageLayout'
 
 const COMPONENT_MAP = {
@@ -102,13 +102,13 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
   if (!Template) return <div style={{ padding: '20px', color: '#e53e3e' }}>Unknown template: {templateId}</div>
 
   return (
-    <div style={{ width: '8.5in', margin: '0 auto' }}>
+    <div style={{ width: `${PAGE_WIDTH}px`, margin: '0 auto' }}>
       {/* Hidden full render for measurement — always pageIndex=0 so all content is present */}
       <div
         ref={measureRef}
         style={{
           position: 'absolute', left: '-9999px', top: 0,
-          width: '8.5in', visibility: 'hidden', pointerEvents: 'none',
+          width: `${PAGE_WIDTH}px`, visibility: 'hidden', pointerEvents: 'none',
           ...fontVars,
         }}
       >
@@ -121,7 +121,7 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
           key={`page-${pageIndex}`}
           className="page"
           style={{
-            width:        '8.5in',
+            width:        `${PAGE_WIDTH}px`,
             height:       `${CONTENT_HEIGHT}px`,
             background:   '#fff',
             boxShadow:    '0 2px 16px rgba(0,0,0,0.15)',

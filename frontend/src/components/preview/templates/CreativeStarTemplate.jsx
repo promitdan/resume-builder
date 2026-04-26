@@ -40,7 +40,7 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {},
   const lastName  = nameParts.slice(1).join(' ') || ''
 
   return (
-    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in', padding: '44px 44px 52px' }}>
+    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '1054px', padding: '44px 44px 52px' }}>
 
       {pageIndex === 0 && (
         <div data-page-header>

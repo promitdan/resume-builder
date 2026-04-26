@@ -30,7 +30,7 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {},
   ].filter(f => f.val)
 
   return (
-    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in', padding: '48px 56px' }}>
+    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '1054px', padding: '48px 56px' }}>
       {pageIndex === 0 && (
         <div data-page-header>
           <div style={{ textAlign: 'center', marginBottom: '24px' }}>

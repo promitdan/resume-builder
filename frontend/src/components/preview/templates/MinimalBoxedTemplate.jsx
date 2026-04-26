@@ -193,7 +193,7 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {},
   )
 
   return (
-    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in' }}>
+    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '1054px' }}>
       {/* Boxed name header */}
       {pageIndex === 0 && (
         <div data-page-header style={{ padding: '20px 28px', borderBottom: `2px solid ${c.mainText}` }}>
