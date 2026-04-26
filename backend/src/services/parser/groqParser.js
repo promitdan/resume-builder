@@ -29,6 +29,9 @@ Rules:
 - For each custom section, extract each distinct item/activity as a separate verbatim string in the bullets array
 - If a field is absent, use "" or []
 - Every key must be present
+- For personal.linkedin: if the resume text says "LinkedIn" or "linkedin" with no visible URL, look for a linkedin.com URL in the embedded URL list and use that full URL
+- For personal.website: if the resume text says "GitHub" or "github" with no visible URL, look for a github.com URL in the embedded URL list and use that full URL
+- For projects[].url: if a project title is followed by "GitHub" with no visible URL, look for a matching github.com URL in the embedded URL list
 
 Return ONLY this JSON shape:
 {

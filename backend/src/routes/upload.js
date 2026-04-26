@@ -1,6 +1,6 @@
 const express  = require('express')
 const multer   = require('multer')
-const { extractTextFromPdf }    = require('../services/parser/pdfParser')
+const { extractFromPdf }        = require('../services/parser/pdfParser')
 const { extractTextFromDocx }   = require('../services/parser/docxParser')
 const { mapToContent }          = require('../services/parser/contentMapper')
 const { parseWithGroq, GroqUnavailableError } = require('../services/parser/groqParser')
@@ -55,14 +55,24 @@ router.post('/', (req, res, next) => {
 
   try {
     const isPdf  = req.file.mimetype === 'application/pdf' || /\.pdf$/i.test(req.file.originalname)
-    const rawText = isPdf
-      ? await extractTextFromPdf(req.file.buffer)
-      : await extractTextFromDocx(req.file.buffer)
+    let rawText, annotationUrls = []
+    if (isPdf) {
+      const { text, urls } = await extractFromPdf(req.file.buffer)
+      rawText = text
+      annotationUrls = urls
+    } else {
+      rawText = await extractTextFromDocx(req.file.buffer)
+    }
+
+    // Append annotation URLs so Groq can map "LinkedIn" / "GitHub" display text to real URLs
+    const groqText = annotationUrls.length
+      ? rawText + `\n\n[URLs embedded in document: ${annotationUrls.join(' ')}]`
+      : rawText
 
     let content, parseMethod
 
     try {
-      const llmRaw = await parseWithGroq(rawText)
+      const llmRaw = await parseWithGroq(groqText)
       console.log('[groq] result:', JSON.stringify(llmRaw, null, 2))
       content     = normalizeLlmContent(llmRaw, rawText)
       parseMethod = 'groq'
