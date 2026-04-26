@@ -84,8 +84,11 @@ export default function PreviewPage() {
           {/* Color palette card */}
           {palettes.length > 0 && (
             <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '16px' }}>
-              <h3 style={{ margin: '0 0 12px', fontSize: '13px', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Color</h3>
-              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+                <h3 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Color</h3>
+                <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 500 }}>{palettes[paletteIndex]?.label}</span>
+              </div>
+              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 {palettes.map((palette, i) => (
                   <button
                     key={palette.label}
@@ -93,16 +96,18 @@ export default function PreviewPage() {
                     title={palette.label}
                     onClick={() => setPaletteIndex(i)}
                     style={{
-                      width: '26px',
-                      height: '26px',
+                      width: '24px',
+                      height: '24px',
                       borderRadius: '50%',
                       background: palette.swatch,
-                      border: i === paletteIndex ? '2.5px solid #0f172a' : '2px solid transparent',
-                      outline: i === paletteIndex ? '2px solid #fff' : 'none',
-                      outlineOffset: '-4px',
+                      border: 'none',
                       cursor: 'pointer',
                       padding: 0,
-                      boxShadow: '0 1px 3px rgba(0,0,0,0.18)',
+                      flexShrink: 0,
+                      boxShadow: i === paletteIndex
+                        ? `0 0 0 2.5px #fff, 0 0 0 4.5px ${palette.swatch}`
+                        : '0 1px 3px rgba(0,0,0,0.20)',
+                      transition: 'box-shadow 0.15s ease',
                     }}
                   />
                 ))}

@@ -61,7 +61,7 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '4px' }}>
             {skills.map((sk, si) =>
               (sk.items ?? []).map((item, ii) => (
-                <span key={`${si}-${ii}`} style={{ background: '#1a4d7a', border: '1px solid #2d6a9f', color: '#cce4ff', fontSize: '12px', padding: '4px 10px', borderRadius: '12px' }}>
+                <span key={`${si}-${ii}`} style={{ background: 'rgba(255,255,255,0.13)', border: `1px solid ${c.sidebarAccent}`, color: c.sidebarAccent, fontSize: '12px', padding: '4px 10px', borderRadius: '12px' }}>
                   <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
                 </span>
               ))
