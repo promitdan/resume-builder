@@ -2,6 +2,7 @@ import t from '../../../templates/modern.json'
 import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
+import ContactIcon from '../ContactIcon'
 
 export default function ModernTemplate({ content = {}, paletteColors = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
@@ -18,14 +19,6 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
   )
 
   const hasSkillItems = skills.some(sk => (sk.items ?? []).length > 0)
-
-  const sidebarContactFields = [
-    { path: 'personal.email',    val: personal.email },
-    { path: 'personal.phone',    val: personal.phone },
-    { path: 'personal.location', val: personal.location },
-    { path: 'personal.linkedin', val: personal.linkedin, isLink: true },
-    { path: 'personal.website',  val: personal.website,  isLink: true },
-  ].filter(f => f.val)
 
   return (
     <div style={{ display: 'flex', fontFamily: ty.bodyFont, fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, minHeight: '11in' }}>
@@ -45,15 +38,37 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
         </div>
 
         {sidebarLabel('Contact')}
-        <div style={{ fontSize: '13px', lineHeight: '1.7', wordBreak: 'break-word', marginBottom: '4px' }}>
-          {sidebarContactFields.map(f => (
-            <div key={f.path}>
-              {f.isLink
-                ? <ContactLink path={f.path} value={f.val} />
-                : <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
-              }
+        <div style={{ fontSize: '13px', marginBottom: '4px' }}>
+          {personal.email && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', wordBreak: 'break-all' }}>
+              <ContactIcon type="email" size={13} color={c.sidebarAccent} />
+              <InlineEditor path="personal.email" value={personal.email}>{personal.email}</InlineEditor>
             </div>
-          ))}
+          )}
+          {personal.phone && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+              <ContactIcon type="phone" size={13} color={c.sidebarAccent} />
+              <InlineEditor path="personal.phone" value={personal.phone}>{personal.phone}</InlineEditor>
+            </div>
+          )}
+          {personal.location && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
+              <ContactIcon type="location" size={13} color={c.sidebarAccent} />
+              <InlineEditor path="personal.location" value={personal.location}>{personal.location}</InlineEditor>
+            </div>
+          )}
+          {personal.linkedin && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', wordBreak: 'break-all' }}>
+              <ContactIcon type="linkedin" size={13} color={c.sidebarAccent} />
+              <ContactLink path="personal.linkedin" value={personal.linkedin} />
+            </div>
+          )}
+          {personal.website && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', wordBreak: 'break-all' }}>
+              <ContactIcon type="globe" size={13} color={c.sidebarAccent} />
+              <ContactLink path="personal.website" value={personal.website} />
+            </div>
+          )}
         </div>
 
         {hasSkillItems && <>
@@ -61,7 +76,7 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '4px' }}>
             {skills.map((sk, si) =>
               (sk.items ?? []).map((item, ii) => (
-                <span key={`${si}-${ii}`} style={{ background: 'rgba(255,255,255,0.13)', border: `1px solid ${c.sidebarAccent}`, color: c.sidebarAccent, fontSize: '12px', padding: '4px 10px', borderRadius: '12px' }}>
+                <span key={`${si}-${ii}`} style={{ background: 'rgba(255,255,255,0.22)', border: `1.5px solid rgba(255,255,255,0.55)`, color: '#ffffff', fontSize: '12px', padding: '4px 10px', borderRadius: '12px', fontWeight: 500 }}>
                   <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
                 </span>
               ))

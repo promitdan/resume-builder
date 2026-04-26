@@ -21,18 +21,25 @@
     "dividerColor": "#4a9eff",
     "mutedText": "#666666"
   },
+  "palettes": [
+    { "label": "Navy",     "swatch": "#2c3e58", "colors": { "sidebarBackground": "#2c3e58", "sidebarText": "#dce6f0", "sidebarAccent": "#7da8cc", "headingText": "#2c3e58", "accentColor": "#7da8cc", "dividerColor": "#7da8cc" } },
+    { "label": "Graphite", "swatch": "#3a3a3a", "colors": { "sidebarBackground": "#3a3a3a", "sidebarText": "#e8e8e8", "sidebarAccent": "#a0a0a0", "headingText": "#3a3a3a", "accentColor": "#888888", "dividerColor": "#888888" } },
+    { "label": "Forest",   "swatch": "#2a3f30", "colors": { "sidebarBackground": "#2a3f30", "sidebarText": "#d4e8d8", "sidebarAccent": "#7aaa88", "headingText": "#2a3f30", "accentColor": "#6a9a78", "dividerColor": "#6a9a78" } },
+    { "label": "Slate",    "swatch": "#3a4a58", "colors": { "sidebarBackground": "#3a4a58", "sidebarText": "#dce4ee", "sidebarAccent": "#8aa4bc", "headingText": "#3a4a58", "accentColor": "#7a94ac", "dividerColor": "#7a94ac" } },
+    { "label": "Plum",     "swatch": "#3d3050", "colors": { "sidebarBackground": "#3d3050", "sidebarText": "#e4ddf0", "sidebarAccent": "#a090c0", "headingText": "#3d3050", "accentColor": "#9080b0", "dividerColor": "#9080b0" } }
+  ],
   "typography": {
     "nameFont": "Inter, sans-serif",
-    "nameFontSize": "15px",
+    "nameFontSize": "19px",
     "nameFontWeight": "700",
     "titleFont": "Inter, sans-serif",
-    "titleFontSize": "11px",
+    "titleFontSize": "14px",
     "sectionLabelFont": "Inter, sans-serif",
-    "sectionLabelSize": "9px",
+    "sectionLabelSize": "11px",
     "sectionLabelStyle": "uppercase",
-    "sectionLabelSpacing": "2.5px",
+    "sectionLabelSpacing": "2px",
     "bodyFont": "Inter, sans-serif",
-    "bodyFontSize": "11px",
+    "bodyFontSize": "14px",
     "bodyLineHeight": "1.6"
   },
   "header": { "placement": "sidebar-top", "alignment": "center", "showAvatar": true, "avatarStyle": "circle", "avatarSizePx": 64 },

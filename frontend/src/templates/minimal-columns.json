@@ -1,0 +1,27 @@
+{
+  "id": "minimal-columns",
+  "name": "Columns",
+  "category": "minimal",
+  "layout": {
+    "sidebarWidthPercent": 33,
+    "itemSpacing": "16px"
+  },
+  "colors": {
+    "mainBg": "#ffffff",
+    "mainText": "#111111",
+    "headingText": "#111111",
+    "mutedText": "#555555",
+    "labelText": "#111111",
+    "dividerColor": "#cccccc"
+  },
+  "typography": {
+    "nameFont": "Arial, Helvetica, sans-serif",
+    "nameFontSize": "42px",
+    "nameFontWeight": "900",
+    "sectionLabelFont": "Arial, Helvetica, sans-serif",
+    "sectionLabelSize": "11px",
+    "bodyFont": "Arial, Helvetica, sans-serif",
+    "bodyFontSize": "13px",
+    "bodyLineHeight": "1.55"
+  }
+}

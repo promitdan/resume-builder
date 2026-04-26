@@ -44,7 +44,7 @@ async function parseWithOllama(rawText) {
       signal: controller.signal
     })
   } catch (err) {
-    if (err.code === 'ECONNREFUSED' || err.name === 'AbortError') {
+    if (err.code === 'ECONNREFUSED' || err.code === 'ECONNRESET' || err.name === 'AbortError') {
       throw new OllamaUnavailableError(`Ollama not reachable: ${err.message}`)
     }
     throw err
@@ -56,7 +56,12 @@ async function parseWithOllama(rawText) {
     throw new OllamaUnavailableError(`Ollama returned HTTP ${response.status}`)
   }
 
-  const data = await response.json()
+  let data
+  try {
+    data = await response.json()
+  } catch (err) {
+    throw new OllamaUnavailableError(`Ollama response unreadable: ${err.message}`)
+  }
   const content = JSON.parse(data.message.content)
   return content
 }

@@ -1,0 +1,36 @@
+{
+  "id": "creative-star",
+  "name": "Star",
+  "category": "creative",
+  "layout": {
+    "itemSpacing": "20px",
+    "nameSplit": true
+  },
+  "colors": {
+    "mainBg": "#e8f0da",
+    "mainText": "#111111",
+    "headingText": "#111111",
+    "mutedText": "#666666",
+    "dividerColor": "#b8c8a4",
+    "tableLabel": "#444444",
+    "tableValue": "#111111"
+  },
+  "palettes": [
+    { "label": "Lime",    "swatch": "#e8f0da", "colors": {} },
+    { "label": "Sky",     "swatch": "#daeaf5", "colors": { "mainBg": "#daeaf5", "dividerColor": "#a4bcd4" } },
+    { "label": "Blush",   "swatch": "#f5e0e0", "colors": { "mainBg": "#f5e0e0", "dividerColor": "#d4a4a4" } },
+    { "label": "Lavender","swatch": "#e8e0f5", "colors": { "mainBg": "#e8e0f5", "dividerColor": "#b8a8d8" } },
+    { "label": "Peach",   "swatch": "#f5ebe0", "colors": { "mainBg": "#f5ebe0", "dividerColor": "#d4b89a" } }
+  ],
+  "typography": {
+    "nameFont": "Arial Black, Arial, sans-serif",
+    "nameFontSize": "52px",
+    "nameFontWeight": "900",
+    "sectionLabelFont": "Arial, Helvetica, sans-serif",
+    "sectionLabelSize": "18px",
+    "sectionLabelWeight": "700",
+    "bodyFont": "Arial, Helvetica, sans-serif",
+    "bodyFontSize": "13px",
+    "bodyLineHeight": "1.6"
+  }
+}

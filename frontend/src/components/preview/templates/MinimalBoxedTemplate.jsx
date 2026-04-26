@@ -1,0 +1,204 @@
+import t from '../../../templates/minimal-boxed.json'
+import InlineEditor from '../InlineEditor'
+import RichTextEditor from '../RichTextEditor'
+import ContactLink from '../ContactLink'
+
+export default function MinimalBoxedTemplate({ content = {}, paletteColors = {} }) {
+  const { personal = {}, experience = [], education = [], skills = [],
+          projects = [], certifications = [], languages = [], awards = [], custom = [],
+          sectionOrder = [] } = content
+  const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
+
+  const Rule = () => <div style={{ height: '1px', background: c.dividerColor, margin: '6px 0 10px' }} />
+
+  const sectionHeader = (text) => (
+    <div style={{ marginBottom: '2px', marginTop: '18px' }}>
+      <div style={{ fontSize: ty.sectionLabelSize, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1.2px', color: c.headingText }}>{text}</div>
+      <Rule />
+    </div>
+  )
+
+  const contactLabel = (label) => (
+    <div style={{ fontSize: '9px', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.8px', color: c.mutedText, marginTop: '8px', marginBottom: '1px' }}>{label}</div>
+  )
+
+  const dateStr = (e) => [e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' – ')
+  const hasSkills = skills.some(sk => (sk.items ?? []).length > 0)
+
+  /* ── Left column ── */
+  const leftCol = (
+    <div style={{ width: `${l.sidebarWidthPercent}%`, padding: '24px 20px 40px 28px', boxSizing: 'border-box', flexShrink: 0, borderRight: `1px solid ${c.dividerColor}`, fontFamily: ty.bodyFont }}>
+
+      {sectionHeader('Contact')}
+      {personal.email    && <>{contactLabel('Email')}<div style={{ fontSize: ty.bodyFontSize, wordBreak: 'break-all' }}><InlineEditor path="personal.email" value={personal.email}>{personal.email}</InlineEditor></div></>}
+      {personal.phone    && <>{contactLabel('Phone')}<div style={{ fontSize: ty.bodyFontSize }}><InlineEditor path="personal.phone" value={personal.phone}>{personal.phone}</InlineEditor></div></>}
+      {personal.location && <>{contactLabel('Location')}<div style={{ fontSize: ty.bodyFontSize }}><InlineEditor path="personal.location" value={personal.location}>{personal.location}</InlineEditor></div></>}
+      {personal.linkedin && <>{contactLabel('LinkedIn')}<div style={{ fontSize: ty.bodyFontSize, wordBreak: 'break-all' }}><ContactLink path="personal.linkedin" value={personal.linkedin} /></div></>}
+      {personal.website  && <>{contactLabel('Website')}<div style={{ fontSize: ty.bodyFontSize, wordBreak: 'break-all' }}><ContactLink path="personal.website" value={personal.website} /></div></>}
+
+      {hasSkills && (
+        <>
+          {sectionHeader('Skills')}
+          {skills.filter(sk => (sk.items ?? []).length > 0).map((sk, si) => (
+            <div key={sk.id ?? si} style={{ marginBottom: '4px' }}>
+              {sk.label && <div style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: c.mutedText, marginBottom: '2px' }}>{sk.label}</div>}
+              <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.7' }}>
+                {(sk.items ?? []).map((item, ii) => (
+                  <span key={ii}>
+                    <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
+                    {ii < sk.items.length - 1 ? ', ' : ''}
+                  </span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+
+      {languages.length > 0 && (
+        <>
+          {sectionHeader('Languages')}
+          <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.8' }}>
+            {languages.map((lang, i) => (
+              <div key={lang.id ?? i}>
+                <InlineEditor path={`languages.${i}.language`} value={lang.language}>{lang.language}</InlineEditor>
+                {lang.proficiency && <span style={{ color: c.mutedText }}> – {lang.proficiency}</span>}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+
+      {awards.length > 0 && (
+        <>
+          {sectionHeader('Awards')}
+          {awards.map((aw, i) => (
+            <div key={aw.id ?? i} style={{ marginBottom: '8px', fontSize: ty.bodyFontSize }}>
+              {aw.title && <div style={{ fontWeight: 700 }}><InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor></div>}
+              {aw.issuer && <div style={{ color: c.mutedText }}><InlineEditor path={`awards.${i}.issuer`} value={aw.issuer}>{aw.issuer}</InlineEditor></div>}
+              {aw.date   && <div style={{ color: c.mutedText }}><InlineEditor path={`awards.${i}.date`} value={aw.date}>{aw.date}</InlineEditor></div>}
+            </div>
+          ))}
+        </>
+      )}
+    </div>
+  )
+
+  /* ── Right column ── */
+  const rightCol = (
+    <div style={{ flex: 1, padding: '24px 28px 40px 20px', boxSizing: 'border-box', fontFamily: ty.bodyFont }}>
+      {personal.summary && (
+        <>
+          {sectionHeader('Profile')}
+          <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight }}>
+            <RichTextEditor path="personal.summary" value={personal.summary} />
+          </div>
+        </>
+      )}
+
+      {sectionOrder.filter(k => !['personal', 'skills', 'languages', 'awards'].includes(k)).map(key => {
+
+        if (key === 'experience' && experience.length > 0) return (
+          <div key={key}>
+            {sectionHeader('Experience')}
+            {experience.map((e, i) => (
+              <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                  <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize }}>
+                    <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
+                    {e.company && <span style={{ fontWeight: 400 }}>, <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor></span>}
+                  </div>
+                  {dateStr(e) && <div style={{ fontSize: ty.bodyFontSize, color: c.mutedText, whiteSpace: 'nowrap', marginLeft: '8px' }}>{dateStr(e)}</div>}
+                </div>
+                {e.location && <div style={{ fontSize: ty.bodyFontSize, color: c.mutedText, marginBottom: '3px' }}><InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></div>}
+                {e.bullets?.filter(Boolean).map((b, bi) => (
+                  <div key={bi} style={{ display: 'flex', alignItems: 'baseline', fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight }}>
+                    <span style={{ flexShrink: 0, marginRight: '4px' }}>•</span>
+                    <div style={{ flex: 1, minWidth: 0 }}><RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} /></div>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        )
+
+        if (key === 'education' && education.length > 0) return (
+          <div key={key}>
+            {sectionHeader('Education')}
+            {education.map((e, i) => (
+              <div key={e.id ?? i} style={{ marginBottom: '10px', fontSize: ty.bodyFontSize }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                  <div style={{ fontWeight: 700 }}>
+                    <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
+                    {e.degree && <span style={{ fontWeight: 400 }}>, <InlineEditor path={`education.${i}.degree`} value={e.degree}>{e.degree}</InlineEditor></span>}
+                    {e.field  && <span style={{ fontWeight: 400 }}>, <InlineEditor path={`education.${i}.field`} value={e.field}>{e.field}</InlineEditor></span>}
+                  </div>
+                  {(e.startDate || e.endDate) && <div style={{ color: c.mutedText, whiteSpace: 'nowrap', marginLeft: '8px' }}>{[e.startDate, e.endDate].filter(Boolean).join(' – ')}</div>}
+                </div>
+                {e.location && <div style={{ color: c.mutedText }}><InlineEditor path={`education.${i}.location`} value={e.location}>{e.location}</InlineEditor></div>}
+                {e.gpa && <div style={{ color: c.mutedText }}>GPA: {e.gpa}</div>}
+              </div>
+            ))}
+          </div>
+        )
+
+        if (key === 'certifications' && certifications.length > 0) return (
+          <div key={key}>
+            {sectionHeader('Certifications')}
+            {certifications.map((cert, i) => (
+              <div key={cert.id ?? i} style={{ marginBottom: '6px', fontSize: ty.bodyFontSize, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <div>
+                  <span style={{ fontWeight: 700 }}><InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor></span>
+                  {cert.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`certifications.${i}.issuer`} value={cert.issuer}>{cert.issuer}</InlineEditor></span>}
+                </div>
+                {cert.date && <span style={{ color: c.mutedText, whiteSpace: 'nowrap', marginLeft: '8px' }}><InlineEditor path={`certifications.${i}.date`} value={cert.date}>{cert.date}</InlineEditor></span>}
+              </div>
+            ))}
+          </div>
+        )
+
+        if (key === 'projects' && projects.length > 0) return (
+          <div key={key}>
+            {sectionHeader('Projects')}
+            {projects.map((proj, i) => (
+              <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize }}>
+                  <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
+                  {proj.url && <span style={{ fontWeight: 400 }}> · <ContactLink path={`projects.${i}.url`} value={proj.url} /></span>}
+                </div>
+                {proj.description && <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, marginTop: '2px' }}><RichTextEditor path={`projects.${i}.description`} value={proj.description} /></div>}
+              </div>
+            ))}
+          </div>
+        )
+
+        if (key === 'custom' && custom.length > 0) return custom.map((sec, i) => (
+          <div key={`${key}-${i}`}>
+            {sectionHeader(<InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor>)}
+            <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
+          </div>
+        ))
+
+        return null
+      })}
+    </div>
+  )
+
+  return (
+    <div style={{ fontFamily: ty.bodyFont, fontSize: ty.bodyFontSize, color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in' }}>
+      {/* Boxed name header */}
+      <div style={{ padding: '20px 28px', borderBottom: `2px solid ${c.mainText}` }}>
+        <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: c.headingText, letterSpacing: '-0.3px' }}>
+          <InlineEditor path="personal.name" value={personal.name}>{personal.name || 'Your Name'}</InlineEditor>
+        </div>
+        {personal.title && <div style={{ fontSize: '13px', color: c.mutedText, marginTop: '3px' }}><InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor></div>}
+      </div>
+
+      {/* Two columns */}
+      <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+        {leftCol}
+        {rightCol}
+      </div>
+    </div>
+  )
+}

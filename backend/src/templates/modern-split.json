@@ -1,0 +1,30 @@
+{
+  "id": "modern-split",
+  "name": "Split",
+  "category": "modern",
+  "layout": {
+    "type": "two-column-light",
+    "sidebarWidthPercent": 33,
+    "itemSpacing": "16px"
+  },
+  "colors": {
+    "sidebarBg": "#f0f2f5",
+    "sidebarText": "#1a1a1a",
+    "mainBg": "#ffffff",
+    "mainText": "#1a1a1a",
+    "headingText": "#0f172a",
+    "accentColor": "#6b8fa8",
+    "mutedText": "#6b7280",
+    "dividerColor": "#d1d5db"
+  },
+  "typography": {
+    "nameFont": "Inter, sans-serif",
+    "nameFontSize": "30px",
+    "nameFontWeight": "800",
+    "sectionLabelFont": "Inter, sans-serif",
+    "sectionLabelSize": "11px",
+    "bodyFont": "Inter, sans-serif",
+    "bodyFontSize": "13px",
+    "bodyLineHeight": "1.6"
+  }
+}

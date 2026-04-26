@@ -1,0 +1,60 @@
+{
+  "id": "classic-academic",
+  "name": "Academic",
+  "category": "classic",
+  "layout": {
+    "type": "single-column",
+    "pageMarginTop": "0",
+    "pageMarginSides": "0",
+    "sectionSpacing": "0px",
+    "itemSpacing": "12px",
+    "sidePadding": "56px"
+  },
+  "colors": {
+    "mainBackground": "#ffffff",
+    "mainText": "#111111",
+    "headingText": "#111111",
+    "sectionBandBg": "#e0e0e0",
+    "sectionBandBorder": "#aaaaaa",
+    "dividerColor": "#aaaaaa",
+    "mutedText": "#444444"
+  },
+  "palettes": [
+    {
+      "label": "Stone",
+      "swatch": "#d4d4d4",
+      "colors": { "sectionBandBg": "#e0e0e0", "sectionBandBorder": "#aaaaaa" }
+    },
+    {
+      "label": "Blush",
+      "swatch": "#f0c8c0",
+      "colors": { "sectionBandBg": "#f5ddd8", "sectionBandBorder": "#d9a59c" }
+    },
+    {
+      "label": "Slate",
+      "swatch": "#b8cfe0",
+      "colors": { "sectionBandBg": "#d8e8f2", "sectionBandBorder": "#8aabcc" }
+    },
+    {
+      "label": "Sage",
+      "swatch": "#b4d4b8",
+      "colors": { "sectionBandBg": "#d6ebd8", "sectionBandBorder": "#8ab899" }
+    },
+    {
+      "label": "Sand",
+      "swatch": "#e0c89a",
+      "colors": { "sectionBandBg": "#f0e4d0", "sectionBandBorder": "#c8a87a" }
+    }
+  ],
+  "typography": {
+    "nameFont": "Georgia, 'Times New Roman', serif",
+    "nameFontSize": "22px",
+    "nameFontWeight": "700",
+    "nameLetterSpacing": "2px",
+    "sectionLabelFont": "Georgia, 'Times New Roman', serif",
+    "sectionLabelSize": "12px",
+    "bodyFont": "Georgia, 'Times New Roman', serif",
+    "bodyFontSize": "13px",
+    "bodyLineHeight": "1.55"
+  }
+}

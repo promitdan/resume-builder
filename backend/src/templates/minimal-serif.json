@@ -1,0 +1,26 @@
+{
+  "id": "minimal-serif",
+  "name": "Serif",
+  "category": "minimal",
+  "layout": {
+    "sidebarWidthPercent": 32,
+    "itemSpacing": "14px"
+  },
+  "colors": {
+    "mainBg": "#f5f5f0",
+    "mainText": "#111111",
+    "headingText": "#111111",
+    "mutedText": "#555555",
+    "dividerColor": "#bbbbbb"
+  },
+  "typography": {
+    "nameFont": "Georgia, 'Times New Roman', serif",
+    "nameFontSize": "26px",
+    "nameFontWeight": "400",
+    "sectionLabelFont": "Georgia, 'Times New Roman', serif",
+    "sectionLabelSize": "11px",
+    "bodyFont": "Georgia, 'Times New Roman', serif",
+    "bodyFontSize": "13px",
+    "bodyLineHeight": "1.6"
+  }
+}

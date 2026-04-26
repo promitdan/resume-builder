@@ -1,0 +1,31 @@
+{
+  "id": "classic-formal",
+  "name": "Formal",
+  "category": "classic",
+  "layout": {
+    "type": "single-column",
+    "pageMarginTop": "0",
+    "pageMarginSides": "0",
+    "sectionSpacing": "16px",
+    "itemSpacing": "14px",
+    "sidePadding": "56px",
+    "contentIndent": "24px"
+  },
+  "colors": {
+    "mainBackground": "#ffffff",
+    "mainText": "#111111",
+    "headingText": "#111111",
+    "dividerColor": "#999999",
+    "mutedText": "#555555"
+  },
+  "typography": {
+    "nameFont": "Georgia, 'Times New Roman', serif",
+    "nameFontSize": "30px",
+    "nameFontWeight": "400",
+    "sectionLabelFont": "Georgia, 'Times New Roman', serif",
+    "sectionLabelSize": "13px",
+    "bodyFont": "Georgia, 'Times New Roman', serif",
+    "bodyFontSize": "13px",
+    "bodyLineHeight": "1.6"
+  }
+}

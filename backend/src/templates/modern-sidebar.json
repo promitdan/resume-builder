@@ -1,0 +1,37 @@
+{
+  "id": "modern-sidebar",
+  "name": "Sidebar Dark",
+  "category": "modern",
+  "layout": {
+    "type": "two-column",
+    "sidebarWidthPercent": 32,
+    "itemSpacing": "14px"
+  },
+  "colors": {
+    "sidebarBg": "#3a3a3a",
+    "sidebarText": "#e8e8e8",
+    "sidebarMuted": "#a0a0a0",
+    "mainBg": "#ffffff",
+    "mainText": "#1a1a1a",
+    "headingText": "#0f172a",
+    "mutedText": "#6b7280",
+    "dividerColor": "#e5e7eb"
+  },
+  "typography": {
+    "nameFont": "Inter, sans-serif",
+    "nameFontSize": "18px",
+    "nameFontWeight": "800",
+    "sectionLabelFont": "Inter, sans-serif",
+    "sectionLabelSize": "10px",
+    "bodyFont": "Inter, sans-serif",
+    "bodyFontSize": "13px",
+    "bodyLineHeight": "1.6"
+  },
+  "palettes": [
+    { "label": "Charcoal", "swatch": "#3a3a3a", "colors": { "sidebarBg": "#3a3a3a", "sidebarMuted": "#a0a0a0" } },
+    { "label": "Navy",     "swatch": "#2c3e58", "colors": { "sidebarBg": "#2c3e58", "sidebarMuted": "#8aa8c8" } },
+    { "label": "Teal",     "swatch": "#2a5a68", "colors": { "sidebarBg": "#2a5a68", "sidebarMuted": "#7ab0bc" } },
+    { "label": "Forest",   "swatch": "#2a3f30", "colors": { "sidebarBg": "#2a3f30", "sidebarMuted": "#7aaa88" } },
+    { "label": "Plum",     "swatch": "#3d3050", "colors": { "sidebarBg": "#3d3050", "sidebarMuted": "#a090c0" } }
+  ]
+}

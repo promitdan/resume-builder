@@ -1,0 +1,33 @@
+{
+  "id": "creative-minimal",
+  "name": "Minimal",
+  "category": "creative",
+  "layout": {
+    "labelWidthPercent": 16,
+    "itemSpacing": "18px"
+  },
+  "colors": {
+    "mainBg": "#f5efe8",
+    "mainText": "#111111",
+    "headingText": "#111111",
+    "mutedText": "#888888",
+    "dividerColor": "#d8cfc4",
+    "labelColor": "#888888"
+  },
+  "palettes": [
+    { "label": "Cream",   "swatch": "#f5efe8", "colors": {} },
+    { "label": "Ivory",   "swatch": "#f5f5e8", "colors": { "mainBg": "#f5f5e8", "dividerColor": "#d4d4b8" } },
+    { "label": "Blush",   "swatch": "#f5eaeb", "colors": { "mainBg": "#f5eaeb", "dividerColor": "#d8c4c4" } },
+    { "label": "Ash",     "swatch": "#f0f0f0", "colors": { "mainBg": "#f0f0f0", "dividerColor": "#cccccc" } },
+    { "label": "Sage",    "swatch": "#edf2ea", "colors": { "mainBg": "#edf2ea", "dividerColor": "#c4d4bc" } }
+  ],
+  "typography": {
+    "nameFont": "Georgia, 'Times New Roman', serif",
+    "nameFontSize": "30px",
+    "nameFontWeight": "400",
+    "sectionLabelSize": "10px",
+    "bodyFont": "Georgia, 'Times New Roman', serif",
+    "bodyFontSize": "13px",
+    "bodyLineHeight": "1.65"
+  }
+}

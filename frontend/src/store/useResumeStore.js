@@ -112,7 +112,7 @@ const mockContent = () => ({
 
 const initialState = {
   content: emptyContent(),
-  templateId: 'classic',
+  templateId: 'classic-traditional',
   paletteIndex: 0,
   fontScale: 1.0,
 }
@@ -222,9 +222,9 @@ export const useResumeStore = create((set) => ({
 
   setFontScale: (fontScale) => set({ fontScale }),
 
-  loadMockData: () => set({ content: mockContent(), templateId: 'classic' }),
+  loadMockData: () => set({ content: mockContent(), templateId: 'classic-traditional' }),
 
-  resetResume: () => set({ content: emptyContent(), templateId: 'classic' }),
+  resetResume: () => set({ content: emptyContent(), templateId: 'classic-traditional' }),
 
   setField: (path, value) =>
     set((s) => {
@@ -234,4 +234,4 @@ export const useResumeStore = create((set) => ({
     }),
 }))
 
-useResumeStore.getInitialState = () => ({ content: emptyContent(), templateId: 'classic', paletteIndex: 0, fontScale: 1.0 })
+useResumeStore.getInitialState = () => ({ content: emptyContent(), templateId: 'classic-traditional', paletteIndex: 0, fontScale: 1.0 })

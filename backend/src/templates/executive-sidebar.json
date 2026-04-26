@@ -1,0 +1,37 @@
+{
+  "id": "executive-sidebar",
+  "name": "Sidebar",
+  "category": "executive",
+  "layout": {
+    "sidebarWidthPercent": 32,
+    "itemSpacing": "14px"
+  },
+  "colors": {
+    "mainBg": "#ffffff",
+    "mainText": "#111111",
+    "headingText": "#111111",
+    "mutedText": "#555555",
+    "dividerColor": "#d8d8d8",
+    "sidebarBg": "#efefef",
+    "sidebarText": "#111111",
+    "sidebarMuted": "#666666",
+    "bannerBg": "#1a2438",
+    "bannerText": "#ffffff"
+  },
+  "palettes": [
+    { "label": "Navy",    "swatch": "#1a2438", "colors": {} },
+    { "label": "Onyx",    "swatch": "#2a2a2a", "colors": { "bannerBg": "#2a2a2a" } },
+    { "label": "Forest",  "swatch": "#1e3528", "colors": { "bannerBg": "#1e3528" } },
+    { "label": "Plum",    "swatch": "#3a2848", "colors": { "bannerBg": "#3a2848" } },
+    { "label": "Umber",   "swatch": "#3a2e22", "colors": { "bannerBg": "#3a2e22" } }
+  ],
+  "typography": {
+    "nameFont": "Arial, Helvetica, sans-serif",
+    "nameFontSize": "26px",
+    "nameFontWeight": "700",
+    "sectionLabelSize": "13px",
+    "bodyFont": "Arial, Helvetica, sans-serif",
+    "bodyFontSize": "13px",
+    "bodyLineHeight": "1.55"
+  }
+}

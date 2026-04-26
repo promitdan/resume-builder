@@ -1,0 +1,37 @@
+{
+  "id": "executive-band",
+  "name": "Band",
+  "category": "executive",
+  "layout": {
+    "sidebarWidthPercent": 30,
+    "itemSpacing": "14px"
+  },
+  "colors": {
+    "mainBg": "#ffffff",
+    "mainText": "#111111",
+    "headingText": "#111111",
+    "mutedText": "#888888",
+    "dividerColor": "#e0e0e0",
+    "bannerBg": "#7ecbcb",
+    "bannerText": "#111111",
+    "labelBg": "#111111",
+    "labelText": "#ffffff",
+    "dateMuted": "#888888"
+  },
+  "palettes": [
+    { "label": "Teal",    "swatch": "#7ecbcb", "colors": {} },
+    { "label": "Slate",   "swatch": "#8baab8", "colors": { "bannerBg": "#8baab8" } },
+    { "label": "Sage",    "swatch": "#8db8a0", "colors": { "bannerBg": "#8db8a0" } },
+    { "label": "Lavender","swatch": "#a89ec4", "colors": { "bannerBg": "#a89ec4" } },
+    { "label": "Sand",    "swatch": "#c4ae8d", "colors": { "bannerBg": "#c4ae8d" } }
+  ],
+  "typography": {
+    "nameFont": "Arial, Helvetica, sans-serif",
+    "nameFontSize": "34px",
+    "nameFontWeight": "900",
+    "sectionLabelSize": "10px",
+    "bodyFont": "Arial, Helvetica, sans-serif",
+    "bodyFontSize": "13px",
+    "bodyLineHeight": "1.55"
+  }
+}

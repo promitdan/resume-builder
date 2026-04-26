@@ -100,11 +100,17 @@ async function callGroq(systemPrompt, userText, maxTokens) {
   }
 
   if (!response.ok) {
-    const body = await response.text()
+    let body = ''
+    try { body = await response.text() } catch (_) {}
     throw new GroqUnavailableError(`Groq returned HTTP ${response.status}: ${body}`)
   }
 
-  const data = await response.json()
+  let data
+  try {
+    data = await response.json()
+  } catch (err) {
+    throw new GroqUnavailableError(`Groq response unreadable: ${err.message}`)
+  }
   return JSON.parse(data.choices[0].message.content)
 }
 
@@ -112,19 +118,25 @@ async function parseWithGroq(rawText) {
   const text = compressText(rawText)
 
   // Two parallel calls: one for all short sections, one for experience only
-  const [sections, expResult] = await Promise.all([
+  // allSettled ensures both rejections are handled — Promise.all leaks the
+  // second rejection as an unhandled promise rejection when both calls fail.
+  const [sectionsResult, expResult] = await Promise.allSettled([
     callGroq(PROMPT_SECTIONS, text, 3000),
     callGroq(PROMPT_EXPERIENCE, text, 6000)
   ])
+  if (sectionsResult.status === 'rejected') throw sectionsResult.reason
+  if (expResult.status === 'rejected') throw expResult.reason
+  const sections = sectionsResult.value
+  const expValue = expResult.value
 
   console.log('[groq pass1] keys:', Object.keys(sections))
   console.log('[groq pass1] certifications:', JSON.stringify(sections.certifications))
   console.log('[groq pass1] awards:', JSON.stringify(sections.awards))
   console.log('[groq pass1] custom:', JSON.stringify(sections.custom))
   console.log('[groq pass1] languages:', JSON.stringify(sections.languages))
-  console.log('[groq pass2] experience entries:', expResult.experience?.length)
+  console.log('[groq pass2] experience entries:', expValue.experience?.length)
 
-  return { ...sections, experience: expResult.experience ?? [] }
+  return { ...sections, experience: expValue.experience ?? [] }
 }
 
 module.exports = { parseWithGroq, GroqUnavailableError }

@@ -1,0 +1,38 @@
+{
+  "id": "modern-banner",
+  "name": "Banner",
+  "category": "modern",
+  "layout": {
+    "type": "banner-two-column",
+    "sidebarWidthPercent": 35,
+    "itemSpacing": "14px"
+  },
+  "colors": {
+    "bannerBg": "#6b8fa8",
+    "bannerText": "#ffffff",
+    "sidebarBg": "#f4f6f8",
+    "mainBg": "#ffffff",
+    "mainText": "#1a1a1a",
+    "headingText": "#1a1a1a",
+    "accentColor": "#5a7d92",
+    "mutedText": "#6b7280",
+    "dividerColor": "#d1d5db"
+  },
+  "typography": {
+    "nameFont": "Inter, sans-serif",
+    "nameFontSize": "22px",
+    "nameFontWeight": "700",
+    "sectionLabelFont": "Inter, sans-serif",
+    "sectionLabelSize": "11px",
+    "bodyFont": "Inter, sans-serif",
+    "bodyFontSize": "13px",
+    "bodyLineHeight": "1.6"
+  },
+  "palettes": [
+    { "label": "Steel",  "swatch": "#607888", "colors": { "bannerBg": "#607888", "accentColor": "#507080" } },
+    { "label": "Slate",  "swatch": "#4a5568", "colors": { "bannerBg": "#4a5568", "accentColor": "#3a4558" } },
+    { "label": "Navy",   "swatch": "#3f5270", "colors": { "bannerBg": "#3f5270", "accentColor": "#2f4260" } },
+    { "label": "Teal",   "swatch": "#3f6a72", "colors": { "bannerBg": "#3f6a72", "accentColor": "#2f5a62" } },
+    { "label": "Umber",  "swatch": "#5f5248", "colors": { "bannerBg": "#5f5248", "accentColor": "#4f4238" } }
+  ]
+}
