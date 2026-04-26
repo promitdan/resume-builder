@@ -41,6 +41,7 @@ const COMPONENT_MAP = {
 
 const PAGE_HEIGHT_PX = 10.5 * 96
 const PAGE_INSET = 48
+const CONTENT_HEIGHT = PAGE_HEIGHT_PX - 2 * PAGE_INSET
 
 export default function ResumePreview({ content, templateId, paletteIndex = 0, fontScale = 1.0, onBreaksChange, currentPage = 1 }) {
   const Template      = COMPONENT_MAP[templateId]
@@ -54,9 +55,8 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
     const el = paperRef.current
     const compute = () => {
       const h = el.scrollHeight
-      const count = Math.floor(h / PAGE_HEIGHT_PX)
-      const next = Array.from({ length: count }, (_, i) => (i + 1) * PAGE_HEIGHT_PX)
-      onBreaksChange?.(next.length + 1)
+      const count = Math.floor(h / CONTENT_HEIGHT)
+      onBreaksChange?.(count + 1)
     }
     compute()
     const ro = new ResizeObserver(compute)
@@ -64,18 +64,20 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
     return () => ro.disconnect()
   }, [content, templateId, fontScale, onBreaksChange])
 
-  const translateY = -(currentPage - 1) * PAGE_HEIGHT_PX + (currentPage > 1 ? PAGE_INSET : 0)
+  const translateY = -(currentPage - 1) * CONTENT_HEIGHT
 
   if (!Template) return <div style={{ padding: '20px', color: '#e53e3e' }}>Unknown template: {templateId}</div>
 
   return (
-    <div style={{ width: '8.5in', height: `${PAGE_HEIGHT_PX}px`, overflow: 'hidden', margin: '0 auto', boxShadow: '0 4px 12px rgba(0,0,0,0.12)' }}>
-      <div
-        ref={paperRef}
-        style={{ width: '8.5in', minHeight: '11in', background: '#fff', position: 'relative', transform: `translateY(${translateY}px)`, transition: 'transform 200ms ease' }}
-      >
-        <div style={{ zoom: fontScale }}>
-          <Template content={content} paletteColors={paletteColors} />
+    <div style={{ width: '8.5in', height: `${PAGE_HEIGHT_PX}px`, background: '#e2e8f0', margin: '0 auto', padding: `${PAGE_INSET}px 0`, boxSizing: 'border-box' }}>
+      <div style={{ height: '100%', overflow: 'hidden', background: '#fff', boxShadow: '0 4px 24px rgba(0,0,0,0.18)', position: 'relative' }}>
+        <div
+          ref={paperRef}
+          style={{ width: '8.5in', minHeight: '11in', background: '#fff', position: 'relative', transform: `translateY(${translateY}px)`, transition: 'transform 200ms ease' }}
+        >
+          <div style={{ zoom: fontScale }}>
+            <Template content={content} paletteColors={paletteColors} />
+          </div>
         </div>
       </div>
     </div>
