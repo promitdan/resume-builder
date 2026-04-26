@@ -13,9 +13,9 @@ async function exportToPdf(content, templateId) {
     const page = await browser.newPage()
     await page.setContent(html, { waitUntil: 'networkidle0' })
     const pdf = await page.pdf({
-      format: 'A4',
+      format: 'Letter',
       printBackground: true,
-      margin: { top: '0', right: '0', bottom: '0', left: '0' }
+      margin: { top: '0.25in', right: '0', bottom: '0.25in', left: '0' }
     })
     return pdf
   } finally {

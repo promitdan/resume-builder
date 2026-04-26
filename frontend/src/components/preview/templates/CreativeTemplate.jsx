@@ -13,15 +13,24 @@ export default function CreativeTemplate({ content = {}, paletteColors = {} }) {
 
   const sectionLabel = (text) => (
     <div style={{ marginBottom: '14px' }}>
-      <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '3px', textTransform: 'uppercase', background: gradientStyle, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', marginBottom: '4px' }}>{text}</div>
+      <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '3px', textTransform: 'uppercase', color: c.headingText, marginBottom: '4px' }}>{text}</div>
       <div style={{ height: '2px', background: gradientStyle, borderRadius: '1px' }}></div>
     </div>
   )
 
   const hasSkillItems = skills.some(sk => (sk.items ?? []).length > 0)
+
+  const hexToRgba = (hex, alpha) => {
+    const h = hex.replace('#', '')
+    const r = parseInt(h.slice(0, 2), 16)
+    const g = parseInt(h.slice(2, 4), 16)
+    const b = parseInt(h.slice(4, 6), 16)
+    return `rgba(${r},${g},${b},${alpha})`
+  }
+
   const pillColors = [
-    { bg: '#ede9fe', color: '#5b21b6' },
-    { bg: '#fce7f3', color: '#9d174d' },
+    { bg: hexToRgba(c.accentStart, 0.12), color: c.accentStart },
+    { bg: hexToRgba(c.accentEnd,   0.12), color: c.accentEnd },
   ]
   const borderColors = [c.accentStart, c.accentEnd]
 
