@@ -116,9 +116,9 @@ function buildCertificationsSection(certs, t) {
   for (const c of certs) {
     paras.push(new Paragraph({
       children: [
-        text(c.name, { bold: true, size: 18 }),
+        text(c.name, { bold: true, size: 20 }),
         c.issuer ? text(` — ${c.issuer}`, { size: 18 }) : null,
-        c.date   ? text(`, ${c.date}`, { size: 18, color: hexToRgb(t.colors.mutedText) }) : null
+        c.date   ? text(`  ${c.date}`, { size: 18, color: hexToRgb(t.colors.mutedText) }) : null
       ].filter(Boolean),
       spacing: { after: 60 }
     }))
@@ -126,12 +126,57 @@ function buildCertificationsSection(certs, t) {
   return paras
 }
 
-function buildGenericSection(label, items, t) {
-  if (!items.length) return []
-  const paras = [sectionHeading(label, t)]
-  for (const item of items) {
-    const body = item.content || item.name || item.language || item.title || ''
-    if (body) paras.push(new Paragraph({ children: [text(body, { size: 18 })], spacing: { after: 60 } }))
+function buildLanguagesSection(languages, t) {
+  if (!languages.length) return []
+  const paras = [sectionHeading('Languages', t)]
+  for (const l of languages) {
+    paras.push(new Paragraph({
+      children: [
+        text(l.language, { bold: true, size: 18 }),
+        l.proficiency ? text(` — ${l.proficiency}`, { size: 18, color: hexToRgb(t.colors.mutedText) }) : null
+      ].filter(Boolean),
+      spacing: { after: 60 }
+    }))
+  }
+  return paras
+}
+
+function buildAwardsSection(awards, t) {
+  if (!awards.length) return []
+  const paras = [sectionHeading('Awards & Recognition', t)]
+  for (const a of awards) {
+    paras.push(new Paragraph({
+      children: [
+        text(a.title, { bold: true, size: 20 }),
+        a.issuer ? text(` — ${a.issuer}`, { size: 18 }) : null,
+        a.date   ? text(`  ${a.date}`, { size: 18, color: hexToRgb(t.colors.mutedText) }) : null
+      ].filter(Boolean),
+      spacing: { after: 60 }
+    }))
+  }
+  return paras
+}
+
+function buildProjectsSection(projects, t) {
+  if (!projects.length) return []
+  const paras = [sectionHeading('Projects', t)]
+  for (const p of projects) {
+    paras.push(new Paragraph({ children: [text(p.title, { bold: true, size: 20 })], spacing: { before: 100 } }))
+    if (p.description) paras.push(new Paragraph({ children: [text(p.description, { size: 18 })], spacing: { after: 40 } }))
+    if (p.url) paras.push(new Paragraph({ children: [text(p.url, { size: 18, color: hexToRgb(t.colors.mutedText) })], spacing: { after: 80 } }))
+  }
+  return paras
+}
+
+function buildCustomSection(customSections, t) {
+  if (!customSections.length) return []
+  const paras = []
+  for (const sec of customSections) {
+    paras.push(sectionHeading(sec.title || 'Other', t))
+    const lines = (sec.description || '').split('\n').filter(Boolean)
+    for (const line of lines) {
+      paras.push(new Paragraph({ bullet: { level: 0 }, children: [text(line, { size: 18 })], spacing: { after: 40 } }))
+    }
   }
   return paras
 }
@@ -142,10 +187,10 @@ function buildSection(key, content, t) {
     case 'education':      return buildEducationSection(content.education, t)
     case 'skills':         return buildSkillsSection(content.skills, t)
     case 'certifications': return buildCertificationsSection(content.certifications, t)
-    case 'projects':       return buildGenericSection('Projects', content.projects, t)
-    case 'languages':      return buildGenericSection('Languages', content.languages, t)
-    case 'awards':         return buildGenericSection('Awards', content.awards, t)
-    case 'custom':         return buildGenericSection(content.custom[0]?.label || 'Other', content.custom, t)
+    case 'languages':      return buildLanguagesSection(content.languages, t)
+    case 'awards':         return buildAwardsSection(content.awards, t)
+    case 'projects':       return buildProjectsSection(content.projects, t)
+    case 'custom':         return buildCustomSection(content.custom, t)
     default: return []
   }
 }
