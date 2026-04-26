@@ -30,14 +30,17 @@ function measureSectionsInEl(el, containerEl) {
   return sections
 }
 
-export function distributePages(sections, firstPageAvail, subsequentPageAvail) {
+// firstPageMaxBottom: max allowed sec.bottom / item.bottom on page 1 — uses actual DOM
+//   positions so inter-section gaps and template padding are automatically accounted for.
+// subsequentPageAvail: cumulative-height budget for pages 2+ (approximation, since we
+//   can't measure exact positions without re-rendering every page).
+export function distributePages(sections, firstPageMaxBottom, subsequentPageAvail) {
   const pages   = []
   let current   = []
   let used      = 0
   let isFirst   = true
   const seen    = new Set()
 
-  const avail = () => isFirst ? firstPageAvail : subsequentPageAvail
   const flush = () => {
     current.forEach(e => seen.add(e.sectionId))
     pages.push(current)
@@ -47,22 +50,25 @@ export function distributePages(sections, firstPageAvail, subsequentPageAvail) {
   }
 
   for (const sec of sections) {
-    // Atomic section (no items — e.g. skills block, custom section)
     if (sec.items.length === 0) {
-      // intentional: atomic sections cannot be split; allow overflow rather than
-      // emitting an empty page
-      if (used > 0 && used + sec.height > avail()) flush()
+      // Atomic section — intentional: allow overflow rather than emitting an empty page
+      const wouldFlush = isFirst
+        ? sec.bottom > firstPageMaxBottom && current.length > 0
+        : used > 0 && used + sec.height > subsequentPageAvail
+      if (wouldFlush) flush()
       current.push({ sectionId: sec.id, items: null, isContinuation: seen.has(sec.id) })
-      used += sec.height
+      if (!isFirst) used += sec.height
       continue
     }
 
     // Section with distributable items
     let entry = null
     for (const item of sec.items) {
-      const hdr    = entry ? 0 : sec.headerHeight
-      const needed = hdr + item.height
-      if (used > 0 && used + needed > avail()) {
+      const hdr = entry ? 0 : sec.headerHeight
+      const wouldFlush = isFirst
+        ? item.bottom > firstPageMaxBottom && current.length > 0
+        : used > 0 && used + hdr + item.height > subsequentPageAvail
+      if (wouldFlush) {
         flush()
         entry = null
       }
@@ -71,10 +77,10 @@ export function distributePages(sections, firstPageAvail, subsequentPageAvail) {
       if (!entry) {
         entry = { sectionId: sec.id, items: [], isContinuation: seen.has(sec.id) }
         current.push(entry)
-        used += sec.headerHeight
+        if (!isFirst) used += sec.headerHeight
       }
       entry.items.push(item.id)
-      used += item.height
+      if (!isFirst) used += item.height
     }
   }
 
@@ -120,15 +126,24 @@ export function sliceContent(fullContent, pageAssignment, pageIndex) {
 }
 
 export function measureAndDistribute(containerEl, isTwoColumn) {
-  const hdrEl       = containerEl.querySelector('[data-page-header]')
-  const headerHeight = hdrEl ? hdrEl.getBoundingClientRect().height : 0
+  const containerTop = containerEl.getBoundingClientRect().top
+  const hdrEl        = containerEl.querySelector('[data-page-header]')
+  // headerBottom: absolute position (from container top) where the header ends
+  const headerBottom = hdrEl ? hdrEl.getBoundingClientRect().bottom - containerTop : 0
 
-  const firstPageAvail      = PAGE_CONTENT_MAX - headerHeight
-  const subsequentPageAvail = PAGE_CONTENT_MAX
+  // Page 1: any section/item whose bottom exceeds this is pushed to page 2
+  const firstPageMaxBottom = PAGE_CONTENT_MAX
 
   if (!isTwoColumn) {
     const sections = measureSectionsInEl(containerEl, containerEl)
-    const pages    = distributePages(sections, firstPageAvail, subsequentPageAvail)
+
+    // Estimate the top offset on page 2 (header hidden, sections start near template top)
+    // = gap between header bottom and first section top on the hidden full render
+    const firstSectionTop    = sections.length > 0 ? sections[0].top : headerBottom
+    const topGap             = Math.max(0, firstSectionTop - headerBottom)
+    const subsequentPageAvail = Math.max(PAGE_CONTENT_MAX / 2, PAGE_CONTENT_MAX - topGap)
+
+    const pages = distributePages(sections, firstPageMaxBottom, subsequentPageAvail)
     return { type: 'single', pages }
   }
 
@@ -141,8 +156,15 @@ export function measureAndDistribute(containerEl, isTwoColumn) {
     }
   }
 
-  const leftPages  = distributePages(colSections.left,  firstPageAvail, subsequentPageAvail)
-  const rightPages = distributePages(colSections.right, firstPageAvail, subsequentPageAvail)
+  const allSections     = [...colSections.left, ...colSections.right]
+  const firstSectionTop = allSections.length > 0
+    ? Math.min(...allSections.map(s => s.top))
+    : headerBottom
+  const topGap             = Math.max(0, firstSectionTop - headerBottom)
+  const subsequentPageAvail = Math.max(PAGE_CONTENT_MAX / 2, PAGE_CONTENT_MAX - topGap)
+
+  const leftPages  = distributePages(colSections.left,  firstPageMaxBottom, subsequentPageAvail)
+  const rightPages = distributePages(colSections.right, firstPageMaxBottom, subsequentPageAvail)
   const totalPages = Math.max(leftPages.length, rightPages.length, 1)
 
   return { type: 'two-column', leftPages, rightPages, totalPages }
