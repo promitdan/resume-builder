@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import ClassicTemplate         from './templates/ClassicTemplate'
 import ClassicAcademicTemplate from './templates/ClassicAcademicTemplate'
 import ClassicFormalTemplate   from './templates/ClassicFormalTemplate'
@@ -39,24 +39,25 @@ const COMPONENT_MAP = {
   'creative-minimal':    CreativeMinimalTemplate,
 }
 
-const PAGE_INSET = 48
-const CONTENT_HEIGHT = 11 * 96           // 1056px — letter page at 96dpi
-const PAGE_HEIGHT_PX = CONTENT_HEIGHT + 2 * PAGE_INSET  // 1152px — frame including margins
+export const CONTENT_HEIGHT = 11 * 96  // 1056px — letter page at 96dpi
+export const PAGE_GAP = 24             // gray gap between page cards
 
-export default function ResumePreview({ content, templateId, paletteIndex = 0, fontScale = 1.0, onBreaksChange, currentPage = 1 }) {
+export default function ResumePreview({ content, templateId, paletteIndex = 0, fontScale = 1.0, onBreaksChange }) {
   const Template      = COMPONENT_MAP[templateId]
   const tpl           = TEMPLATE_CONFIGS[templateId]
-  const paperRef      = useRef()
+  const measureRef    = useRef()
+  const [totalPages, setTotalPages] = useState(1)
 
   const paletteColors = tpl?.palettes?.[paletteIndex]?.colors ?? {}
 
   useEffect(() => {
-    if (!paperRef.current) return
-    const el = paperRef.current
+    if (!measureRef.current) return
+    const el = measureRef.current
     const compute = () => {
       const h = el.scrollHeight
-      const count = Math.floor(h / CONTENT_HEIGHT)
-      onBreaksChange?.(count + 1)
+      const pages = Math.max(1, Math.ceil(h / CONTENT_HEIGHT))
+      setTotalPages(pages)
+      onBreaksChange?.(pages)
     }
     compute()
     const ro = new ResizeObserver(compute)
@@ -64,22 +65,40 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
     return () => ro.disconnect()
   }, [content, templateId, fontScale, onBreaksChange])
 
-  const translateY = -(currentPage - 1) * CONTENT_HEIGHT
-
   if (!Template) return <div style={{ padding: '20px', color: '#e53e3e' }}>Unknown template: {templateId}</div>
 
   return (
-    <div style={{ width: '8.5in', height: `${PAGE_HEIGHT_PX}px`, background: '#e2e8f0', margin: '0 auto', padding: `${PAGE_INSET}px 0`, boxSizing: 'border-box' }}>
-      <div style={{ height: '100%', overflow: 'hidden', background: '#fff', boxShadow: '0 4px 24px rgba(0,0,0,0.18)', position: 'relative' }}>
-        <div
-          ref={paperRef}
-          style={{ width: '8.5in', minHeight: '11in', background: '#fff', position: 'relative', transform: `translateY(${translateY}px)`, transition: 'transform 200ms ease' }}
-        >
-          <div style={{ zoom: fontScale }}>
-            <Template content={content} paletteColors={paletteColors} />
-          </div>
+    <div style={{ width: '8.5in', margin: '0 auto' }}>
+      {/* Hidden full render for height measurement */}
+      <div
+        ref={measureRef}
+        style={{ position: 'absolute', left: '-9999px', top: 0, width: '8.5in', visibility: 'hidden', pointerEvents: 'none' }}
+      >
+        <div style={{ zoom: fontScale }}>
+          <Template content={content} paletteColors={paletteColors} />
         </div>
       </div>
+
+      {/* N visible page cards */}
+      {Array.from({ length: totalPages }, (_, i) => (
+        <div
+          key={i}
+          style={{
+            width: '8.5in',
+            height: `${CONTENT_HEIGHT}px`,
+            overflow: 'hidden',
+            background: '#fff',
+            boxShadow: '0 2px 16px rgba(0,0,0,0.15)',
+            marginBottom: i < totalPages - 1 ? `${PAGE_GAP}px` : 0,
+          }}
+        >
+          <div style={{ transform: `translateY(${-i * CONTENT_HEIGHT}px)` }}>
+            <div style={{ zoom: fontScale }}>
+              <Template content={content} paletteColors={paletteColors} />
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }

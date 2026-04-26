@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
-import { useState, useCallback } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useResumeStore } from '../store/useResumeStore'
-import ResumePreview from '../components/preview/ResumePreview'
+import ResumePreview, { CONTENT_HEIGHT, PAGE_GAP } from '../components/preview/ResumePreview'
 import TemplateSwitcher from '../components/preview/TemplateSwitcher'
 import DownloadButtons from '../components/shared/DownloadButtons'
 import { TEMPLATE_CONFIGS } from '../registry/templateRegistry'
@@ -36,12 +36,27 @@ export default function PreviewPage() {
   const canIncrease = scaleIdx < FONT_SCALE_STEPS.length - 1
 
   // Page navigation
+  const scrollRef = useRef()
   const [totalPages, setTotalPages]   = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
 
   const handleBreaksChange = useCallback((count) => {
     setTotalPages(count)
     setCurrentPage(1)
+  }, [])
+
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const page = Math.floor(el.scrollTop / (CONTENT_HEIGHT + PAGE_GAP)) + 1
+    setCurrentPage(Math.min(page, totalPages))
+  }, [totalPages])
+
+  const goToPage = useCallback((page) => {
+    const el = scrollRef.current
+    if (!el) return
+    el.scrollTo({ top: (page - 1) * (CONTENT_HEIGHT + PAGE_GAP), behavior: 'smooth' })
+    setCurrentPage(page)
   }, [])
 
   return (
@@ -64,15 +79,18 @@ export default function PreviewPage() {
       <div style={{ flex: 1, display: 'flex', gap: '24px', padding: '28px 32px', alignItems: 'flex-start', maxWidth: '1200px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
         {/* Resume preview — dominant */}
         <div style={{ flex: 1, position: 'relative', borderRadius: '10px', overflow: 'hidden', minHeight: '500px' }}>
-          {/* Paper area */}
-          <div style={{ background: '#e2e8f0', padding: '24px', boxSizing: 'border-box', display: 'flex', justifyContent: 'center', minHeight: '100%' }}>
+          {/* Scrollable paper area */}
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            style={{ overflow: 'auto', maxHeight: 'calc(100vh - 120px)', background: '#e2e8f0', padding: '24px', boxSizing: 'border-box', display: 'flex', justifyContent: 'center' }}
+          >
             <ResumePreview
               content={content}
               templateId={templateId}
               paletteIndex={paletteIndex}
               fontScale={fontScale}
               onBreaksChange={handleBreaksChange}
-              currentPage={currentPage}
             />
           </div>
 
@@ -82,7 +100,7 @@ export default function PreviewPage() {
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(15,23,42,0.72)', backdropFilter: 'blur(6px)', borderRadius: '999px', padding: '6px 10px', boxShadow: '0 4px 16px rgba(0,0,0,0.28)', pointerEvents: 'auto' }}>
                 <button
                   type="button"
-                  onClick={() => setCurrentPage(currentPage - 1)}
+                  onClick={() => goToPage(currentPage - 1)}
                   disabled={currentPage <= 1}
                   style={{ background: 'none', border: 'none', color: currentPage <= 1 ? 'rgba(255,255,255,0.3)' : '#fff', cursor: currentPage <= 1 ? 'default' : 'pointer', padding: '2px 6px', fontSize: '16px', lineHeight: 1, borderRadius: '6px', display: 'flex', alignItems: 'center' }}
                 >
@@ -93,7 +111,7 @@ export default function PreviewPage() {
                 </span>
                 <button
                   type="button"
-                  onClick={() => setCurrentPage(currentPage + 1)}
+                  onClick={() => goToPage(currentPage + 1)}
                   disabled={currentPage >= totalPages}
                   style={{ background: 'none', border: 'none', color: currentPage >= totalPages ? 'rgba(255,255,255,0.3)' : '#fff', cursor: currentPage >= totalPages ? 'default' : 'pointer', padding: '2px 6px', fontSize: '16px', lineHeight: 1, borderRadius: '6px', display: 'flex', alignItems: 'center' }}
                 >
