@@ -114,7 +114,7 @@ const initialState = {
   content: emptyContent(),
   templateId: 'classic-traditional',
   paletteIndex: 0,
-  fontScale: 1.0,
+  fontSize: 'medium',
 }
 
 export const useResumeStore = create((set) => ({
@@ -220,7 +220,7 @@ export const useResumeStore = create((set) => ({
 
   setPaletteIndex: (paletteIndex) => set({ paletteIndex }),
 
-  setFontScale: (fontScale) => set({ fontScale }),
+  setFontSize: (fontSize) => set({ fontSize }),
 
   loadMockData: () => set({ content: mockContent(), templateId: 'classic-traditional' }),
 
@@ -234,4 +234,4 @@ export const useResumeStore = create((set) => ({
     }),
 }))
 
-useResumeStore.getInitialState = () => ({ content: emptyContent(), templateId: 'classic-traditional', paletteIndex: 0, fontScale: 1.0 })
+useResumeStore.getInitialState = () => ({ content: emptyContent(), templateId: 'classic-traditional', paletteIndex: 0, fontSize: 'medium' })

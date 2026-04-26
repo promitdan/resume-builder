@@ -6,34 +6,25 @@ import TemplateSwitcher from '../components/preview/TemplateSwitcher'
 import DownloadButtons from '../components/shared/DownloadButtons'
 import { TEMPLATE_CONFIGS } from '../registry/templateRegistry'
 
-const FONT_SCALE_STEPS = [0.80, 0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.15, 1.20]
+const FONT_SIZE_OPTIONS = [
+  { key: 'small',  label: 'S' },
+  { key: 'medium', label: 'M' },
+  { key: 'large',  label: 'L' },
+]
 
 export default function PreviewPage() {
   const content      = useResumeStore(s => s.content)
   const templateId   = useResumeStore(s => s.templateId)
   const paletteIndex = useResumeStore(s => s.paletteIndex)
-  const fontScale    = useResumeStore(s => s.fontScale)
+  const fontSize     = useResumeStore(s => s.fontSize)
   const setPaletteIndex = useResumeStore(s => s.setPaletteIndex)
-  const setFontScale    = useResumeStore(s => s.setFontScale)
+  const setFontSize     = useResumeStore(s => s.setFontSize)
   const navigate     = useNavigate()
 
   const tpl      = TEMPLATE_CONFIGS[templateId]
   const palettes = tpl?.palettes ?? []
   const isMonochrome = palettes.length === 0
 
-  const decreaseFontScale = () => {
-    const idx = FONT_SCALE_STEPS.indexOf(fontScale)
-    if (idx > 0) setFontScale(FONT_SCALE_STEPS[idx - 1])
-  }
-  const increaseFontScale = () => {
-    const idx = FONT_SCALE_STEPS.indexOf(fontScale)
-    if (idx < FONT_SCALE_STEPS.length - 1) setFontScale(FONT_SCALE_STEPS[idx + 1])
-  }
-  const resetFontScale = () => setFontScale(1.0)
-
-  const scaleIdx   = FONT_SCALE_STEPS.indexOf(fontScale)
-  const canDecrease = scaleIdx > 0
-  const canIncrease = scaleIdx < FONT_SCALE_STEPS.length - 1
 
   // Page navigation
   const scrollRef = useRef()
@@ -89,7 +80,7 @@ export default function PreviewPage() {
               content={content}
               templateId={templateId}
               paletteIndex={paletteIndex}
-              fontScale={fontScale}
+              fontSize={fontSize}
               onBreaksChange={handleBreaksChange}
             />
           </div>
@@ -177,38 +168,27 @@ export default function PreviewPage() {
             )}
           </div>
 
-          {/* Font size card */}
+          {/* Typography card */}
           <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '16px' }}>
-            <h3 style={{ margin: '0 0 12px', fontSize: '13px', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Font Size</h3>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <button
-                type="button"
-                onClick={decreaseFontScale}
-                disabled={!canDecrease}
-                style={{ width: '32px', height: '32px', border: '1.5px solid #e2e8f0', borderRadius: '6px', background: canDecrease ? '#fff' : '#f8fafc', color: canDecrease ? '#334155' : '#cbd5e1', cursor: canDecrease ? 'pointer' : 'default', fontWeight: 700, fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
-              >
-                A
-                <span style={{ fontSize: '9px', marginTop: '3px', marginLeft: '-1px' }}>−</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={resetFontScale}
-                title="Reset to 100%"
-                style={{ flex: 1, height: '32px', border: '1.5px solid #e2e8f0', borderRadius: '6px', background: fontScale === 1.0 ? '#f1f5f9' : '#fff', color: '#334155', cursor: 'pointer', fontSize: '12px', fontWeight: 600 }}
-              >
-                {Math.round(fontScale * 100)}%
-              </button>
-
-              <button
-                type="button"
-                onClick={increaseFontScale}
-                disabled={!canIncrease}
-                style={{ width: '32px', height: '32px', border: '1.5px solid #e2e8f0', borderRadius: '6px', background: canIncrease ? '#fff' : '#f8fafc', color: canIncrease ? '#334155' : '#cbd5e1', cursor: canIncrease ? 'pointer' : 'default', fontWeight: 700, fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
-              >
-                A
-                <span style={{ fontSize: '9px', marginTop: '-3px', marginLeft: '-1px' }}>+</span>
-              </button>
+            <h3 style={{ margin: '0 0 12px', fontSize: '13px', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Typography</h3>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              {FONT_SIZE_OPTIONS.map(({ key, label }) => (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => setFontSize(key)}
+                  style={{
+                    flex: 1, height: '34px',
+                    border: `1.5px solid ${fontSize === key ? '#3b82f6' : '#e2e8f0'}`,
+                    borderRadius: '6px',
+                    background: fontSize === key ? '#eff6ff' : '#fff',
+                    color: fontSize === key ? '#3b82f6' : '#334155',
+                    fontWeight: 600, fontSize: '13px', cursor: 'pointer',
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
 

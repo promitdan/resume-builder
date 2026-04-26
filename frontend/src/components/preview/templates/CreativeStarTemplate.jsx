@@ -1,4 +1,4 @@
-import t from '../../../templates/creative-star.json'
+﻿import t from '../../../templates/creative-star.json'
 import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
@@ -40,7 +40,7 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
   const lastName  = nameParts.slice(1).join(' ') || ''
 
   return (
-    <div style={{ fontFamily: ty.bodyFont, fontSize: ty.bodyFontSize, color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in', padding: '44px 44px 52px' }}>
+    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in', padding: '44px 44px 52px' }}>
 
       {/* Header row */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '32px' }}>
@@ -48,16 +48,16 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
         <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: c.headingText, lineHeight: 1.0 }}>
           <div><InlineEditor path="personal.name" value={personal.name}>{firstName}</InlineEditor></div>
           {lastName && <div>{lastName}</div>}
-          {personal.title && <div style={{ fontSize: '13px', fontFamily: ty.bodyFont, fontWeight: 400, color: c.mutedText, marginTop: '10px' }}><InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor></div>}
+          {personal.title && <div style={{ fontSize: 'var(--resume-meta)', fontFamily: ty.bodyFont, fontWeight: 400, color: c.mutedText, marginTop: '10px' }}><InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor></div>}
         </div>
 
         {/* Details table */}
         {detailRows.length > 0 && (
           <div style={{ minWidth: '260px', maxWidth: '340px' }}>
-            <div style={{ fontFamily: ty.sectionLabelFont, fontSize: '15px', fontWeight: 700, color: c.headingText, marginBottom: '6px' }}>Details</div>
+            <div style={{ fontFamily: ty.sectionLabelFont, fontSize: 'var(--resume-sub)', fontWeight: 700, color: c.headingText, marginBottom: '6px' }}>Details</div>
             {detailRows.map((row, i) => (
               <div key={i}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '5px 0', fontSize: ty.bodyFontSize }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', padding: '5px 0', fontSize: 'var(--resume-body)' }}>
                   <span style={{ color: c.tableLabel }}>{row.label}</span>
                   <span style={{ fontWeight: row.bold ? 700 : 400, color: c.tableValue, marginLeft: '16px', textAlign: 'right', wordBreak: 'break-all' }}>
                     <InlineEditor path={row.path} value={row.val}>{row.val}</InlineEditor>
@@ -78,7 +78,7 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
         <>
           <SectionHeader>Websites and Social Links</SectionHeader>
           <Divider />
-          <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.9' }}>
+          <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.9' }}>
             {personal.linkedin && <div><strong>LinkedIn: </strong><ContactLink path="personal.linkedin" value={personal.linkedin} /></div>}
             {personal.website  && <div><strong>GitHub: </strong><ContactLink path="personal.website" value={personal.website} /></div>}
           </div>
@@ -90,7 +90,7 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
         <>
           <SectionHeader>Summary</SectionHeader>
           <Divider />
-          <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight }}>
+          <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
             <RichTextEditor path="personal.summary" value={personal.summary} />
           </div>
         </>
@@ -106,15 +106,15 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
             {experience.map((e, i) => (
               <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
                 {dateStr(e) && <div style={{ fontSize: '12px', color: c.mutedText, marginBottom: '2px' }}>{dateStr(e)}</div>}
-                <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize }}>
+                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>
                 </div>
-                {e.role && <div style={{ fontSize: ty.bodyFontSize, color: c.mutedText }}>
+                {e.role && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText }}>
                   <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                   {e.location && <span>, <InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></span>}
                 </div>}
                 {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, marginTop: '4px' }}>
+                  <div key={bi} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginTop: '4px' }}>
                     <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                   </div>
                 ))}
@@ -128,7 +128,7 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
             <SectionHeader>Education</SectionHeader>
             <Divider />
             {education.map((e, i) => (
-              <div key={e.id ?? i} style={{ marginBottom: '12px', fontSize: ty.bodyFontSize }}>
+              <div key={e.id ?? i} style={{ marginBottom: '12px', fontSize: 'var(--resume-body)' }}>
                 {(e.startDate || e.endDate) && <div style={{ fontSize: '12px', color: c.mutedText, marginBottom: '2px' }}>{[e.startDate, e.endDate].filter(Boolean).join(' · ')}</div>}
                 <div style={{ fontWeight: 700 }}>
                   <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
@@ -147,7 +147,7 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
           <div key={key}>
             <SectionHeader>Skills</SectionHeader>
             <Divider />
-            <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.9' }}>
+            <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.9' }}>
               {allSkillItems.map((item, ii) => (
                 <span key={ii}>{item}{ii < allSkillItems.length - 1 ? ' · ' : ''}</span>
               ))}
@@ -159,7 +159,7 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
           <div key={key}>
             <SectionHeader>Languages</SectionHeader>
             <Divider />
-            <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.9' }}>
+            <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.9' }}>
               {languages.map((lang, i) => (
                 <span key={lang.id ?? i}>
                   <InlineEditor path={`languages.${i}.language`} value={lang.language}>{lang.language}</InlineEditor>
@@ -176,7 +176,7 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
             <SectionHeader>Certifications</SectionHeader>
             <Divider />
             {certifications.map((cert, i) => (
-              <div key={cert.id ?? i} style={{ marginBottom: '8px', fontSize: ty.bodyFontSize }}>
+              <div key={cert.id ?? i} style={{ marginBottom: '8px', fontSize: 'var(--resume-body)' }}>
                 <div style={{ fontWeight: 700 }}><InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor></div>
                 {cert.issuer && <div style={{ color: c.mutedText }}><InlineEditor path={`certifications.${i}.issuer`} value={cert.issuer}>{cert.issuer}</InlineEditor></div>}
                 {cert.date   && <div style={{ fontSize: '12px', color: c.mutedText }}><InlineEditor path={`certifications.${i}.date`} value={cert.date}>{cert.date}</InlineEditor></div>}
@@ -190,7 +190,7 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
             <SectionHeader>Achievements</SectionHeader>
             <Divider />
             {awards.map((aw, i) => (
-              <div key={aw.id ?? i} style={{ marginBottom: '8px', fontSize: ty.bodyFontSize }}>
+              <div key={aw.id ?? i} style={{ marginBottom: '8px', fontSize: 'var(--resume-body)' }}>
                 {aw.title && <span style={{ fontWeight: 700 }}><InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor></span>}
                 {aw.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`awards.${i}.issuer`} value={aw.issuer}>{aw.issuer}</InlineEditor></span>}
                 {aw.date   && <span style={{ fontSize: '12px', color: c.mutedText }}> · <InlineEditor path={`awards.${i}.date`} value={aw.date}>{aw.date}</InlineEditor></span>}
@@ -206,11 +206,11 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
             <Divider />
             {projects.map((proj, i) => (
               <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
-                <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize }}>
+                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
                   {proj.url && <span style={{ fontWeight: 400 }}> · <ContactLink path={`projects.${i}.url`} value={proj.url} /></span>}
                 </div>
-                {proj.description && <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, marginTop: '2px' }}><RichTextEditor path={`projects.${i}.description`} value={proj.description} /></div>}
+                {proj.description && <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginTop: '2px' }}><RichTextEditor path={`projects.${i}.description`} value={proj.description} /></div>}
               </div>
             ))}
           </div>
@@ -220,7 +220,7 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {} 
           <div key={`${key}-${i}`}>
             <SectionHeader><InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor></SectionHeader>
             <Divider />
-            <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
+            <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
           </div>
         ))
 

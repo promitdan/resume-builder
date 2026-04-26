@@ -1,4 +1,4 @@
-import t from '../../../templates/modern-sidebar.json'
+﻿import t from '../../../templates/modern-sidebar.json'
 import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
@@ -45,7 +45,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
       {(personal.email || personal.phone || personal.location) && (
         <>
           {sidebarLabel('Details')}
-          <div style={{ fontSize: ty.bodyFontSize, color: c.sidebarText }}>
+          <div style={{ fontSize: 'var(--resume-body)', color: c.sidebarText }}>
             {personal.email && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                 <ContactIcon type="email" size={13} color={c.sidebarMuted} />
@@ -72,7 +72,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
       {hasSkills && (
         <>
           {sidebarLabel('Skills')}
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: ty.bodyFontSize, lineHeight: '1.8' }}>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 'var(--resume-body)', lineHeight: '1.8' }}>
             {skills.flatMap((sk, si) => (sk.items ?? []).map((item, ii) => (
               <li key={`${si}-${ii}`} style={{ paddingLeft: '14px', position: 'relative', color: c.sidebarText }}>
                 <span style={{ position: 'absolute', left: 0, color: c.sidebarMuted }}>·</span>
@@ -87,7 +87,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
       {hasSocial && (
         <>
           {sidebarLabel('Social Links')}
-          <div style={{ fontSize: ty.bodyFontSize, color: c.sidebarText }}>
+          <div style={{ fontSize: 'var(--resume-body)', color: c.sidebarText }}>
             {personal.linkedin && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                 <ContactIcon type="linkedin" size={13} color={c.sidebarMuted} />
@@ -108,7 +108,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
       {languages.length > 0 && (
         <>
           {sidebarLabel('Languages')}
-          <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.9' }}>
+          <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.9' }}>
             {languages.map((lang, i) => (
               <div key={lang.id ?? i}>
                 <InlineEditor path={`languages.${i}.language`} value={lang.language}>{lang.language}</InlineEditor>
@@ -126,7 +126,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
       {personal.summary && (
         <>
           {mainLabel('Summary')}
-          <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, marginBottom: '4px' }}>
+          <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '4px' }}>
             <RichTextEditor path="personal.summary" value={personal.summary} />
           </div>
         </>
@@ -139,18 +139,18 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
             {mainLabel('Experience')}
             {experience.map((e, i) => (
               <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
-                <div style={{ fontSize: '11px', color: c.mutedText, marginBottom: '2px' }}>{dateStr(e)}</div>
-                <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize, marginBottom: '1px' }}>
+                <div style={{ fontSize: 'var(--resume-label)', color: c.mutedText, marginBottom: '2px' }}>{dateStr(e)}</div>
+                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)', marginBottom: '1px' }}>
                   <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                 </div>
                 {e.company && (
-                  <div style={{ fontSize: ty.bodyFontSize, color: c.mutedText, marginBottom: '5px' }}>
+                  <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '5px' }}>
                     <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>
                     {e.location && <span> · <InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></span>}
                   </div>
                 )}
                 {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
+                  <div key={bi} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
                     <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                   </div>
                 ))}
@@ -164,11 +164,11 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
             {mainLabel('Education')}
             {education.map((e, i) => (
               <div key={e.id ?? i} style={{ marginBottom: '12px' }}>
-                <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize }}>
+                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
                 </div>
                 {(e.degree || e.field) && (
-                  <div style={{ fontSize: ty.bodyFontSize, color: c.mutedText }}>
+                  <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText }}>
                     <InlineEditor path={`education.${i}.degree`} value={e.degree}>{e.degree}</InlineEditor>
                     {e.degree && e.field ? ', ' : ''}
                     <InlineEditor path={`education.${i}.field`} value={e.field}>{e.field}</InlineEditor>
@@ -188,12 +188,12 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
             {mainLabel('Projects')}
             {projects.map((proj, i) => (
               <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
-                <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize }}>
+                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
                   {proj.url && <span style={{ fontWeight: 400 }}> · <ContactLink path={`projects.${i}.url`} value={proj.url} /></span>}
                 </div>
                 {proj.description && (
-                  <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, marginTop: '3px' }}>
+                  <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginTop: '3px' }}>
                     <RichTextEditor path={`projects.${i}.description`} value={proj.description} />
                   </div>
                 )}
@@ -206,7 +206,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
           <div key={key}>
             {mainLabel('Certifications')}
             {certifications.map((cert, i) => (
-              <div key={cert.id ?? i} style={{ marginBottom: '8px', fontSize: ty.bodyFontSize }}>
+              <div key={cert.id ?? i} style={{ marginBottom: '8px', fontSize: 'var(--resume-body)' }}>
                 <span style={{ fontWeight: 700 }}>
                   <InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor>
                 </span>
@@ -221,7 +221,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
           <div key={key}>
             {mainLabel('Achievements')}
             {awards.map((aw, i) => (
-              <div key={aw.id ?? i} style={{ marginBottom: '8px', fontSize: ty.bodyFontSize }}>
+              <div key={aw.id ?? i} style={{ marginBottom: '8px', fontSize: 'var(--resume-body)' }}>
                 {aw.title && <span style={{ fontWeight: 700 }}><InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor></span>}
                 {aw.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`awards.${i}.issuer`} value={aw.issuer}>{aw.issuer}</InlineEditor></span>}
                 {aw.date && <span style={{ color: c.mutedText }}> · <InlineEditor path={`awards.${i}.date`} value={aw.date}>{aw.date}</InlineEditor></span>}
@@ -234,7 +234,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
         if (key === 'custom' && custom.length > 0) return custom.map((sec, i) => (
           <div key={`${key}-${i}`}>
             {mainLabel(<InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor>)}
-            <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight }}>
+            <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
               <RichTextEditor path={`custom.${i}.description`} value={sec.description} />
             </div>
           </div>
@@ -246,7 +246,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
   )
 
   return (
-    <div style={{ display: 'flex', minHeight: '11in', fontFamily: ty.bodyFont, fontSize: ty.bodyFontSize, color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg }}>
+    <div style={{ display: 'flex', minHeight: '11in', fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg }}>
       {sidebar}
       {main}
     </div>

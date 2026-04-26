@@ -1,4 +1,4 @@
-import t from '../../../templates/minimal-serif.json'
+﻿import t from '../../../templates/minimal-serif.json'
 import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
@@ -30,14 +30,14 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {} 
   ].filter(f => f.val)
 
   return (
-    <div style={{ fontFamily: ty.bodyFont, fontSize: ty.bodyFontSize, color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in', padding: '48px 56px' }}>
+    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in', padding: '48px 56px' }}>
       {/* Centered name header */}
       <div style={{ textAlign: 'center', marginBottom: '24px' }}>
         <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: c.headingText, letterSpacing: '0.5px' }}>
           <InlineEditor path="personal.name" value={personal.name}>{personal.name || 'Your Name'}</InlineEditor>
         </div>
         {personal.title && (
-          <div style={{ fontSize: '13px', color: c.mutedText, marginTop: '6px', fontStyle: 'italic' }}>
+          <div style={{ fontSize: 'var(--resume-meta)', color: c.mutedText, marginTop: '6px', fontStyle: 'italic' }}>
             <InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor>
           </div>
         )}
@@ -61,7 +61,7 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {} 
       {personal.summary && (
         <>
           {sectionHeader('Profile')}
-          <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, textAlign: 'justify' }}>
+          <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, textAlign: 'justify' }}>
             <RichTextEditor path="personal.summary" value={personal.summary} />
           </div>
         </>
@@ -75,18 +75,18 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {} 
             {experience.map((e, i) => (
               <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1px' }}>
-                  <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize, fontStyle: 'italic' }}>
+                  <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)', fontStyle: 'italic' }}>
                     <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                   </div>
-                  {dateStr(e) && <div style={{ fontSize: ty.bodyFontSize, color: c.mutedText }}>{dateStr(e)}</div>}
+                  {dateStr(e) && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText }}>{dateStr(e)}</div>}
                 </div>
-                <div style={{ fontSize: ty.bodyFontSize, color: c.mutedText, marginBottom: '4px' }}>
+                <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '4px' }}>
                   {e.company && <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>}
                   {e.company && e.location ? ', ' : ''}
                   {e.location && <InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor>}
                 </div>
                 {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} style={{ display: 'flex', alignItems: 'baseline', fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight }}>
+                  <div key={bi} style={{ display: 'flex', alignItems: 'baseline', fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
                     <span style={{ flexShrink: 0, marginRight: '4px' }}>•</span>
                     <div style={{ flex: 1, minWidth: 0 }}><RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} /></div>
                   </div>
@@ -101,15 +101,15 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {} 
             {sectionHeader('Education')}
             {education.map((e, i) => (
               <div key={e.id ?? i} style={{ marginBottom: '12px', textAlign: 'center' }}>
-                <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize }}>
+                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
                 </div>
-                <div style={{ fontSize: ty.bodyFontSize, fontStyle: 'italic', color: c.mutedText }}>
+                <div style={{ fontSize: 'var(--resume-body)', fontStyle: 'italic', color: c.mutedText }}>
                   {[e.degree, e.field].filter(Boolean).join(', ')}
                   {e.degree || e.field ? ' ' : ''}
                   {(e.startDate || e.endDate) && <span>({[e.startDate, e.endDate].filter(Boolean).join(' – ')})</span>}
                 </div>
-                {e.gpa && <div style={{ fontSize: ty.bodyFontSize, color: c.mutedText }}>GPA: {e.gpa}</div>}
+                {e.gpa && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText }}>GPA: {e.gpa}</div>}
               </div>
             ))}
           </div>
@@ -118,7 +118,7 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {} 
         if (key === 'skills' && hasSkills) return (
           <div key={key}>
             {sectionHeader('Skills')}
-            <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.9', textAlign: 'center' }}>
+            <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.9', textAlign: 'center' }}>
               {skills.filter(sk => (sk.items ?? []).length > 0).map((sk, si) => (
                 <span key={sk.id ?? si}>
                   {(sk.items ?? []).map((item, ii) => (
@@ -136,7 +136,7 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {} 
         if (key === 'languages' && languages.length > 0) return (
           <div key={key}>
             {sectionHeader('Languages')}
-            <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.9', textAlign: 'center' }}>
+            <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.9', textAlign: 'center' }}>
               {languages.map((lang, i) => (
                 <span key={lang.id ?? i}>
                   <InlineEditor path={`languages.${i}.language`} value={lang.language}>{lang.language}</InlineEditor>
@@ -152,7 +152,7 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {} 
           <div key={key}>
             {sectionHeader('Certifications')}
             {certifications.map((cert, i) => (
-              <div key={cert.id ?? i} style={{ marginBottom: '6px', fontSize: ty.bodyFontSize, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <div key={cert.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                 <div>
                   <span style={{ fontWeight: 700 }}><InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor></span>
                   {cert.issuer && <span style={{ color: c.mutedText, fontStyle: 'italic' }}> · <InlineEditor path={`certifications.${i}.issuer`} value={cert.issuer}>{cert.issuer}</InlineEditor></span>}
@@ -167,7 +167,7 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {} 
           <div key={key}>
             {sectionHeader('Awards')}
             {awards.map((aw, i) => (
-              <div key={aw.id ?? i} style={{ marginBottom: '8px', fontSize: ty.bodyFontSize, display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <div key={aw.id ?? i} style={{ marginBottom: '8px', fontSize: 'var(--resume-body)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                 <div>
                   {aw.title && <span style={{ fontWeight: 700 }}><InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor></span>}
                   {aw.issuer && <span style={{ color: c.mutedText, fontStyle: 'italic' }}> · <InlineEditor path={`awards.${i}.issuer`} value={aw.issuer}>{aw.issuer}</InlineEditor></span>}
@@ -183,11 +183,11 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {} 
             {sectionHeader('Projects')}
             {projects.map((proj, i) => (
               <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
-                <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize, fontStyle: 'italic' }}>
+                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)', fontStyle: 'italic' }}>
                   <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
                   {proj.url && <span style={{ fontWeight: 400, fontStyle: 'normal' }}> · <ContactLink path={`projects.${i}.url`} value={proj.url} /></span>}
                 </div>
-                {proj.description && <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, marginTop: '2px' }}><RichTextEditor path={`projects.${i}.description`} value={proj.description} /></div>}
+                {proj.description && <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginTop: '2px' }}><RichTextEditor path={`projects.${i}.description`} value={proj.description} /></div>}
               </div>
             ))}
           </div>
@@ -196,7 +196,7 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {} 
         if (key === 'custom' && custom.length > 0) return custom.map((sec, i) => (
           <div key={`${key}-${i}`}>
             {sectionHeader(<InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor>)}
-            <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
+            <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
           </div>
         ))
 

@@ -1,4 +1,4 @@
-import t from '../../../templates/minimal-columns.json'
+﻿import t from '../../../templates/minimal-columns.json'
 import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
@@ -30,22 +30,22 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
     <div style={{ width: `${l.sidebarWidthPercent}%`, padding: '28px 24px 40px 32px', boxSizing: 'border-box', flexShrink: 0, borderRight: `1px solid ${c.dividerColor}`, fontFamily: ty.bodyFont }}>
 
       {sectionHeader('Details')}
-      {personal.location && <>{contactLabel('Address')}<div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight }}><InlineEditor path="personal.location" value={personal.location}>{personal.location}</InlineEditor></div></>}
-      {personal.phone    && <>{contactLabel('Phone')}<div style={{ fontSize: ty.bodyFontSize }}><InlineEditor path="personal.phone" value={personal.phone}>{personal.phone}</InlineEditor></div></>}
-      {personal.email    && <>{contactLabel('Email')}<div style={{ fontSize: ty.bodyFontSize, wordBreak: 'break-all' }}><InlineEditor path="personal.email" value={personal.email}>{personal.email}</InlineEditor></div></>}
+      {personal.location && <>{contactLabel('Address')}<div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}><InlineEditor path="personal.location" value={personal.location}>{personal.location}</InlineEditor></div></>}
+      {personal.phone    && <>{contactLabel('Phone')}<div style={{ fontSize: 'var(--resume-body)' }}><InlineEditor path="personal.phone" value={personal.phone}>{personal.phone}</InlineEditor></div></>}
+      {personal.email    && <>{contactLabel('Email')}<div style={{ fontSize: 'var(--resume-body)', wordBreak: 'break-all' }}><InlineEditor path="personal.email" value={personal.email}>{personal.email}</InlineEditor></div></>}
 
       {(personal.linkedin || personal.website) && (
         <>
           {sectionHeader('Websites & Social Links')}
-          {personal.linkedin && <div style={{ fontSize: ty.bodyFontSize, marginBottom: '4px' }}><span style={{ fontWeight: 700 }}>LinkedIn: </span><ContactLink path="personal.linkedin" value={personal.linkedin} /></div>}
-          {personal.website  && <div style={{ fontSize: ty.bodyFontSize, marginBottom: '4px' }}><span style={{ fontWeight: 700 }}>Website: </span><ContactLink path="personal.website" value={personal.website} /></div>}
+          {personal.linkedin && <div style={{ fontSize: 'var(--resume-body)', marginBottom: '4px' }}><span style={{ fontWeight: 700 }}>LinkedIn: </span><ContactLink path="personal.linkedin" value={personal.linkedin} /></div>}
+          {personal.website  && <div style={{ fontSize: 'var(--resume-body)', marginBottom: '4px' }}><span style={{ fontWeight: 700 }}>Website: </span><ContactLink path="personal.website" value={personal.website} /></div>}
         </>
       )}
 
       {hasSkills && (
         <>
           {sectionHeader('Skills')}
-          <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.8' }}>
+          <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.8' }}>
             {skills.filter(sk => (sk.items ?? []).length > 0).map((sk, si) => (
               <div key={sk.id ?? si} style={{ marginBottom: '4px' }}>
                 {(sk.items ?? []).map((item, ii) => (
@@ -63,7 +63,7 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
       {languages.length > 0 && (
         <>
           {sectionHeader('Languages')}
-          <div style={{ fontSize: ty.bodyFontSize, lineHeight: '1.8' }}>
+          <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.8' }}>
             {languages.map((lang, i) => (
               <div key={lang.id ?? i}>
                 <InlineEditor path={`languages.${i}.language`} value={lang.language}>{lang.language}</InlineEditor>
@@ -82,7 +82,7 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
       {personal.summary && (
         <>
           {sectionHeader('Summary')}
-          <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, marginBottom: '4px' }}>
+          <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '4px' }}>
             <RichTextEditor path="personal.summary" value={personal.summary} />
           </div>
         </>
@@ -95,14 +95,14 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
             {sectionHeader('Experience')}
             {experience.map((e, i) => (
               <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
-                <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize }}>
+                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                   {e.company && <span>, <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor></span>}
                 </div>
-                {dateStr(e) && <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize, marginBottom: '4px' }}>{dateStr(e)}</div>}
-                {e.location && <div style={{ fontSize: ty.bodyFontSize, color: c.mutedText, marginBottom: '3px' }}><InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></div>}
+                {dateStr(e) && <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)', marginBottom: '4px' }}>{dateStr(e)}</div>}
+                {e.location && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '3px' }}><InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></div>}
                 {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
+                  <div key={bi} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
                     <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                   </div>
                 ))}
@@ -115,7 +115,7 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
           <div key={key}>
             {sectionHeader('Education')}
             {education.map((e, i) => (
-              <div key={e.id ?? i} style={{ marginBottom: '12px', fontSize: ty.bodyFontSize }}>
+              <div key={e.id ?? i} style={{ marginBottom: '12px', fontSize: 'var(--resume-body)' }}>
                 <div style={{ fontWeight: 700 }}>
                   <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
                   {e.location && <span style={{ fontWeight: 400 }}>, <InlineEditor path={`education.${i}.location`} value={e.location}>{e.location}</InlineEditor></span>}
@@ -132,7 +132,7 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
           <div key={key}>
             {sectionHeader('Certifications and Licenses')}
             {certifications.map((cert, i) => (
-              <div key={cert.id ?? i} style={{ marginBottom: '6px', fontSize: ty.bodyFontSize }}>
+              <div key={cert.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
                 <InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor>
                 {cert.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`certifications.${i}.issuer`} value={cert.issuer}>{cert.issuer}</InlineEditor></span>}
                 {cert.date   && <span style={{ color: c.mutedText }}> · <InlineEditor path={`certifications.${i}.date`} value={cert.date}>{cert.date}</InlineEditor></span>}
@@ -145,7 +145,7 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
           <div key={key}>
             {sectionHeader('Achievements')}
             {awards.map((aw, i) => (
-              <div key={aw.id ?? i} style={{ marginBottom: '6px', fontSize: ty.bodyFontSize }}>
+              <div key={aw.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
                 {aw.title && <span style={{ fontWeight: 700 }}><InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor></span>}
                 {aw.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`awards.${i}.issuer`} value={aw.issuer}>{aw.issuer}</InlineEditor></span>}
                 {aw.date   && <span style={{ color: c.mutedText }}> · <InlineEditor path={`awards.${i}.date`} value={aw.date}>{aw.date}</InlineEditor></span>}
@@ -160,11 +160,11 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
             {sectionHeader('Projects')}
             {projects.map((proj, i) => (
               <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
-                <div style={{ fontWeight: 700, fontSize: ty.bodyFontSize }}>
+                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
                   {proj.url && <span style={{ fontWeight: 400 }}> · <ContactLink path={`projects.${i}.url`} value={proj.url} /></span>}
                 </div>
-                {proj.description && <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight, marginTop: '3px' }}><RichTextEditor path={`projects.${i}.description`} value={proj.description} /></div>}
+                {proj.description && <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginTop: '3px' }}><RichTextEditor path={`projects.${i}.description`} value={proj.description} /></div>}
               </div>
             ))}
           </div>
@@ -173,7 +173,7 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
         if (key === 'custom' && custom.length > 0) return custom.map((sec, i) => (
           <div key={`${key}-${i}`}>
             {sectionHeader(<InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor>)}
-            <div style={{ fontSize: ty.bodyFontSize, lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
+            <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
           </div>
         ))
 
@@ -183,13 +183,13 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
   )
 
   return (
-    <div style={{ fontFamily: ty.bodyFont, fontSize: ty.bodyFontSize, color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in' }}>
+    <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in' }}>
       {/* Name header */}
       <div style={{ padding: '36px 32px 20px' }}>
         <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: c.headingText, lineHeight: 1.05, letterSpacing: '-0.5px' }}>
           <InlineEditor path="personal.name" value={personal.name}>{personal.name || 'Your Name'}</InlineEditor>
         </div>
-        {personal.title && <div style={{ fontSize: '14px', color: c.mutedText, marginTop: '6px' }}><InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor></div>}
+        {personal.title && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginTop: '6px' }}><InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor></div>}
       </div>
       <div style={{ height: '1px', background: c.dividerColor, margin: '0 32px' }} />
 
