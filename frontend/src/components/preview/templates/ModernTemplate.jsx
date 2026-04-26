@@ -4,7 +4,7 @@ import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
 import ContactIcon from '../ContactIcon'
 
-export default function ModernTemplate({ content = {}, paletteColors = {} }) {
+export default function ModernTemplate({ content = {}, paletteColors = {}, pageIndex = 0 }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [],
           sectionOrder = [] } = content
@@ -22,23 +22,25 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
 
   return (
     <div style={{ display: 'flex', fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, minHeight: '11in' }}>
-      <div style={{ width: `${l.sidebarWidthPercent}%`, background: c.sidebarBackground, color: c.sidebarText, padding: '32px 20px', boxSizing: 'border-box', flexShrink: 0 }}>
-        <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-          <div style={{ width: '72px', height: '72px', background: c.sidebarAccent, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '30px', fontWeight: '700', color: '#fff', margin: '0 auto 12px' }}>
-            {(personal.name || '?')[0]}
-          </div>
-          <div style={{ fontSize: ty.nameFontSize, fontWeight: '700', color: '#fff', letterSpacing: '0.5px' }}>
-            <InlineEditor path="personal.name" value={personal.name}>{personal.name}</InlineEditor>
-          </div>
-          {personal.title && (
-            <div style={{ fontSize: ty.titleFontSize, color: '#90b8e0', marginTop: '4px' }}>
-              <InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor>
+      <div data-col="left" style={{ width: `${l.sidebarWidthPercent}%`, background: c.sidebarBackground, color: c.sidebarText, padding: '32px 20px', boxSizing: 'border-box', flexShrink: 0 }}>
+        {pageIndex === 0 && (
+          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+            <div style={{ width: '72px', height: '72px', background: c.sidebarAccent, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '30px', fontWeight: '700', color: '#fff', margin: '0 auto 12px' }}>
+              {(personal.name || '?')[0]}
             </div>
-          )}
-        </div>
+            <div style={{ fontSize: ty.nameFontSize, fontWeight: '700', color: '#fff', letterSpacing: '0.5px' }}>
+              <InlineEditor path="personal.name" value={personal.name}>{personal.name}</InlineEditor>
+            </div>
+            {personal.title && (
+              <div style={{ fontSize: ty.titleFontSize, color: '#90b8e0', marginTop: '4px' }}>
+                <InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor>
+              </div>
+            )}
+          </div>
+        )}
 
-        {sidebarLabel('Contact')}
-        <div style={{ fontSize: 'var(--resume-meta)', marginBottom: '4px' }}>
+        {pageIndex === 0 && sidebarLabel('Contact')}
+        {pageIndex === 0 && <div style={{ fontSize: 'var(--resume-meta)', marginBottom: '4px' }}>
           {personal.email && (
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px', wordBreak: 'break-all' }}>
               <ContactIcon type="email" size={13} color={c.sidebarAccent} />
@@ -69,9 +71,9 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
               <ContactLink path="personal.website" value={personal.website} />
             </div>
           )}
-        </div>
+        </div>}
 
-        {hasSkillItems && <>
+        {hasSkillItems && <div data-section="skills">
           {sidebarLabel('Skills')}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '4px' }}>
             {skills.map((sk, si) =>
@@ -82,12 +84,12 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
               ))
             )}
           </div>
-        </>}
+        </div>}
 
-        {education.length > 0 && <>
+        {education.length > 0 && <div data-section="education">
           {sidebarLabel('Education')}
           {education.map((e, i) => (
-            <div key={e.id ?? i} style={{ marginBottom: '10px', fontSize: 'var(--resume-meta)', lineHeight: '1.7' }}>
+            <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: '10px', fontSize: 'var(--resume-meta)', lineHeight: '1.7' }}>
               <div style={{ fontWeight: '600', color: '#fff' }}>
                 <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
               </div>
@@ -103,12 +105,12 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
               )}
             </div>
           ))}
-        </>}
+        </div>}
       </div>
 
-      <div style={{ flex: 1, background: c.mainBackground, color: c.mainText, padding: '32px 28px', boxSizing: 'border-box' }}>
+      <div data-col="right" style={{ flex: 1, background: c.mainBackground, color: c.mainText, padding: '32px 28px', boxSizing: 'border-box' }}>
         {personal.summary && (
-          <div>
+          <div data-section="summary">
             {mainLabel('Professional Summary')}
             <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.65', color: '#333', marginBottom: '4px' }}>
               <RichTextEditor path="personal.summary" value={personal.summary} />
@@ -118,10 +120,10 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
 
         {sectionOrder.filter(k => k !== 'personal' && k !== 'education' && k !== 'skills').map(key => {
           if (key === 'experience' && experience.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="experience">
               {mainLabel('Work History')}
               {experience.map((e, i) => (
-                <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                     <div style={{ fontSize: 'var(--resume-sub)', fontWeight: '700', color: c.headingText }}>
                       <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>
@@ -151,10 +153,10 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'certifications' && certifications.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="certifications">
               {mainLabel('Certifications')}
               {certifications.map((cert, i) => (
-                <div key={cert.id ?? i} style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <div key={cert.id ?? i} data-item={cert.id ?? i} style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                   <div>
                     <span style={{ fontSize: 'var(--resume-body)', fontWeight: '600', color: c.headingText }}>
                       <InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor>
@@ -176,11 +178,11 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'languages' && languages.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="languages">
               {mainLabel('Languages')}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {languages.map((lang, i) => (
-                  <span key={lang.id ?? i} style={{ background: '#f1f5f9', border: '1px solid #e2e8f0', color: '#64748b', fontSize: 'var(--resume-meta)', padding: '4px 12px', borderRadius: '12px' }}>
+                  <span key={lang.id ?? i} data-item={lang.id ?? i} style={{ background: '#f1f5f9', border: '1px solid #e2e8f0', color: '#64748b', fontSize: 'var(--resume-meta)', padding: '4px 12px', borderRadius: '12px' }}>
                     <InlineEditor path={`languages.${i}.language`} value={lang.language}>{lang.language}</InlineEditor>
                     {lang.proficiency && (
                       <> — <InlineEditor path={`languages.${i}.proficiency`} value={lang.proficiency}>{lang.proficiency}</InlineEditor></>
@@ -192,10 +194,10 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'awards' && awards.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="awards">
               {mainLabel('Awards & Recognition')}
               {awards.map((aw, i) => (
-                <div key={aw.id ?? i} style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <div key={aw.id ?? i} data-item={aw.id ?? i} style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                   <div>
                     <span style={{ fontSize: 'var(--resume-body)', fontWeight: '600', color: c.headingText }}>
                       <InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor>
@@ -217,10 +219,10 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'projects' && projects.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="projects">
               {mainLabel('Projects')}
               {projects.map((proj, i) => (
-                <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                <div key={proj.id ?? i} data-item={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
                   <div style={{ fontSize: 'var(--resume-sub)', fontWeight: '700', color: c.headingText }}>
                     <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
                   </div>
@@ -240,11 +242,11 @@ export default function ModernTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'custom' && custom.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="custom">
               {custom.map((sec, i) => {
                 const lines = (sec.description || '').split('\n').filter(Boolean)
                 return (
-                  <div key={sec.id ?? i}>
+                  <div key={sec.id ?? i} data-item={sec.id ?? i}>
                     {mainLabel(<InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor>)}
                     <InlineEditor path={`custom.${i}.description`} value={sec.description} multiline>
                       <div>

@@ -3,7 +3,7 @@ import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
 
-export default function MinimalBoxedTemplate({ content = {}, paletteColors = {} }) {
+export default function MinimalBoxedTemplate({ content = {}, paletteColors = {}, pageIndex = 0 }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [],
           sectionOrder = [] } = content
@@ -27,17 +27,21 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {} 
 
   /* ── Left column ── */
   const leftCol = (
-    <div style={{ width: `${l.sidebarWidthPercent}%`, padding: '24px 20px 40px 28px', boxSizing: 'border-box', flexShrink: 0, borderRight: `1px solid ${c.dividerColor}`, fontFamily: ty.bodyFont }}>
+    <div data-col="left" style={{ width: `${l.sidebarWidthPercent}%`, padding: '24px 20px 40px 28px', boxSizing: 'border-box', flexShrink: 0, borderRight: `1px solid ${c.dividerColor}`, fontFamily: ty.bodyFont }}>
 
-      {sectionHeader('Contact')}
-      {personal.email    && <>{contactLabel('Email')}<div style={{ fontSize: 'var(--resume-body)', wordBreak: 'break-all' }}><InlineEditor path="personal.email" value={personal.email}>{personal.email}</InlineEditor></div></>}
-      {personal.phone    && <>{contactLabel('Phone')}<div style={{ fontSize: 'var(--resume-body)' }}><InlineEditor path="personal.phone" value={personal.phone}>{personal.phone}</InlineEditor></div></>}
-      {personal.location && <>{contactLabel('Location')}<div style={{ fontSize: 'var(--resume-body)' }}><InlineEditor path="personal.location" value={personal.location}>{personal.location}</InlineEditor></div></>}
-      {personal.linkedin && <>{contactLabel('LinkedIn')}<div style={{ fontSize: 'var(--resume-body)', wordBreak: 'break-all' }}><ContactLink path="personal.linkedin" value={personal.linkedin} /></div></>}
-      {personal.website  && <>{contactLabel('Website')}<div style={{ fontSize: 'var(--resume-body)', wordBreak: 'break-all' }}><ContactLink path="personal.website" value={personal.website} /></div></>}
+      {pageIndex === 0 && (
+        <>
+          {sectionHeader('Contact')}
+          {personal.email    && <>{contactLabel('Email')}<div style={{ fontSize: 'var(--resume-body)', wordBreak: 'break-all' }}><InlineEditor path="personal.email" value={personal.email}>{personal.email}</InlineEditor></div></>}
+          {personal.phone    && <>{contactLabel('Phone')}<div style={{ fontSize: 'var(--resume-body)' }}><InlineEditor path="personal.phone" value={personal.phone}>{personal.phone}</InlineEditor></div></>}
+          {personal.location && <>{contactLabel('Location')}<div style={{ fontSize: 'var(--resume-body)' }}><InlineEditor path="personal.location" value={personal.location}>{personal.location}</InlineEditor></div></>}
+          {personal.linkedin && <>{contactLabel('LinkedIn')}<div style={{ fontSize: 'var(--resume-body)', wordBreak: 'break-all' }}><ContactLink path="personal.linkedin" value={personal.linkedin} /></div></>}
+          {personal.website  && <>{contactLabel('Website')}<div style={{ fontSize: 'var(--resume-body)', wordBreak: 'break-all' }}><ContactLink path="personal.website" value={personal.website} /></div></>}
+        </>
+      )}
 
       {hasSkills && (
-        <>
+        <div data-section="skills">
           {sectionHeader('Skills')}
           {skills.filter(sk => (sk.items ?? []).length > 0).map((sk, si) => (
             <div key={sk.id ?? si} style={{ marginBottom: '4px' }}>
@@ -52,11 +56,11 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {} 
               </div>
             </div>
           ))}
-        </>
+        </div>
       )}
 
       {languages.length > 0 && (
-        <>
+        <div data-section="languages">
           {sectionHeader('Languages')}
           <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.8' }}>
             {languages.map((lang, i) => (
@@ -66,43 +70,43 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {} 
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
 
       {awards.length > 0 && (
-        <>
+        <div data-section="awards">
           {sectionHeader('Awards')}
           {awards.map((aw, i) => (
-            <div key={aw.id ?? i} style={{ marginBottom: '8px', fontSize: 'var(--resume-body)' }}>
+            <div key={aw.id ?? i} data-item={aw.id ?? i} style={{ marginBottom: '8px', fontSize: 'var(--resume-body)' }}>
               {aw.title && <div style={{ fontWeight: 700 }}><InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor></div>}
               {aw.issuer && <div style={{ color: c.mutedText }}><InlineEditor path={`awards.${i}.issuer`} value={aw.issuer}>{aw.issuer}</InlineEditor></div>}
               {aw.date   && <div style={{ color: c.mutedText }}><InlineEditor path={`awards.${i}.date`} value={aw.date}>{aw.date}</InlineEditor></div>}
             </div>
           ))}
-        </>
+        </div>
       )}
     </div>
   )
 
   /* ── Right column ── */
   const rightCol = (
-    <div style={{ flex: 1, padding: '24px 28px 40px 20px', boxSizing: 'border-box', fontFamily: ty.bodyFont }}>
+    <div data-col="right" style={{ flex: 1, padding: '24px 28px 40px 20px', boxSizing: 'border-box', fontFamily: ty.bodyFont }}>
       {personal.summary && (
-        <>
+        <div data-section="summary">
           {sectionHeader('Profile')}
           <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
             <RichTextEditor path="personal.summary" value={personal.summary} />
           </div>
-        </>
+        </div>
       )}
 
       {sectionOrder.filter(k => !['personal', 'skills', 'languages', 'awards'].includes(k)).map(key => {
 
         if (key === 'experience' && experience.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="experience">
             {sectionHeader('Experience')}
             {experience.map((e, i) => (
-              <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+              <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                   <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                     <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
@@ -123,10 +127,10 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {} 
         )
 
         if (key === 'education' && education.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="education">
             {sectionHeader('Education')}
             {education.map((e, i) => (
-              <div key={e.id ?? i} style={{ marginBottom: '10px', fontSize: 'var(--resume-body)' }}>
+              <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: '10px', fontSize: 'var(--resume-body)' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                   <div style={{ fontWeight: 700 }}>
                     <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
@@ -143,10 +147,10 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {} 
         )
 
         if (key === 'certifications' && certifications.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="certifications">
             {sectionHeader('Certifications')}
             {certifications.map((cert, i) => (
-              <div key={cert.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <div key={cert.id ?? i} data-item={cert.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                 <div>
                   <span style={{ fontWeight: 700 }}><InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor></span>
                   {cert.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`certifications.${i}.issuer`} value={cert.issuer}>{cert.issuer}</InlineEditor></span>}
@@ -158,10 +162,10 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {} 
         )
 
         if (key === 'projects' && projects.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="projects">
             {sectionHeader('Projects')}
             {projects.map((proj, i) => (
-              <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+              <div key={proj.id ?? i} data-item={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
                 <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
                   {proj.url && <span style={{ fontWeight: 400 }}> · <ContactLink path={`projects.${i}.url`} value={proj.url} /></span>}
@@ -172,12 +176,16 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {} 
           </div>
         )
 
-        if (key === 'custom' && custom.length > 0) return custom.map((sec, i) => (
-          <div key={`${key}-${i}`}>
-            {sectionHeader(<InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor>)}
-            <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
+        if (key === 'custom' && custom.length > 0) return (
+          <div key={key} data-section="custom">
+            {custom.map((sec, i) => (
+              <div key={sec.id ?? i} data-item={sec.id ?? i}>
+                {sectionHeader(<InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor>)}
+                <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
+              </div>
+            ))}
           </div>
-        ))
+        )
 
         return null
       })}
@@ -187,12 +195,14 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {} 
   return (
     <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in' }}>
       {/* Boxed name header */}
-      <div style={{ padding: '20px 28px', borderBottom: `2px solid ${c.mainText}` }}>
-        <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: c.headingText, letterSpacing: '-0.3px' }}>
-          <InlineEditor path="personal.name" value={personal.name}>{personal.name || 'Your Name'}</InlineEditor>
+      {pageIndex === 0 && (
+        <div data-page-header style={{ padding: '20px 28px', borderBottom: `2px solid ${c.mainText}` }}>
+          <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: c.headingText, letterSpacing: '-0.3px' }}>
+            <InlineEditor path="personal.name" value={personal.name}>{personal.name || 'Your Name'}</InlineEditor>
+          </div>
+          {personal.title && <div style={{ fontSize: 'var(--resume-meta)', color: c.mutedText, marginTop: '3px' }}><InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor></div>}
         </div>
-        {personal.title && <div style={{ fontSize: 'var(--resume-meta)', color: c.mutedText, marginTop: '3px' }}><InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor></div>}
-      </div>
+      )}
 
       {/* Two columns */}
       <div style={{ display: 'flex', alignItems: 'flex-start' }}>

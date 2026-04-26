@@ -4,7 +4,7 @@ import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
 import ContactIcon from '../ContactIcon'
 
-export default function ExecutiveSidebarTemplate({ content = {}, paletteColors = {} }) {
+export default function ExecutiveSidebarTemplate({ content = {}, paletteColors = {}, pageIndex = 0 }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [],
           sectionOrder = [] } = content
@@ -38,16 +38,20 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
 
   /* ── Left sidebar ── */
   const leftCol = (
-    <div style={{ width: `${l.sidebarWidthPercent}%`, background: c.sidebarBg, padding: '24px 20px 40px 24px', boxSizing: 'border-box', flexShrink: 0, fontFamily: ty.bodyFont }}>
-      {sidebarLabel('Details')}
-      {personal.email    && iconRow('email',    personal.email,    'personal.email')}
-      {personal.location && iconRow('location', personal.location, 'personal.location')}
-      {personal.phone    && iconRow('phone',    personal.phone,    'personal.phone')}
-      {personal.linkedin && iconRow('linkedin', personal.linkedin, 'personal.linkedin', true)}
-      {personal.website  && iconRow('globe',    personal.website,  'personal.website',  true)}
+    <div data-col="left" style={{ width: `${l.sidebarWidthPercent}%`, background: c.sidebarBg, padding: '24px 20px 40px 24px', boxSizing: 'border-box', flexShrink: 0, fontFamily: ty.bodyFont }}>
+      {pageIndex === 0 && (
+        <>
+          {sidebarLabel('Details')}
+          {personal.email    && iconRow('email',    personal.email,    'personal.email')}
+          {personal.location && iconRow('location', personal.location, 'personal.location')}
+          {personal.phone    && iconRow('phone',    personal.phone,    'personal.phone')}
+          {personal.linkedin && iconRow('linkedin', personal.linkedin, 'personal.linkedin', true)}
+          {personal.website  && iconRow('globe',    personal.website,  'personal.website',  true)}
+        </>
+      )}
 
       {hasSkills && (
-        <>
+        <div data-section="skills">
           <div style={{ height: '1px', background: c.dividerColor, margin: '16px 0' }} />
           {sidebarLabel('Skills')}
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 'var(--resume-body)', lineHeight: '1.9' }}>
@@ -58,11 +62,11 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
               </li>
             ))}
           </ul>
-        </>
+        </div>
       )}
 
       {languages.length > 0 && (
-        <>
+        <div data-section="languages">
           <div style={{ height: '1px', background: c.dividerColor, margin: '16px 0' }} />
           {sidebarLabel('Languages')}
           <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.9' }}>
@@ -73,30 +77,30 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
               </div>
             ))}
           </div>
-        </>
+        </div>
       )}
     </div>
   )
 
   /* ── Right column ── */
   const rightCol = (
-    <div style={{ flex: 1, padding: '24px 28px 40px 24px', boxSizing: 'border-box', fontFamily: ty.bodyFont }}>
+    <div data-col="right" style={{ flex: 1, padding: '24px 28px 40px 24px', boxSizing: 'border-box', fontFamily: ty.bodyFont }}>
       {personal.summary && (
-        <>
+        <div data-section="summary">
           <SectionHeader>Summary</SectionHeader>
           <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '4px' }}>
             <RichTextEditor path="personal.summary" value={personal.summary} />
           </div>
-        </>
+        </div>
       )}
 
       {sectionOrder.filter(k => !['personal', 'skills', 'languages'].includes(k)).map(key => {
 
         if (key === 'experience' && experience.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="experience">
             <SectionHeader>Experience</SectionHeader>
             {experience.map((e, i) => (
-              <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+              <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
                 <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                   {e.company && <span>, <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor></span>}
@@ -113,10 +117,10 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
         )
 
         if (key === 'education' && education.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="education">
             <SectionHeader>Education</SectionHeader>
             {education.map((e, i) => (
-              <div key={e.id ?? i} style={{ marginBottom: '10px', fontSize: 'var(--resume-body)' }}>
+              <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: '10px', fontSize: 'var(--resume-body)' }}>
                 <div style={{ fontWeight: 700 }}>
                   <InlineEditor path={`education.${i}.degree`} value={e.degree}>{e.degree}</InlineEditor>
                   {e.field && <span>, <InlineEditor path={`education.${i}.field`} value={e.field}>{e.field}</InlineEditor></span>}
@@ -132,10 +136,10 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
         )
 
         if (key === 'certifications' && certifications.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="certifications">
             <SectionHeader>Certifications and Licenses</SectionHeader>
             {certifications.map((cert, i) => (
-              <div key={cert.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
+              <div key={cert.id ?? i} data-item={cert.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
                 <InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor>
                 {cert.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`certifications.${i}.issuer`} value={cert.issuer}>{cert.issuer}</InlineEditor></span>}
                 {cert.date   && <span style={{ color: c.mutedText }}> · <InlineEditor path={`certifications.${i}.date`} value={cert.date}>{cert.date}</InlineEditor></span>}
@@ -145,10 +149,10 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
         )
 
         if (key === 'awards' && awards.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="awards">
             <SectionHeader>Achievements</SectionHeader>
             {awards.map((aw, i) => (
-              <div key={aw.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
+              <div key={aw.id ?? i} data-item={aw.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
                 {aw.title && <span style={{ fontWeight: 700 }}><InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor></span>}
                 {aw.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`awards.${i}.issuer`} value={aw.issuer}>{aw.issuer}</InlineEditor></span>}
                 {aw.date   && <span style={{ color: c.mutedText }}> · <InlineEditor path={`awards.${i}.date`} value={aw.date}>{aw.date}</InlineEditor></span>}
@@ -158,10 +162,10 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
         )
 
         if (key === 'projects' && projects.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="projects">
             <SectionHeader>Projects</SectionHeader>
             {projects.map((proj, i) => (
-              <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+              <div key={proj.id ?? i} data-item={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
                 <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
                   {proj.url && <span style={{ fontWeight: 400 }}> · <ContactLink path={`projects.${i}.url`} value={proj.url} /></span>}
@@ -172,12 +176,16 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
           </div>
         )
 
-        if (key === 'custom' && custom.length > 0) return custom.map((sec, i) => (
-          <div key={`${key}-${i}`}>
-            <SectionHeader><InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor></SectionHeader>
-            <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
+        if (key === 'custom' && custom.length > 0) return (
+          <div key={key} data-section="custom">
+            {custom.map((sec, i) => (
+              <div key={sec.id ?? i} data-item={sec.id ?? i}>
+                <SectionHeader><InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor></SectionHeader>
+                <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
+              </div>
+            ))}
           </div>
-        ))
+        )
 
         return null
       })}
@@ -187,12 +195,14 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
   return (
     <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBg, minHeight: '11in' }}>
       {/* Dark banner header */}
-      <div style={{ background: c.bannerBg, padding: '22px 24px 18px' }}>
-        <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: c.bannerText, letterSpacing: '0.3px' }}>
-          <InlineEditor path="personal.name" value={personal.name}>{personal.name || 'Your Name'}</InlineEditor>
+      {pageIndex === 0 && (
+        <div data-page-header style={{ background: c.bannerBg, padding: '22px 24px 18px' }}>
+          <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: c.bannerText, letterSpacing: '0.3px' }}>
+            <InlineEditor path="personal.name" value={personal.name}>{personal.name || 'Your Name'}</InlineEditor>
+          </div>
+          {personal.title && <div style={{ fontSize: 'var(--resume-meta)', color: 'rgba(255,255,255,0.65)', marginTop: '4px' }}><InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor></div>}
         </div>
-        {personal.title && <div style={{ fontSize: 'var(--resume-meta)', color: 'rgba(255,255,255,0.65)', marginTop: '4px' }}><InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor></div>}
-      </div>
+      )}
 
       {/* Two columns */}
       <div style={{ display: 'flex', alignItems: 'flex-start' }}>
