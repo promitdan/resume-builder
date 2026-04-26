@@ -97,7 +97,7 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
     const ro = new ResizeObserver(compute)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [content, templateId, fontSize, isTwoColumn])
+  }, [content, templateId, fontSize, isTwoColumn, paletteIndex, onBreaksChange])
 
   if (!Template) return <div style={{ padding: '20px', color: '#e53e3e' }}>Unknown template: {templateId}</div>
 
@@ -118,7 +118,7 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
       {/* N page cards — each is a fresh template render with its content slice */}
       {pageSlices.map(({ slicedContent, pageIndex }, i) => (
         <div
-          key={i}
+          key={`page-${pageIndex}`}
           className="page"
           style={{
             width:        '8.5in',
