@@ -3,7 +3,7 @@ import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
 
-export default function CreativeTemplate({ content = {}, paletteColors = {} }) {
+export default function CreativeTemplate({ content = {}, paletteColors = {}, pageIndex = 0 }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [],
           sectionOrder = [] } = content
@@ -44,31 +44,33 @@ export default function CreativeTemplate({ content = {}, paletteColors = {} }) {
 
   return (
     <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight }}>
-      <div style={{ background: `linear-gradient(135deg, ${c.accentStart}, #7c3aed, ${c.accentEnd})`, color: '#fff', padding: '40px 52px 32px' }}>
-        <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: '#fff', letterSpacing: '-0.5px', marginBottom: '4px' }}>
-          <InlineEditor path="personal.name" value={personal.name}>{personal.name}</InlineEditor>
-        </div>
-        {personal.title && (
-          <div style={{ fontSize: ty.titleFontSize, fontWeight: '400', color: '#e0d9ff', letterSpacing: '1px', marginBottom: '18px' }}>
-            <InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor>
+      {pageIndex === 0 && (
+        <div data-page-header style={{ background: `linear-gradient(135deg, ${c.accentStart}, #7c3aed, ${c.accentEnd})`, color: '#fff', padding: '40px 52px 32px' }}>
+          <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: '#fff', letterSpacing: '-0.5px', marginBottom: '4px' }}>
+            <InlineEditor path="personal.name" value={personal.name}>{personal.name}</InlineEditor>
           </div>
-        )}
-        <div style={{ display: 'flex', gap: '20px', fontSize: 'var(--resume-meta)', color: '#d1c4ff', flexWrap: 'wrap' }}>
-          {headerContactFields.map(f => (
-            <span key={f.path}>
-              {f.icon}{' '}
-              {f.isLink
-                ? <ContactLink path={f.path} value={f.val} />
-                : <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
-              }
-            </span>
-          ))}
+          {personal.title && (
+            <div style={{ fontSize: ty.titleFontSize, fontWeight: '400', color: '#e0d9ff', letterSpacing: '1px', marginBottom: '18px' }}>
+              <InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor>
+            </div>
+          )}
+          <div style={{ display: 'flex', gap: '20px', fontSize: 'var(--resume-meta)', color: '#d1c4ff', flexWrap: 'wrap' }}>
+            {headerContactFields.map(f => (
+              <span key={f.path}>
+                {f.icon}{' '}
+                {f.isLink
+                  ? <ContactLink path={f.path} value={f.val} />
+                  : <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
+                }
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       <div style={{ padding: '28px 52px 40px' }}>
         {personal.summary && (
-          <div style={{ marginBottom: '24px' }}>
+          <div data-section="summary" style={{ marginBottom: '24px' }}>
             {sectionLabel('About')}
             <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.7', color: '#444' }}>
               <RichTextEditor path="personal.summary" value={personal.summary} />
@@ -77,7 +79,7 @@ export default function CreativeTemplate({ content = {}, paletteColors = {} }) {
         )}
 
         {hasSkillItems && (
-          <div style={{ marginBottom: '24px' }}>
+          <div data-section="skills" style={{ marginBottom: '24px' }}>
             {sectionLabel('Skills')}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
               {skills.map((sk, si) =>
@@ -97,12 +99,12 @@ export default function CreativeTemplate({ content = {}, paletteColors = {} }) {
 
         {sectionOrder.filter(k => k !== 'personal' && k !== 'skills').map(key => {
           if (key === 'experience' && experience.length > 0) return (
-            <div key={key} style={{ marginBottom: '24px' }}>
+            <div key={key} data-section="experience" style={{ marginBottom: '24px' }}>
               {sectionLabel('Experience')}
               {experience.map((e, i) => {
                 const bc = borderColors[i % 2]
                 return (
-                  <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing, paddingLeft: '14px', borderLeft: `3px solid ${bc}` }}>
+                  <div key={e.id ?? i} data-item={e.id ?? `exp-${i}`} style={{ marginBottom: l.itemSpacing, paddingLeft: '14px', borderLeft: `3px solid ${bc}` }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                       <div style={{ fontSize: 'var(--resume-sub)', fontWeight: '700', color: c.headingText }}>
                         <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>
@@ -133,13 +135,13 @@ export default function CreativeTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'education' && education.length > 0) return (
-            <div key={key} style={{ marginBottom: '24px' }}>
+            <div key={key} data-section="education" style={{ marginBottom: '24px' }}>
               {sectionLabel('Education')}
               <div style={{ display: 'flex', gap: '32px', flexWrap: 'wrap' }}>
                 {education.map((e, i) => {
                   const bc = borderColors[i % 2]
                   return (
-                    <div key={e.id ?? i} style={{ paddingLeft: '14px', borderLeft: `3px solid ${bc}` }}>
+                    <div key={e.id ?? i} data-item={e.id ?? `edu-${i}`} style={{ paddingLeft: '14px', borderLeft: `3px solid ${bc}` }}>
                       <div style={{ fontSize: 'var(--resume-sub)', fontWeight: '700', color: c.headingText }}>
                         <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
                       </div>
@@ -161,10 +163,10 @@ export default function CreativeTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'certifications' && certifications.length > 0) return (
-            <div key={key} style={{ marginBottom: '24px' }}>
+            <div key={key} data-section="certifications" style={{ marginBottom: '24px' }}>
               {sectionLabel('Certifications')}
               {certifications.map((cert, i) => (
-                <div key={cert.id ?? i} style={{ marginBottom: '8px', paddingLeft: '14px', borderLeft: `3px solid ${borderColors[i % 2]}` }}>
+                <div key={cert.id ?? i} data-item={cert.id ?? `cert-${i}`} style={{ marginBottom: '8px', paddingLeft: '14px', borderLeft: `3px solid ${borderColors[i % 2]}` }}>
                   <div style={{ fontSize: 'var(--resume-body)', fontWeight: '700', color: c.headingText }}>
                     <InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor>
                   </div>
@@ -184,7 +186,7 @@ export default function CreativeTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'languages' && languages.length > 0) return (
-            <div key={key} style={{ marginBottom: '24px' }}>
+            <div key={key} data-section="languages" style={{ marginBottom: '24px' }}>
               {sectionLabel('Languages')}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {languages.map((lang, i) => (
@@ -200,10 +202,10 @@ export default function CreativeTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'awards' && awards.length > 0) return (
-            <div key={key} style={{ marginBottom: '24px' }}>
+            <div key={key} data-section="awards" style={{ marginBottom: '24px' }}>
               {sectionLabel('Awards & Recognition')}
               {awards.map((aw, i) => (
-                <div key={aw.id ?? i} style={{ marginBottom: '8px', paddingLeft: '14px', borderLeft: `3px solid ${borderColors[i % 2]}` }}>
+                <div key={aw.id ?? i} data-item={aw.id ?? `award-${i}`} style={{ marginBottom: '8px', paddingLeft: '14px', borderLeft: `3px solid ${borderColors[i % 2]}` }}>
                   <div style={{ fontSize: 'var(--resume-body)', fontWeight: '700', color: c.headingText }}>
                     <InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor>
                   </div>
@@ -223,12 +225,12 @@ export default function CreativeTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'projects' && projects.length > 0) return (
-            <div key={key} style={{ marginBottom: '24px' }}>
+            <div key={key} data-section="projects" style={{ marginBottom: '24px' }}>
               {sectionLabel('Projects')}
               {projects.map((proj, i) => {
                 const bc = borderColors[i % 2]
                 return (
-                  <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing, paddingLeft: '14px', borderLeft: `3px solid ${bc}` }}>
+                  <div key={proj.id ?? i} data-item={proj.id ?? `proj-${i}`} style={{ marginBottom: l.itemSpacing, paddingLeft: '14px', borderLeft: `3px solid ${bc}` }}>
                     <div style={{ fontSize: 'var(--resume-sub)', fontWeight: '700', color: c.headingText }}>
                       <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
                     </div>
@@ -249,7 +251,7 @@ export default function CreativeTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'custom' && custom.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="custom">
               {custom.map((sec, i) => {
                 const lines = (sec.description || '').split('\n').filter(Boolean)
                 return (
