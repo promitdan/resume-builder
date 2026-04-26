@@ -23,8 +23,10 @@ export default function UploadDropzone() {
     try {
       const form = new FormData()
       form.append('file', file)
-      const { data } = await axios.post('/api/upload', form)
-      setContent(data.content)
+      const res = await axios.post('/api/upload', form)
+      const parseMethod = res.headers['x-parse-method'] || 'unknown'
+      console.log(`[resume-builder] PDF parsed via: ${parseMethod}`)
+      setContent(res.data.content)
       navigate('/preview')
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to parse file. Please try again.')
@@ -37,6 +39,22 @@ export default function UploadDropzone() {
     e.preventDefault()
     setDragging(false)
     handleFile(e.dataTransfer.files[0])
+  }
+
+  if (loading) {
+    return (
+      <div style={{ position: 'fixed', inset: 0, background: 'rgba(15,23,42,0.7)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
+        <div style={{ background: '#fff', borderRadius: '16px', padding: '40px 48px', textAlign: 'center', maxWidth: '360px' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '16px' }}>🤖</div>
+          <p style={{ margin: '0 0 8px', fontWeight: 700, fontSize: '17px', color: '#0f172a' }}>Parsing your resume…</p>
+          <p style={{ margin: '0 0 24px', fontSize: '13px', color: '#64748b' }}>AI is reading your document.<br />This may take up to a minute.</p>
+          <div style={{ height: '4px', background: '#e2e8f0', borderRadius: '2px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: '40%', background: '#3b82f6', borderRadius: '2px', animation: 'slide 1.4s ease-in-out infinite' }} />
+          </div>
+        </div>
+        <style>{`@keyframes slide { 0%{transform:translateX(-100%)} 100%{transform:translateX(350%)} }`}</style>
+      </div>
+    )
   }
 
   return (
