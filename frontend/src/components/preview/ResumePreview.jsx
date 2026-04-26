@@ -77,7 +77,7 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
         <div style={{ zoom: fontScale }}>
           <Template content={content} paletteColors={paletteColors} />
         </div>
-      </div>   {/* inner resume div */}
-    </div>     {/* clip container */}
+      </div>
+    </div>
   )
 }
