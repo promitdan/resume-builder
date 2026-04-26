@@ -36,12 +36,11 @@ export default function PreviewPage() {
   const canIncrease = scaleIdx < FONT_SCALE_STEPS.length - 1
 
   // Page navigation
-  const [breaks, setBreaks]           = useState([])
+  const [totalPages, setTotalPages]   = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
-  const totalPages = breaks.length + 1
 
-  const handleBreaksChange = useCallback((next) => {
-    setBreaks(next)
+  const handleBreaksChange = useCallback((count) => {
+    setTotalPages(count)
     setCurrentPage(1)
   }, [])
 

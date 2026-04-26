@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect } from 'react'
 import ClassicTemplate         from './templates/ClassicTemplate'
 import ClassicAcademicTemplate from './templates/ClassicAcademicTemplate'
 import ClassicFormalTemplate   from './templates/ClassicFormalTemplate'
@@ -46,7 +46,6 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
   const Template      = COMPONENT_MAP[templateId]
   const tpl           = TEMPLATE_CONFIGS[templateId]
   const paperRef      = useRef()
-  const [breaks, setBreaks] = useState([])
 
   const paletteColors = tpl?.palettes?.[paletteIndex]?.colors ?? {}
 
@@ -57,8 +56,7 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
       const h = el.scrollHeight
       const count = Math.floor(h / PAGE_HEIGHT_PX)
       const next = Array.from({ length: count }, (_, i) => (i + 1) * PAGE_HEIGHT_PX)
-      setBreaks(next)
-      onBreaksChange?.(next)
+      onBreaksChange?.(next.length + 1)
     }
     compute()
     const ro = new ResizeObserver(compute)
