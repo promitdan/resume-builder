@@ -45,10 +45,6 @@ export default function PreviewPage() {
     setCurrentPage(1)
   }, [])
 
-  const goToPage = useCallback((page) => {
-    setCurrentPage(page)
-  }, [])
-
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
       {/* Navbar */}
@@ -87,7 +83,7 @@ export default function PreviewPage() {
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(15,23,42,0.72)', backdropFilter: 'blur(6px)', borderRadius: '999px', padding: '6px 10px', boxShadow: '0 4px 16px rgba(0,0,0,0.28)', pointerEvents: 'auto' }}>
                 <button
                   type="button"
-                  onClick={() => goToPage(currentPage - 1)}
+                  onClick={() => setCurrentPage(currentPage - 1)}
                   disabled={currentPage <= 1}
                   style={{ background: 'none', border: 'none', color: currentPage <= 1 ? 'rgba(255,255,255,0.3)' : '#fff', cursor: currentPage <= 1 ? 'default' : 'pointer', padding: '2px 6px', fontSize: '16px', lineHeight: 1, borderRadius: '6px', display: 'flex', alignItems: 'center' }}
                 >
@@ -98,7 +94,7 @@ export default function PreviewPage() {
                 </span>
                 <button
                   type="button"
-                  onClick={() => goToPage(currentPage + 1)}
+                  onClick={() => setCurrentPage(currentPage + 1)}
                   disabled={currentPage >= totalPages}
                   style={{ background: 'none', border: 'none', color: currentPage >= totalPages ? 'rgba(255,255,255,0.3)' : '#fff', cursor: currentPage >= totalPages ? 'default' : 'pointer', padding: '2px 6px', fontSize: '16px', lineHeight: 1, borderRadius: '6px', display: 'flex', alignItems: 'center' }}
                 >
