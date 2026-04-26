@@ -49,6 +49,8 @@ export function distributePages(sections, firstPageAvail, subsequentPageAvail) {
   for (const sec of sections) {
     // Atomic section (no items — e.g. skills block, custom section)
     if (sec.items.length === 0) {
+      // intentional: atomic sections cannot be split; allow overflow rather than
+      // emitting an empty page
       if (used > 0 && used + sec.height > avail()) flush()
       current.push({ sectionId: sec.id, items: null, isContinuation: seen.has(sec.id) })
       used += sec.height
@@ -64,6 +66,8 @@ export function distributePages(sections, firstPageAvail, subsequentPageAvail) {
         flush()
         entry = null
       }
+      // intentional: if a single item exceeds a full page, it still goes on the
+      // current (empty) page rather than looping forever
       if (!entry) {
         entry = { sectionId: sec.id, items: [], isContinuation: seen.has(sec.id) }
         current.push(entry)
@@ -97,6 +101,7 @@ export function sliceContent(fullContent, pageAssignment, pageIndex) {
 
   for (const { sectionId, items, isContinuation } of pageAssignment) {
     if (sectionId === 'summary') continue
+    if (!ARRAY_SECTIONS.includes(sectionId)) continue
 
     if (items === null) {
       // Atomic section — include full array
