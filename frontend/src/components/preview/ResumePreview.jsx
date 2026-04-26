@@ -88,17 +88,19 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
           style={{
             width: '8.5in',
             height: `${CONTENT_HEIGHT}px`,
-            overflow: 'hidden',
-            background: '#fff',
+            background: '#e2e8f0',
             boxShadow: '0 2px 16px rgba(0,0,0,0.15)',
             marginBottom: i < totalPages - 1 ? `${PAGE_GAP}px` : 0,
             padding: `${PAGE_INSET}px 0`,
             boxSizing: 'border-box',
           }}
         >
-          <div style={{ transform: `translateY(${-i * VISIBLE_HEIGHT}px)` }}>
-            <div style={{ zoom: fontScale }}>
-              <Template content={content} paletteColors={paletteColors} />
+          {/* Inner white clip — overflow:hidden here, not on gray outer */}
+          <div style={{ height: '100%', overflow: 'hidden', background: '#fff' }}>
+            <div style={{ transform: `translateY(${-i * VISIBLE_HEIGHT}px)` }}>
+              <div style={{ zoom: fontScale }}>
+                <Template content={content} paletteColors={paletteColors} />
+              </div>
             </div>
           </div>
         </div>
