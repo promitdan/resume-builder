@@ -3,7 +3,7 @@ import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
 
-export default function ExecutiveTemplate({ content = {}, paletteColors = {} }) {
+export default function ExecutiveTemplate({ content = {}, paletteColors = {}, pageIndex = 0 }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [],
           sectionOrder = [] } = content
@@ -38,44 +38,48 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {} }) 
 
   return (
     <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight }}>
-      <div style={{ background: c.headerBackground, color: c.headerText, padding: '40px 52px 32px' }}>
-        <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, letterSpacing: ty.nameLetterSpacing || '1px', textTransform: 'uppercase', color: '#fff', marginBottom: '6px' }}>
-          <InlineEditor path="personal.name" value={personal.name}>{personal.name}</InlineEditor>
-        </div>
-        {personal.title && (
-          <div style={{ fontSize: ty.titleFontSize, fontWeight: '400', color: c.headerMuted, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '20px' }}>
-            <InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor>
-          </div>
-        )}
-        <div style={{ display: 'flex', gap: '24px', fontSize: 'var(--resume-meta)', color: '#cbd5e0', flexWrap: 'wrap' }}>
-          {headerContactFields.map(f => (
-            <span key={f.path}>
-              {f.isLink
-                ? <ContactLink path={f.path} value={f.val} />
-                : <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
-              }
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {hasSkillItems && (
-        <div style={{ background: '#f7f7fa', padding: '16px 52px', borderBottom: '1px solid #e2e8f0' }}>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-            {skills.map((sk, si) =>
-              (sk.items ?? []).map((item, ii) => (
-                <span key={`${si}-${ii}`} style={{ background: c.headingText, color: '#e0e0f0', fontSize: '12px', fontWeight: '500', padding: '5px 12px', borderRadius: '3px' }}>
-                  <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
-                </span>
-              ))
+      {pageIndex === 0 && (
+        <div data-page-header>
+          <div style={{ background: c.headerBackground, color: c.headerText, padding: '40px 52px 32px' }}>
+            <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, letterSpacing: ty.nameLetterSpacing || '1px', textTransform: 'uppercase', color: '#fff', marginBottom: '6px' }}>
+              <InlineEditor path="personal.name" value={personal.name}>{personal.name}</InlineEditor>
+            </div>
+            {personal.title && (
+              <div style={{ fontSize: ty.titleFontSize, fontWeight: '400', color: c.headerMuted, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '20px' }}>
+                <InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor>
+              </div>
             )}
+            <div style={{ display: 'flex', gap: '24px', fontSize: 'var(--resume-meta)', color: '#cbd5e0', flexWrap: 'wrap' }}>
+              {headerContactFields.map(f => (
+                <span key={f.path}>
+                  {f.isLink
+                    ? <ContactLink path={f.path} value={f.val} />
+                    : <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
+                  }
+                </span>
+              ))}
+            </div>
           </div>
+
+          {hasSkillItems && (
+            <div style={{ background: '#f7f7fa', padding: '16px 52px', borderBottom: '1px solid #e2e8f0' }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {skills.map((sk, si) =>
+                  (sk.items ?? []).map((item, ii) => (
+                    <span key={`${si}-${ii}`} style={{ background: c.headingText, color: '#e0e0f0', fontSize: '12px', fontWeight: '500', padding: '5px 12px', borderRadius: '3px' }}>
+                      <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
+                    </span>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
         </div>
       )}
 
       <div style={{ padding: '28px 52px 40px' }}>
         {personal.summary && (
-          <div>
+          <div data-section="summary">
             {sectionLabel('Professional Summary', true)}
             <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.7', color: '#333' }}>
               <RichTextEditor path="personal.summary" value={personal.summary} />
@@ -85,10 +89,10 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {} }) 
 
         {sectionOrder.filter(k => k !== 'personal' && k !== 'skills').map(key => {
           if (key === 'experience' && experience.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="experience">
               {sectionLabel('Work History', key === visibleMainKeys[0] && !personal.summary)}
               {experience.map((e, i) => (
-                <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                <div key={e.id ?? i} data-item={e.id ?? `exp-${i}`} style={{ marginBottom: l.itemSpacing }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                     <div style={{ fontSize: '16px', fontWeight: '700', color: c.headingText }}>
                       <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>
@@ -118,10 +122,10 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {} }) 
           )
 
           if (key === 'education' && education.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="education">
               {sectionLabel('Education', key === visibleMainKeys[0] && !personal.summary)}
               {education.map((e, i) => (
-                <div key={e.id ?? i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+                <div key={e.id ?? i} data-item={e.id ?? `edu-${i}`} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
                   <div>
                     <span style={{ fontSize: 'var(--resume-sub)', fontWeight: '700', color: c.headingText }}>
                       <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
@@ -143,10 +147,10 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {} }) 
           )
 
           if (key === 'certifications' && certifications.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="certifications">
               {sectionLabel('Certifications', key === visibleMainKeys[0] && !personal.summary)}
               {certifications.map((cert, i) => (
-                <div key={cert.id ?? i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div key={cert.id ?? i} data-item={cert.id ?? `cert-${i}`} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                   <div>
                     <span style={{ fontSize: 'var(--resume-sub)', fontWeight: '700', color: c.headingText }}>
                       <InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor>
@@ -168,7 +172,7 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {} }) 
           )
 
           if (key === 'languages' && languages.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="languages">
               {sectionLabel('Languages', key === visibleMainKeys[0] && !personal.summary)}
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {languages.map((lang, i) => (
@@ -184,10 +188,10 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {} }) 
           )
 
           if (key === 'awards' && awards.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="awards">
               {sectionLabel('Awards & Recognition', key === visibleMainKeys[0] && !personal.summary)}
               {awards.map((aw, i) => (
-                <div key={aw.id ?? i} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <div key={aw.id ?? i} data-item={aw.id ?? `award-${i}`} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px' }}>
                   <div>
                     <span style={{ fontSize: 'var(--resume-sub)', fontWeight: '700', color: c.headingText }}>
                       <InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor>
@@ -209,10 +213,10 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {} }) 
           )
 
           if (key === 'projects' && projects.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="projects">
               {sectionLabel('Projects', key === visibleMainKeys[0] && !personal.summary)}
               {projects.map((proj, i) => (
-                <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                <div key={proj.id ?? i} data-item={proj.id ?? `proj-${i}`} style={{ marginBottom: l.itemSpacing }}>
                   <div style={{ fontSize: '16px', fontWeight: '700', color: c.headingText }}>
                     <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
                   </div>
@@ -232,7 +236,7 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {} }) 
           )
 
           if (key === 'custom' && custom.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="custom">
               {custom.map((sec, i) => {
                 const lines = (sec.description || '').split('\n').filter(Boolean)
                 return (
