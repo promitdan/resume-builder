@@ -13,7 +13,7 @@ const DotLeader = ({ left, right, leftStyle = {}, rightStyle = {} }) => (
   </div>
 )
 
-export default function ClassicAcademicTemplate({ content = {}, paletteColors = {} }) {
+export default function ClassicAcademicTemplate({ content = {}, paletteColors = {}, pageIndex = 0 }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [],
           sectionOrder = [] } = content
@@ -50,63 +50,67 @@ export default function ClassicAcademicTemplate({ content = {}, paletteColors = 
   return (
     <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, background: c.mainBackground }}>
 
-      {/* ── Header ── */}
-      <div style={{ textAlign: 'center', padding: `28px ${SP} 12px` }}>
-        <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, letterSpacing: ty.nameLetterSpacing, color: c.headingText, marginBottom: '4px' }}>
-          <InlineEditor path="personal.name" value={personal.name}>{personal.name || 'Your Name'}</InlineEditor>
-        </div>
-        {personal.location && (
-          <div style={{ fontSize: 'var(--resume-meta)', color: c.mutedText, marginBottom: '3px' }}>
-            <InlineEditor path="personal.location" value={personal.location}>{personal.location}</InlineEditor>
+      {pageIndex === 0 && (
+        <div data-page-header>
+          {/* ── Header ── */}
+          <div style={{ textAlign: 'center', padding: `28px ${SP} 12px` }}>
+            <div style={{ fontFamily: ty.nameFont, fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, letterSpacing: ty.nameLetterSpacing, color: c.headingText, marginBottom: '4px' }}>
+              <InlineEditor path="personal.name" value={personal.name}>{personal.name || 'Your Name'}</InlineEditor>
+            </div>
+            {personal.location && (
+              <div style={{ fontSize: 'var(--resume-meta)', color: c.mutedText, marginBottom: '3px' }}>
+                <InlineEditor path="personal.location" value={personal.location}>{personal.location}</InlineEditor>
+              </div>
+            )}
+            {personal.title && (
+              <div style={{ fontSize: 'var(--resume-body)', fontStyle: 'italic', color: c.mutedText, marginBottom: '4px' }}>
+                <InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor>
+              </div>
+            )}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '28px', fontSize: 'var(--resume-meta)', color: c.mainText }}>
+              {personal.email && <InlineEditor path="personal.email" value={personal.email}>{personal.email}</InlineEditor>}
+              {personal.phone && <InlineEditor path="personal.phone" value={personal.phone}>{personal.phone}</InlineEditor>}
+            </div>
           </div>
-        )}
-        {personal.title && (
-          <div style={{ fontSize: 'var(--resume-body)', fontStyle: 'italic', color: c.mutedText, marginBottom: '4px' }}>
-            <InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor>
-          </div>
-        )}
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '28px', fontSize: 'var(--resume-meta)', color: c.mainText }}>
-          {personal.email && <InlineEditor path="personal.email" value={personal.email}>{personal.email}</InlineEditor>}
-          {personal.phone && <InlineEditor path="personal.phone" value={personal.phone}>{personal.phone}</InlineEditor>}
-        </div>
-      </div>
 
-      {/* ── Links section ── */}
-      {hasLinks && (
-        <>
-          {band('Websites and Social Links')}
-          <div style={{ padding: `0 ${SP}`, marginBottom: '4px', display: 'grid', gridTemplateColumns: 'max-content 1fr', gap: '2px 12px' }}>
-            {personal.linkedin && (
-              <><span style={{ fontWeight: 600, fontSize: 'var(--resume-body)' }}>LinkedIn:</span>
-              <ContactLink path="personal.linkedin" value={personal.linkedin} /></>
-            )}
-            {personal.website && (
-              <><span style={{ fontWeight: 600, fontSize: 'var(--resume-body)' }}>Website:</span>
-              <ContactLink path="personal.website" value={personal.website} /></>
-            )}
-          </div>
-        </>
+          {/* ── Links section ── */}
+          {hasLinks && (
+            <>
+              {band('Websites and Social Links')}
+              <div style={{ padding: `0 ${SP}`, marginBottom: '4px', display: 'grid', gridTemplateColumns: 'max-content 1fr', gap: '2px 12px' }}>
+                {personal.linkedin && (
+                  <><span style={{ fontWeight: 600, fontSize: 'var(--resume-body)' }}>LinkedIn:</span>
+                  <ContactLink path="personal.linkedin" value={personal.linkedin} /></>
+                )}
+                {personal.website && (
+                  <><span style={{ fontWeight: 600, fontSize: 'var(--resume-body)' }}>Website:</span>
+                  <ContactLink path="personal.website" value={personal.website} /></>
+                )}
+              </div>
+            </>
+          )}
+        </div>
       )}
 
       {/* ── Summary ── */}
       {personal.summary && (
-        <>
+        <div data-section="summary">
           {band('Summary')}
           <div style={{ padding: `0 ${SP}`, fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
             <RichTextEditor path="personal.summary" value={personal.summary} />
           </div>
-        </>
+        </div>
       )}
 
       {/* ── Ordered sections ── */}
       {sectionOrder.filter(k => k !== 'personal').map(key => {
 
         if (key === 'experience' && experience.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="experience">
             {band('Experience')}
             <div style={{ padding: `0 ${SP}` }}>
               {experience.map((e, i) => (
-                <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                <div key={e.id ?? i} data-item={e.id ?? `exp-${i}`} style={{ marginBottom: l.itemSpacing }}>
                   <div style={{ display: 'flex', alignItems: 'baseline' }}>
                     <Diamond />
                     <span style={{ fontWeight: 700, marginRight: '2px' }}>
@@ -130,11 +134,11 @@ export default function ClassicAcademicTemplate({ content = {}, paletteColors = 
         )
 
         if (key === 'education' && education.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="education">
             {band('Education')}
             <div style={{ padding: `0 ${SP}` }}>
               {education.map((e, i) => (
-                <div key={e.id ?? i} style={{ marginBottom: '10px' }}>
+                <div key={e.id ?? i} data-item={e.id ?? `edu-${i}`} style={{ marginBottom: '10px' }}>
                   <div style={{ display: 'flex', alignItems: 'baseline' }}>
                     <Diamond />
                     <span style={{ fontWeight: 700 }}>
@@ -160,7 +164,7 @@ export default function ClassicAcademicTemplate({ content = {}, paletteColors = 
         )
 
         if (key === 'skills' && hasSkillItems) return (
-          <div key={key}>
+          <div key={key} data-section="skills">
             {band('Skills')}
             <div style={{ padding: `0 ${SP}` }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px 0' }}>
@@ -181,11 +185,11 @@ export default function ClassicAcademicTemplate({ content = {}, paletteColors = 
         )
 
         if (key === 'certifications' && certifications.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="certifications">
             {band('Certifications')}
             <div style={{ padding: `0 ${SP}` }}>
               {certifications.map((cert, i) => (
-                <div key={cert.id ?? i} style={{ marginBottom: '8px' }}>
+                <div key={cert.id ?? i} data-item={cert.id ?? `cert-${i}`} style={{ marginBottom: '8px' }}>
                   <DotLeader
                     left={<><Diamond /><span style={{ fontWeight: 700 }}><InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor></span>{cert.issuer && <span style={{ fontWeight: 400 }}>, <InlineEditor path={`certifications.${i}.issuer`} value={cert.issuer}>{cert.issuer}</InlineEditor></span>}</>}
                     right={<InlineEditor path={`certifications.${i}.date`} value={cert.date}>{cert.date}</InlineEditor>}
@@ -198,11 +202,11 @@ export default function ClassicAcademicTemplate({ content = {}, paletteColors = 
         )
 
         if (key === 'awards' && awards.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="awards">
             {band('Achievements')}
             <div style={{ padding: `0 ${SP}` }}>
               {awards.map((aw, i) => (
-                <div key={aw.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
+                <div key={aw.id ?? i} data-item={aw.id ?? `award-${i}`} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
                   <RichTextEditor path={`awards.${i}.description`} value={aw.description || `${aw.title}${aw.issuer ? `, ${aw.issuer}` : ''}`} />
                 </div>
               ))}
@@ -211,7 +215,7 @@ export default function ClassicAcademicTemplate({ content = {}, paletteColors = 
         )
 
         if (key === 'languages' && languages.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="languages">
             {band('Languages')}
             <div style={{ padding: `0 ${SP}`, display: 'flex', flexWrap: 'wrap', gap: '4px 32px', fontSize: 'var(--resume-body)' }}>
               {languages.map((lang, i) => (
@@ -225,11 +229,11 @@ export default function ClassicAcademicTemplate({ content = {}, paletteColors = 
         )
 
         if (key === 'projects' && projects.length > 0) return (
-          <div key={key}>
+          <div key={key} data-section="projects">
             {band('Projects')}
             <div style={{ padding: `0 ${SP}` }}>
               {projects.map((proj, i) => (
-                <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                <div key={proj.id ?? i} data-item={proj.id ?? `proj-${i}`} style={{ marginBottom: l.itemSpacing }}>
                   <div style={{ display: 'flex', alignItems: 'baseline' }}>
                     <Diamond />
                     <span style={{ fontWeight: 700 }}>
@@ -249,14 +253,18 @@ export default function ClassicAcademicTemplate({ content = {}, paletteColors = 
           </div>
         )
 
-        if (key === 'custom' && custom.length > 0) return custom.map((sec, i) => (
-          <div key={`${key}-${i}`}>
-            {band(<InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor>)}
-            <div style={{ padding: `0 ${SP}`, fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
-              <RichTextEditor path={`custom.${i}.description`} value={sec.description} />
-            </div>
+        if (key === 'custom' && custom.length > 0) return (
+          <div key={key} data-section="custom">
+            {custom.map((sec, i) => (
+              <div key={`${key}-${i}`}>
+                {band(<InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor>)}
+                <div style={{ padding: `0 ${SP}`, fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
+                  <RichTextEditor path={`custom.${i}.description`} value={sec.description} />
+                </div>
+              </div>
+            ))}
           </div>
-        ))
+        )
 
         return null
       })}
