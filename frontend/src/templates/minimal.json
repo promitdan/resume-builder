@@ -16,6 +16,13 @@
     "dividerColor": "#eeeeee",
     "mutedText": "#999999"
   },
+  "palettes": [
+    { "label": "Default", "swatch": "#111111", "colors": {} },
+    { "label": "Navy",    "swatch": "#1e3a5f", "colors": { "headingText": "#1e3a5f" } },
+    { "label": "Forest",  "swatch": "#14532d", "colors": { "headingText": "#14532d" } },
+    { "label": "Rose",    "swatch": "#9f1239", "colors": { "headingText": "#9f1239" } },
+    { "label": "Slate",   "swatch": "#334155", "colors": { "headingText": "#334155" } }
+  ],
   "typography": {
     "nameFont": "Inter, sans-serif",
     "nameFontSize": "40px",

@@ -3,11 +3,11 @@ import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
 
-export default function ClassicTemplate({ content = {} }) {
+export default function ClassicTemplate({ content = {}, paletteColors = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [],
           sectionOrder = [] } = content
-  const c = t.colors, ty = t.typography, l = t.layout
+  const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
 
   const sectionLabel = (text) => (
     <div style={{

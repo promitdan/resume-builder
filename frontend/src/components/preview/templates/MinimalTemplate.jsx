@@ -3,11 +3,11 @@ import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
 
-export default function MinimalTemplate({ content = {} }) {
+export default function MinimalTemplate({ content = {}, paletteColors = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [],
           sectionOrder = [] } = content
-  const c = t.colors, ty = t.typography, l = t.layout
+  const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
 
   const sectionLabel = (text, first = false) => (
     <div style={{ fontSize: '11px', fontWeight: '600', letterSpacing: '3px', textTransform: 'uppercase', color: '#aaa', marginBottom: '10px', marginTop: first ? '0' : '32px' }}>{text}</div>

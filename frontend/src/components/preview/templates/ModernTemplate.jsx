@@ -3,11 +3,11 @@ import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
 
-export default function ModernTemplate({ content = {} }) {
+export default function ModernTemplate({ content = {}, paletteColors = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [],
           sectionOrder = [] } = content
-  const c = t.colors, ty = t.typography, l = t.layout
+  const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
 
   const sidebarLabel = (text) => (
     <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', color: c.sidebarAccent, borderBottom: '1px solid #2d5080', paddingBottom: '4px', marginBottom: '10px', marginTop: '18px' }}>{text}</div>

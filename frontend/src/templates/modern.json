@@ -21,6 +21,13 @@
     "dividerColor": "#4a9eff",
     "mutedText": "#666666"
   },
+  "palettes": [
+    { "label": "Default", "swatch": "#1e3a5f", "colors": {} },
+    { "label": "Slate",   "swatch": "#334155", "colors": { "sidebarBackground": "#334155", "headingText": "#334155", "sidebarAccent": "#94a3b8", "accentColor": "#94a3b8", "dividerColor": "#94a3b8" } },
+    { "label": "Teal",    "swatch": "#0f4c4c", "colors": { "sidebarBackground": "#0f4c4c", "headingText": "#0f4c4c", "sidebarAccent": "#14b8a6", "accentColor": "#14b8a6", "dividerColor": "#14b8a6" } },
+    { "label": "Emerald", "swatch": "#14532d", "colors": { "sidebarBackground": "#14532d", "headingText": "#14532d", "sidebarAccent": "#4ade80", "accentColor": "#4ade80", "dividerColor": "#4ade80" } },
+    { "label": "Violet",  "swatch": "#3b0764", "colors": { "sidebarBackground": "#3b0764", "headingText": "#3b0764", "sidebarAccent": "#a855f7", "accentColor": "#a855f7", "dividerColor": "#a855f7" } }
+  ],
   "typography": {
     "nameFont": "Inter, sans-serif",
     "nameFontSize": "19px",

@@ -3,11 +3,11 @@ import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
 
-export default function ExecutiveTemplate({ content = {} }) {
+export default function ExecutiveTemplate({ content = {}, paletteColors = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [],
           sectionOrder = [] } = content
-  const c = t.colors, ty = t.typography, l = t.layout
+  const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
 
   const sectionLabel = (text, first = false) => (
     <div style={{ fontSize: '11px', fontWeight: '700', letterSpacing: '3px', textTransform: 'uppercase', color: c.headingText, borderLeft: `3px solid ${c.headingText}`, paddingLeft: '10px', marginBottom: '12px', marginTop: first ? '0' : '24px' }}>{text}</div>
