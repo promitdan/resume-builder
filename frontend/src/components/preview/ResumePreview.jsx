@@ -64,7 +64,7 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
     const ro = new ResizeObserver(compute)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [content, templateId, fontScale])
+  }, [content, templateId, fontScale, onBreaksChange])
 
   const translateY = -(currentPage - 1) * PAGE_HEIGHT_PX + (currentPage > 1 ? PAGE_INSET : 0)
 
