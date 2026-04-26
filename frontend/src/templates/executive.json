@@ -22,11 +22,11 @@
     "mutedText": "#666666"
   },
   "palettes": [
-    { "label": "Default",  "swatch": "#1a1a2e", "colors": {} },
-    { "label": "Navy",     "swatch": "#1e3a5f", "colors": { "headerBackground": "#1e3a5f", "headingText": "#1e3a5f", "accentColor": "#1e3a5f", "dividerColor": "#1e3a5f" } },
-    { "label": "Forest",   "swatch": "#14532d", "colors": { "headerBackground": "#14532d", "headingText": "#14532d", "accentColor": "#14532d", "dividerColor": "#14532d" } },
-    { "label": "Burgundy", "swatch": "#7c2d12", "colors": { "headerBackground": "#7c2d12", "headingText": "#7c2d12", "accentColor": "#7c2d12", "dividerColor": "#7c2d12" } },
-    { "label": "Charcoal", "swatch": "#1c1c1c", "colors": { "headerBackground": "#292929", "headingText": "#1c1c1c", "accentColor": "#1c1c1c", "dividerColor": "#1c1c1c" } }
+    { "label": "Onyx",     "swatch": "#1a1a2e", "colors": {} },
+    { "label": "Navy",     "swatch": "#1b3a6b", "colors": { "headerBackground": "#1b3a6b", "headingText": "#1b3a6b", "accentColor": "#1b3a6b", "dividerColor": "#1b3a6b" } },
+    { "label": "Burgundy", "swatch": "#6b1c2e", "colors": { "headerBackground": "#6b1c2e", "headingText": "#6b1c2e", "accentColor": "#6b1c2e", "dividerColor": "#6b1c2e" } },
+    { "label": "Forest",   "swatch": "#1a3a22", "colors": { "headerBackground": "#1a3a22", "headingText": "#1a3a22", "accentColor": "#1a3a22", "dividerColor": "#1a3a22" } },
+    { "label": "Teal",     "swatch": "#0c3b3b", "colors": { "headerBackground": "#0c3b3b", "headingText": "#0c3b3b", "accentColor": "#0c3b3b", "dividerColor": "#0c3b3b" } }
   ],
   "typography": {
     "nameFont": "Inter, sans-serif",

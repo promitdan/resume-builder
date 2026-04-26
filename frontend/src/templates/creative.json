@@ -18,11 +18,11 @@
     "mutedText": "#666666"
   },
   "palettes": [
-    { "label": "Default", "swatch": "#4f46e5", "colors": {} },
-    { "label": "Ocean",   "swatch": "#1d4ed8", "colors": { "headingText": "#1e1b4b", "accentStart": "#1d4ed8", "accentEnd": "#0891b2", "dividerColor": "#bfdbfe" } },
-    { "label": "Sunset",  "swatch": "#ea580c", "colors": { "headingText": "#431407", "accentStart": "#ea580c", "accentEnd": "#dc2626", "dividerColor": "#fed7aa" } },
-    { "label": "Forest",  "swatch": "#16a34a", "colors": { "headingText": "#14532d", "accentStart": "#16a34a", "accentEnd": "#0f766e", "dividerColor": "#bbf7d0" } },
-    { "label": "Rose",    "swatch": "#e11d48", "colors": { "headingText": "#4c0519", "accentStart": "#e11d48", "accentEnd": "#7c3aed", "dividerColor": "#fecdd3" } }
+    { "label": "Indigo",  "swatch": "#4f46e5", "colors": {} },
+    { "label": "Ocean",   "swatch": "#1e40af", "colors": { "headingText": "#1e3a5f", "accentStart": "#1e40af", "accentEnd": "#0891b2", "dividerColor": "#bfdbfe" } },
+    { "label": "Sunset",  "swatch": "#d97706", "colors": { "headingText": "#78350f", "accentStart": "#d97706", "accentEnd": "#ef4444", "dividerColor": "#fde68a" } },
+    { "label": "Forest",  "swatch": "#059669", "colors": { "headingText": "#064e3b", "accentStart": "#059669", "accentEnd": "#0d9488", "dividerColor": "#a7f3d0" } },
+    { "label": "Aurora",  "swatch": "#7c3aed", "colors": { "headingText": "#4c1d95", "accentStart": "#7c3aed", "accentEnd": "#db2777", "dividerColor": "#ddd6fe" } }
   ],
   "typography": {
     "nameFont": "Inter, sans-serif",
