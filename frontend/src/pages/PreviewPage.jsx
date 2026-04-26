@@ -1,15 +1,10 @@
 import { useNavigate } from 'react-router-dom'
+import { useState, useCallback } from 'react'
 import { useResumeStore } from '../store/useResumeStore'
 import ResumePreview from '../components/preview/ResumePreview'
 import TemplateSwitcher from '../components/preview/TemplateSwitcher'
 import DownloadButtons from '../components/shared/DownloadButtons'
-import classicTpl   from '../templates/classic.json'
-import modernTpl    from '../templates/modern.json'
-import minimalTpl   from '../templates/minimal.json'
-import executiveTpl from '../templates/executive.json'
-import creativeTpl  from '../templates/creative.json'
-
-const TEMPLATE_MAP = { classic: classicTpl, modern: modernTpl, minimal: minimalTpl, executive: executiveTpl, creative: creativeTpl }
+import { TEMPLATE_CONFIGS } from '../registry/templateRegistry'
 
 const FONT_SCALE_STEPS = [0.80, 0.85, 0.90, 0.95, 1.00, 1.05, 1.10, 1.15, 1.20]
 
@@ -22,8 +17,9 @@ export default function PreviewPage() {
   const setFontScale    = useResumeStore(s => s.setFontScale)
   const navigate     = useNavigate()
 
-  const tpl      = TEMPLATE_MAP[templateId]
+  const tpl      = TEMPLATE_CONFIGS[templateId]
   const palettes = tpl?.palettes ?? []
+  const isMonochrome = palettes.length === 0
 
   const decreaseFontScale = () => {
     const idx = FONT_SCALE_STEPS.indexOf(fontScale)
@@ -38,6 +34,20 @@ export default function PreviewPage() {
   const scaleIdx   = FONT_SCALE_STEPS.indexOf(fontScale)
   const canDecrease = scaleIdx > 0
   const canIncrease = scaleIdx < FONT_SCALE_STEPS.length - 1
+
+  // Page navigation
+  const [breaks, setBreaks]           = useState([])
+  const [currentPage, setCurrentPage] = useState(1)
+  const totalPages = breaks.length + 1
+
+  const handleBreaksChange = useCallback((next) => {
+    setBreaks(next)
+    setCurrentPage(1)
+  }, [])
+
+  const goToPage = useCallback((page) => {
+    setCurrentPage(page)
+  }, [])
 
   return (
     <div style={{ minHeight: '100vh', background: '#f8fafc', display: 'flex', flexDirection: 'column' }}>
@@ -58,8 +68,45 @@ export default function PreviewPage() {
       {/* Body */}
       <div style={{ flex: 1, display: 'flex', gap: '24px', padding: '28px 32px', alignItems: 'flex-start', maxWidth: '1200px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
         {/* Resume preview — dominant */}
-        <div style={{ flex: 1, overflow: 'auto', background: '#e2e8f0', borderRadius: '10px', padding: '24px', minHeight: '500px' }}>
-          <ResumePreview content={content} templateId={templateId} paletteIndex={paletteIndex} fontScale={fontScale} />
+        <div style={{ flex: 1, position: 'relative', borderRadius: '10px', overflow: 'hidden', minHeight: '500px' }}>
+          {/* Paper area */}
+          <div style={{ background: '#e2e8f0', padding: '24px', boxSizing: 'border-box', display: 'flex', justifyContent: 'center', minHeight: '100%' }}>
+            <ResumePreview
+              content={content}
+              templateId={templateId}
+              paletteIndex={paletteIndex}
+              fontScale={fontScale}
+              onBreaksChange={handleBreaksChange}
+              currentPage={currentPage}
+            />
+          </div>
+
+          {/* Floating page pill */}
+          {totalPages > 1 && (
+            <div style={{ position: 'absolute', bottom: '20px', left: 0, right: 0, display: 'flex', justifyContent: 'center', pointerEvents: 'none', zIndex: 40 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', background: 'rgba(15,23,42,0.72)', backdropFilter: 'blur(6px)', borderRadius: '999px', padding: '6px 10px', boxShadow: '0 4px 16px rgba(0,0,0,0.28)', pointerEvents: 'auto' }}>
+                <button
+                  type="button"
+                  onClick={() => goToPage(currentPage - 1)}
+                  disabled={currentPage <= 1}
+                  style={{ background: 'none', border: 'none', color: currentPage <= 1 ? 'rgba(255,255,255,0.3)' : '#fff', cursor: currentPage <= 1 ? 'default' : 'pointer', padding: '2px 6px', fontSize: '16px', lineHeight: 1, borderRadius: '6px', display: 'flex', alignItems: 'center' }}
+                >
+                  ‹
+                </button>
+                <span style={{ color: '#fff', fontSize: '13px', fontWeight: 600, minWidth: '52px', textAlign: 'center', letterSpacing: '0.2px' }}>
+                  {currentPage} / {totalPages}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => goToPage(currentPage + 1)}
+                  disabled={currentPage >= totalPages}
+                  style={{ background: 'none', border: 'none', color: currentPage >= totalPages ? 'rgba(255,255,255,0.3)' : '#fff', cursor: currentPage >= totalPages ? 'default' : 'pointer', padding: '2px 6px', fontSize: '16px', lineHeight: 1, borderRadius: '6px', display: 'flex', alignItems: 'center' }}
+                >
+                  ›
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right sidebar */}
@@ -82,12 +129,19 @@ export default function PreviewPage() {
           </div>
 
           {/* Color palette card */}
-          {palettes.length > 0 && (
-            <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '16px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <h3 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Color</h3>
-                <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 500 }}>{palettes[paletteIndex]?.label}</span>
+          <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '16px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+              <h3 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Color</h3>
+              <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 500 }}>
+                {isMonochrome ? 'Monochrome' : palettes[paletteIndex]?.label}
+              </span>
+            </div>
+            {isMonochrome ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#1a1a1a', boxShadow: '0 0 0 2.5px #fff, 0 0 0 4.5px #1a1a1a', flexShrink: 0 }} />
+                <span style={{ fontSize: '12px', color: '#94a3b8' }}>No color variants for this template</span>
               </div>
+            ) : (
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 {palettes.map((palette, i) => (
                   <button
@@ -96,14 +150,9 @@ export default function PreviewPage() {
                     title={palette.label}
                     onClick={() => setPaletteIndex(i)}
                     style={{
-                      width: '24px',
-                      height: '24px',
-                      borderRadius: '50%',
-                      background: palette.swatch,
-                      border: 'none',
-                      cursor: 'pointer',
-                      padding: 0,
-                      flexShrink: 0,
+                      width: '24px', height: '24px', borderRadius: '50%',
+                      background: palette.swatch, border: 'none',
+                      cursor: 'pointer', padding: 0, flexShrink: 0,
                       boxShadow: i === paletteIndex
                         ? `0 0 0 2.5px #fff, 0 0 0 4.5px ${palette.swatch}`
                         : '0 1px 3px rgba(0,0,0,0.20)',
@@ -112,8 +161,8 @@ export default function PreviewPage() {
                   />
                 ))}
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
           {/* Font size card */}
           <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '16px' }}>
