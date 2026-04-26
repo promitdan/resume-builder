@@ -3,7 +3,7 @@ import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
 
-export default function MinimalTemplate({ content = {}, paletteColors = {} }) {
+export default function MinimalTemplate({ content = {}, paletteColors = {}, pageIndex = 0 }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [],
           sectionOrder = [] } = content
@@ -25,30 +25,32 @@ export default function MinimalTemplate({ content = {}, paletteColors = {} }) {
 
   return (
     <div style={{ fontFamily: ty.bodyFont, fontSize: 'var(--resume-body)', color: c.mainText, lineHeight: ty.bodyLineHeight, padding: '52px 64px' }}>
-      <div style={{ marginBottom: '36px' }}>
-        <div style={{ fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: c.headingText, letterSpacing: '-0.5px' }}>
-          <InlineEditor path="personal.name" value={personal.name}>{personal.name}</InlineEditor>
-        </div>
-        {personal.title && (
-          <div style={{ fontSize: ty.titleFontSize, fontWeight: '400', color: '#666', marginTop: '4px', letterSpacing: '0.5px' }}>
-            <InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor>
+      {pageIndex === 0 && (
+        <div data-page-header style={{ marginBottom: '36px' }}>
+          <div style={{ fontSize: ty.nameFontSize, fontWeight: ty.nameFontWeight, color: c.headingText, letterSpacing: '-0.5px' }}>
+            <InlineEditor path="personal.name" value={personal.name}>{personal.name}</InlineEditor>
           </div>
-        )}
-        <div style={{ fontSize: 'var(--resume-meta)', color: '#999', marginTop: '8px' }}>
-          {contactFields.map((f, i) => (
-            <span key={f.path}>
-              {f.isLink
-                ? <ContactLink path={f.path} value={f.val} />
-                : <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
-              }
-              {i < contactFields.length - 1 && ' · '}
-            </span>
-          ))}
+          {personal.title && (
+            <div style={{ fontSize: ty.titleFontSize, fontWeight: '400', color: '#666', marginTop: '4px', letterSpacing: '0.5px' }}>
+              <InlineEditor path="personal.title" value={personal.title}>{personal.title}</InlineEditor>
+            </div>
+          )}
+          <div style={{ fontSize: 'var(--resume-meta)', color: '#999', marginTop: '8px' }}>
+            {contactFields.map((f, i) => (
+              <span key={f.path}>
+                {f.isLink
+                  ? <ContactLink path={f.path} value={f.val} />
+                  : <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
+                }
+                {i < contactFields.length - 1 && ' · '}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
       {personal.summary && (
-        <div>
+        <div data-section="summary">
           {sectionLabel('Summary')}
           <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.7', color: '#444', maxWidth: '580px' }}>
             <RichTextEditor path="personal.summary" value={personal.summary} />
@@ -70,7 +72,7 @@ export default function MinimalTemplate({ content = {}, paletteColors = {} }) {
         })
         return sectionOrder.filter(k => k !== 'personal').map(key => {
           if (key === 'skills' && hasSkillItems) return (
-            <div key={key}>
+            <div key={key} data-section="skills">
               {sectionLabel('Skills', key === visibleKeys[0])}
               <div style={{ fontSize: 'var(--resume-body)', color: '#555', lineHeight: '2' }}>
                 {skills.map((sk, si) =>
@@ -86,10 +88,10 @@ export default function MinimalTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'experience' && experience.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="experience">
               {sectionLabel('Experience', key === visibleKeys[0])}
               {experience.map((e, i) => (
-                <div key={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                <div key={e.id ?? i} data-item={e.id ?? `exp-${i}`} style={{ marginBottom: l.itemSpacing }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '2px' }}>
                     <div style={{ fontSize: '16px', fontWeight: '600', color: c.headingText }}>
                       <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>
@@ -119,11 +121,11 @@ export default function MinimalTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'education' && education.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="education">
               {sectionLabel('Education', key === visibleKeys[0])}
               <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap' }}>
                 {education.map((e, i) => (
-                  <div key={e.id ?? i}>
+                  <div key={e.id ?? i} data-item={e.id ?? `edu-${i}`}>
                     <div style={{ fontSize: 'var(--resume-sub)', fontWeight: '600', color: c.headingText }}>
                       <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
                     </div>
@@ -144,10 +146,10 @@ export default function MinimalTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'certifications' && certifications.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="certifications">
               {sectionLabel('Certifications', key === visibleKeys[0])}
               {certifications.map((cert, i) => (
-                <div key={cert.id ?? i} style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <div key={cert.id ?? i} data-item={cert.id ?? `cert-${i}`} style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                   <div>
                     <span style={{ fontSize: 'var(--resume-sub)', fontWeight: '600', color: c.headingText }}>
                       <InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor>
@@ -169,7 +171,7 @@ export default function MinimalTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'languages' && languages.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="languages">
               {sectionLabel('Languages', key === visibleKeys[0])}
               <div style={{ fontSize: 'var(--resume-body)', color: '#555', lineHeight: '2' }}>
                 {languages.map((lang, i) => (
@@ -186,10 +188,10 @@ export default function MinimalTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'awards' && awards.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="awards">
               {sectionLabel('Awards & Recognition', key === visibleKeys[0])}
               {awards.map((aw, i) => (
-                <div key={aw.id ?? i} style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                <div key={aw.id ?? i} data-item={aw.id ?? `award-${i}`} style={{ marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                   <div>
                     <span style={{ fontSize: 'var(--resume-sub)', fontWeight: '600', color: c.headingText }}>
                       <InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor>
@@ -211,10 +213,10 @@ export default function MinimalTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'projects' && projects.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="projects">
               {sectionLabel('Projects', key === visibleKeys[0])}
               {projects.map((proj, i) => (
-                <div key={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                <div key={proj.id ?? i} data-item={proj.id ?? `proj-${i}`} style={{ marginBottom: l.itemSpacing }}>
                   <div style={{ fontSize: '16px', fontWeight: '600', color: c.headingText }}>
                     <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
                   </div>
@@ -234,7 +236,7 @@ export default function MinimalTemplate({ content = {}, paletteColors = {} }) {
           )
 
           if (key === 'custom' && custom.length > 0) return (
-            <div key={key}>
+            <div key={key} data-section="custom">
               {custom.map((sec, i) => {
                 const lines = (sec.description || '').split('\n').filter(Boolean)
                 return (
