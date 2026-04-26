@@ -1,6 +1,7 @@
 import t from '../../../templates/creative.json'
 import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
+import ContactLink from '../ContactLink'
 
 export default function CreativeTemplate({ content = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
@@ -25,9 +26,11 @@ export default function CreativeTemplate({ content = {} }) {
   const borderColors = [c.accentStart, c.accentEnd]
 
   const headerContactFields = [
-    { path: 'personal.email', val: personal.email, icon: '✉' },
-    { path: 'personal.phone', val: personal.phone, icon: '☎' },
+    { path: 'personal.email',    val: personal.email,    icon: '✉' },
+    { path: 'personal.phone',    val: personal.phone,    icon: '☎' },
     { path: 'personal.location', val: personal.location, icon: '📍' },
+    { path: 'personal.linkedin', val: personal.linkedin, icon: '🔗', isLink: true },
+    { path: 'personal.website',  val: personal.website,  icon: '🌐', isLink: true },
   ].filter(f => f.val)
 
   return (
@@ -43,7 +46,13 @@ export default function CreativeTemplate({ content = {} }) {
         )}
         <div style={{ display: 'flex', gap: '20px', fontSize: '13px', color: '#d1c4ff', flexWrap: 'wrap' }}>
           {headerContactFields.map(f => (
-            <span key={f.path}>{f.icon} <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor></span>
+            <span key={f.path}>
+              {f.icon}{' '}
+              {f.isLink
+                ? <ContactLink path={f.path} value={f.val} />
+                : <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
+              }
+            </span>
           ))}
         </div>
       </div>
@@ -221,7 +230,7 @@ export default function CreativeTemplate({ content = {} }) {
                     )}
                     {proj.url && (
                       <div style={{ fontSize: '13px', color: '#999', marginTop: '2px' }}>
-                        <InlineEditor path={`projects.${i}.url`} value={proj.url}>{proj.url}</InlineEditor>
+                        <ContactLink path={`projects.${i}.url`} value={proj.url} />
                       </div>
                     )}
                   </div>

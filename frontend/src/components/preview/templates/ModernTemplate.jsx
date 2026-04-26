@@ -1,6 +1,7 @@
 import t from '../../../templates/modern.json'
 import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
+import ContactLink from '../ContactLink'
 
 export default function ModernTemplate({ content = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
@@ -19,9 +20,11 @@ export default function ModernTemplate({ content = {} }) {
   const hasSkillItems = skills.some(sk => (sk.items ?? []).length > 0)
 
   const sidebarContactFields = [
-    { path: 'personal.email', val: personal.email },
-    { path: 'personal.phone', val: personal.phone },
+    { path: 'personal.email',    val: personal.email },
+    { path: 'personal.phone',    val: personal.phone },
     { path: 'personal.location', val: personal.location },
+    { path: 'personal.linkedin', val: personal.linkedin, isLink: true },
+    { path: 'personal.website',  val: personal.website,  isLink: true },
   ].filter(f => f.val)
 
   return (
@@ -45,7 +48,10 @@ export default function ModernTemplate({ content = {} }) {
         <div style={{ fontSize: '13px', lineHeight: '1.7', wordBreak: 'break-word', marginBottom: '4px' }}>
           {sidebarContactFields.map(f => (
             <div key={f.path}>
-              <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
+              {f.isLink
+                ? <ContactLink path={f.path} value={f.val} />
+                : <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
+              }
             </div>
           ))}
         </div>
@@ -210,7 +216,7 @@ export default function ModernTemplate({ content = {} }) {
                   )}
                   {proj.url && (
                     <div style={{ fontSize: '13px', color: '#888', marginTop: '2px' }}>
-                      <InlineEditor path={`projects.${i}.url`} value={proj.url}>{proj.url}</InlineEditor>
+                      <ContactLink path={`projects.${i}.url`} value={proj.url} />
                     </div>
                   )}
                 </div>

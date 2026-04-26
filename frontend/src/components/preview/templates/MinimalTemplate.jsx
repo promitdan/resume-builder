@@ -1,6 +1,7 @@
 import t from '../../../templates/minimal.json'
 import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
+import ContactLink from '../ContactLink'
 
 export default function MinimalTemplate({ content = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
@@ -15,11 +16,11 @@ export default function MinimalTemplate({ content = {} }) {
   const hasSkillItems = skills.some(sk => (sk.items ?? []).length > 0)
 
   const contactFields = [
-    { path: 'personal.email', val: personal.email },
-    { path: 'personal.phone', val: personal.phone },
+    { path: 'personal.email',    val: personal.email },
+    { path: 'personal.phone',    val: personal.phone },
     { path: 'personal.location', val: personal.location },
-    { path: 'personal.linkedin', val: personal.linkedin },
-    { path: 'personal.website', val: personal.website },
+    { path: 'personal.linkedin', val: personal.linkedin, isLink: true },
+    { path: 'personal.website',  val: personal.website,  isLink: true },
   ].filter(f => f.val)
 
   return (
@@ -36,7 +37,10 @@ export default function MinimalTemplate({ content = {} }) {
         <div style={{ fontSize: '13px', color: '#999', marginTop: '8px' }}>
           {contactFields.map((f, i) => (
             <span key={f.path}>
-              <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
+              {f.isLink
+                ? <ContactLink path={f.path} value={f.val} />
+                : <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
+              }
               {i < contactFields.length - 1 && ' · '}
             </span>
           ))}
@@ -221,7 +225,7 @@ export default function MinimalTemplate({ content = {} }) {
                   )}
                   {proj.url && (
                     <div style={{ fontSize: '13px', color: '#999', marginTop: '2px' }}>
-                      <InlineEditor path={`projects.${i}.url`} value={proj.url}>{proj.url}</InlineEditor>
+                      <ContactLink path={`projects.${i}.url`} value={proj.url} />
                     </div>
                   )}
                 </div>

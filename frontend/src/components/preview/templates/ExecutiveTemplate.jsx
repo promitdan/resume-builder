@@ -1,6 +1,7 @@
 import t from '../../../templates/executive.json'
 import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
+import ContactLink from '../ContactLink'
 
 export default function ExecutiveTemplate({ content = {} }) {
   const { personal = {}, experience = [], education = [], skills = [],
@@ -28,9 +29,11 @@ export default function ExecutiveTemplate({ content = {} }) {
     })
 
   const headerContactFields = [
-    { path: 'personal.email', val: personal.email },
-    { path: 'personal.phone', val: personal.phone },
+    { path: 'personal.email',    val: personal.email },
+    { path: 'personal.phone',    val: personal.phone },
     { path: 'personal.location', val: personal.location },
+    { path: 'personal.linkedin', val: personal.linkedin, isLink: true },
+    { path: 'personal.website',  val: personal.website,  isLink: true },
   ].filter(f => f.val)
 
   return (
@@ -47,7 +50,10 @@ export default function ExecutiveTemplate({ content = {} }) {
         <div style={{ display: 'flex', gap: '24px', fontSize: '13px', color: '#cbd5e0', flexWrap: 'wrap' }}>
           {headerContactFields.map(f => (
             <span key={f.path}>
-              <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
+              {f.isLink
+                ? <ContactLink path={f.path} value={f.val} />
+                : <InlineEditor path={f.path} value={f.val}>{f.val}</InlineEditor>
+              }
             </span>
           ))}
         </div>
@@ -217,7 +223,7 @@ export default function ExecutiveTemplate({ content = {} }) {
                   )}
                   {proj.url && (
                     <div style={{ fontSize: '13px', color: '#888', marginTop: '2px' }}>
-                      <InlineEditor path={`projects.${i}.url`} value={proj.url}>{proj.url}</InlineEditor>
+                      <ContactLink path={`projects.${i}.url`} value={proj.url} />
                     </div>
                   )}
                 </div>
