@@ -161,10 +161,33 @@ export function sliceContent(fullContent, pageAssignment, pageIndex) {
     if (items === null) {
       // Atomic section — include full array
       slice[sectionId] = fullContent[sectionId] ?? []
+    } else if (sectionId === 'skills') {
+      // Skills: reconstruct nested group structure from sk-{gi}-{ii} IDs
+      const assignedSkillIds = new Set(items.map(a => a.id))
+      const reconstructed = (fullContent.skills ?? []).map((group, gi) => ({
+        ...group,
+        items: (group.items ?? []).filter((_, ii) => assignedSkillIds.has(`sk-${gi}-${ii}`)),
+      })).filter(group => group.items.length > 0)
+      if (isContinuation && reconstructed.length > 0) {
+        reconstructed[0] = { ...reconstructed[0], _isContinuation: true }
+      }
+      slice.skills = reconstructed
     } else {
-      // Item-level slice
-      const idSet    = new Set(items)
-      const filtered = (fullContent[sectionId] ?? []).filter(item => idSet.has(item.id))
+      // Sections with distributable items (experience, education, projects, etc.)
+      const itemMap  = new Map(items.map(a => [a.id, a]))
+      const fullArr  = fullContent[sectionId] ?? []
+      const filtered = fullArr
+        .filter(item => itemMap.has(item.id))
+        .map(item => {
+          const assignment = itemMap.get(item.id)
+          if (assignment.subitems === null) return item
+          const subitemSet = new Set(assignment.subitems)
+          return {
+            ...item,
+            bullets: (item.bullets ?? []).filter((_, bi) => subitemSet.has(`bullet-${bi}`)),
+            _bulletContinuation: assignment.isBulletContinuation,
+          }
+        })
       slice[sectionId] = isContinuation && filtered.length > 0
         ? [{ ...filtered[0], _isContinuation: true }, ...filtered.slice(1)]
         : filtered
