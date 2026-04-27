@@ -107,10 +107,11 @@ export default function ClassicAcademicTemplate({ content = {}, paletteColors = 
 
         if (key === 'experience' && experience.length > 0) return (
           <div key={key} data-section="experience">
-            {band('Experience')}
+            {band(experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience')}
             <div style={{ padding: `0 ${SP}` }}>
               {experience.map((e, i) => (
                 <div key={e.id ?? i} data-item={e.id ?? `exp-${i}`} style={{ marginBottom: l.itemSpacing }}>
+                  {!e._bulletContinuation && (
                   <div style={{ display: 'flex', alignItems: 'baseline' }}>
                     <Diamond />
                     <span style={{ fontWeight: 700, marginRight: '2px' }}>
@@ -122,8 +123,9 @@ export default function ClassicAcademicTemplate({ content = {}, paletteColors = 
                     <span style={{ flex: 1, borderBottom: '1px dotted #aaa', margin: '0 8px 3px', minWidth: '16px' }} />
                     <span style={{ whiteSpace: 'nowrap', fontSize: 'var(--resume-meta)', color: c.mutedText }}>{dateStr(e)}</span>
                   </div>
+                  )}
                   {e.bullets?.filter(Boolean).map((b, bi) => (
-                    <div key={bi} style={{ paddingLeft: '18px', fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, color: c.mainText, marginTop: '3px' }}>
+                    <div key={bi} data-subitem={`bullet-${bi}`} style={{ paddingLeft: '18px', fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, color: c.mainText, marginTop: '3px' }}>
                       <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                     </div>
                   ))}
@@ -165,12 +167,12 @@ export default function ClassicAcademicTemplate({ content = {}, paletteColors = 
 
         if (key === 'skills' && hasSkillItems) return (
           <div key={key} data-section="skills">
-            {band('Skills')}
+            {band(skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills')}
             <div style={{ padding: `0 ${SP}` }}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '3px 0' }}>
                 {skills.map((sk, si) =>
                   (sk.items ?? []).map((item, ii) => (
-                    <div key={`${si}-${ii}`} style={{ display: 'flex', alignItems: 'baseline', paddingRight: '12px' }}>
+                    <div key={`${si}-${ii}`} data-item={`sk-${si}-${ii}`} style={{ display: 'flex', alignItems: 'baseline', paddingRight: '12px' }}>
                       <span style={{ whiteSpace: 'nowrap', marginRight: '4px' }}>•</span>
                       <span style={{ whiteSpace: 'nowrap', fontSize: 'var(--resume-body)' }}>
                         <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
