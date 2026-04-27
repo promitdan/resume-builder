@@ -1,5 +1,5 @@
 const express = require('express')
-const { exportToPdf }  = require('../services/exporter/pdfExporter')
+const { exportToPdf, exportHtmlToPdf } = require('../services/exporter/pdfExporter')
 const { exportToDocx } = require('../services/exporter/docxExporter')
 
 const router = express.Router()
@@ -17,13 +17,32 @@ function validateBody(req, res) {
 }
 
 router.post('/pdf', async (req, res) => {
+  const { html, content, templateId } = req.body
+
+  if (html !== undefined) {
+    if (typeof html !== 'string' || !html.trim()) {
+      return res.status(400).json({ error: 'html must be a non-empty string', code: 'INVALID_HTML' })
+    }
+    try {
+      const pdf = await exportHtmlToPdf(html)
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': 'attachment; filename="resume.pdf"',
+        'Content-Length': pdf.length
+      })
+      return res.end(pdf)
+    } catch (err) {
+      console.error('PDF export error:', err)
+      return res.status(500).json({ error: 'PDF generation failed', code: 'PDF_ERROR' })
+    }
+  }
+
   if (!validateBody(req, res)) return
   try {
-    const { content, templateId } = req.body
     const pdf = await exportToPdf(content, templateId)
     res.set({
       'Content-Type': 'application/pdf',
-      'Content-Disposition': `attachment; filename="resume.pdf"`,
+      'Content-Disposition': 'attachment; filename="resume.pdf"',
       'Content-Length': pdf.length
     })
     res.end(pdf)
