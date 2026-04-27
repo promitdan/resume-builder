@@ -109,11 +109,11 @@ export default function ModernBannerTemplate({ content = {}, paletteColors = {},
 
         if (key === 'skills' && hasSkills) return (
           <div key={key} data-section="skills">
-            {leftLabel('Skills')}
+            {leftLabel(skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills')}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px' }}>
-              {skills.filter(sk => (sk.items ?? []).length > 0).flatMap((sk, si) =>
+              {skills.map((sk, si) =>
                 (sk.items ?? []).map((item, ii) => (
-                  <span key={`${si}-${ii}`} style={{ background: c.bannerBg, color: '#fff', fontSize: '12px', padding: '3px 10px', borderRadius: '12px', opacity: 0.9 }}>
+                  <span key={`${si}-${ii}`} data-item={`sk-${si}-${ii}`} style={{ background: c.bannerBg, color: '#fff', fontSize: '12px', padding: '3px 10px', borderRadius: '12px', opacity: 0.9 }}>
                     <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
                   </span>
                 ))
@@ -173,19 +173,23 @@ export default function ModernBannerTemplate({ content = {}, paletteColors = {},
 
         if (key === 'experience' && experience.length > 0) return (
           <div key={key} data-section="experience">
-            {rightLabel('Experience')}
+            {rightLabel(experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience')}
             {experience.map((e, i) => (
               <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                {!e._bulletContinuation && (
                 <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                   {e.company && <span style={{ fontWeight: 400 }}> - <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor></span>}
                 </div>
+                )}
+                {!e._bulletContinuation && (
                 <div style={{ fontSize: '12px', color: c.accentColor, fontStyle: 'italic', marginBottom: '4px' }}>
                   {dateStr(e)}
                   {e.location && <span style={{ color: c.mutedText, fontStyle: 'normal' }}> · <InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></span>}
                 </div>
+                )}
                 {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
+                  <div key={bi} data-subitem={`bullet-${bi}`} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
                     <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                   </div>
                 ))}

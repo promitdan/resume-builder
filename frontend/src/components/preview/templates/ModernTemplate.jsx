@@ -74,11 +74,11 @@ export default function ModernTemplate({ content = {}, paletteColors = {}, pageI
         </div>}
 
         {hasSkillItems && <div data-section="skills">
-          {sidebarLabel('Skills')}
+          {sidebarLabel(skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills')}
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginBottom: '4px' }}>
             {skills.map((sk, si) =>
               (sk.items ?? []).map((item, ii) => (
-                <span key={`${si}-${ii}`} style={{ background: 'rgba(255,255,255,0.22)', border: `1.5px solid rgba(255,255,255,0.55)`, color: '#ffffff', fontSize: '12px', padding: '4px 10px', borderRadius: '12px', fontWeight: 500 }}>
+                <span key={`${si}-${ii}`} data-item={`sk-${si}-${ii}`} style={{ background: 'rgba(255,255,255,0.22)', border: `1.5px solid rgba(255,255,255,0.55)`, color: '#ffffff', fontSize: '12px', padding: '4px 10px', borderRadius: '12px', fontWeight: 500 }}>
                   <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
                 </span>
               ))
@@ -121,9 +121,10 @@ export default function ModernTemplate({ content = {}, paletteColors = {}, pageI
         {sectionOrder.filter(k => k !== 'personal' && k !== 'education' && k !== 'skills').map(key => {
           if (key === 'experience' && experience.length > 0) return (
             <div key={key} data-section="experience">
-              {mainLabel('Work History')}
+              {mainLabel(experience[0]?._isContinuation ? 'Work History (cont.)' : 'Work History')}
               {experience.map((e, i) => (
                 <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                  {!e._bulletContinuation && (
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                     <div style={{ fontSize: 'var(--resume-sub)', fontWeight: '700', color: c.headingText }}>
                       <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>
@@ -134,7 +135,8 @@ export default function ModernTemplate({ content = {}, paletteColors = {}, pageI
                       {e.current ? 'Present' : <InlineEditor path={`experience.${i}.endDate`} value={e.endDate}>{e.endDate}</InlineEditor>}
                     </div>
                   </div>
-                  {(e.role || e.location) && (
+                  )}
+                  {!e._bulletContinuation && (e.role || e.location) && (
                     <div style={{ fontSize: 'var(--resume-body)', fontWeight: '600', color: c.sidebarAccent, margin: '2px 0 5px' }}>
                       <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                       {e.role && e.location ? ' · ' : ''}
@@ -142,7 +144,7 @@ export default function ModernTemplate({ content = {}, paletteColors = {}, pageI
                     </div>
                   )}
                   {e.bullets?.filter(Boolean).map((b, bi) => (
-                    <div key={bi} style={{ display: 'flex', alignItems: 'baseline', fontSize: 'var(--resume-body)', lineHeight: '1.65', color: '#333', marginBottom: '2px' }}>
+                    <div key={bi} data-subitem={`bullet-${bi}`} style={{ display: 'flex', alignItems: 'baseline', fontSize: 'var(--resume-body)', lineHeight: '1.65', color: '#333', marginBottom: '2px' }}>
                       <span style={{ flexShrink: 0, marginRight: '2px' }}>•</span>
                       <div style={{ flex: 1, minWidth: 0 }}><RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} /></div>
                     </div>
