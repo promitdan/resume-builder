@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import axios from 'axios'
 import { useResumeStore } from '../../store/useResumeStore'
+import { capturePreviewHtml } from '../../utils/capturePreview'
 
 export default function DownloadButtons() {
   const content    = useResumeStore(s => s.content)
@@ -12,7 +13,10 @@ export default function DownloadButtons() {
     setLoading(type)
     setError('')
     try {
-      const { data } = await axios.post(`/api/export/${type}`, { content, templateId }, { responseType: 'blob' })
+      const postBody = type === 'pdf'
+        ? { html: capturePreviewHtml() }
+        : { content, templateId }
+      const { data } = await axios.post(`/api/export/${type}`, postBody, { responseType: 'blob' })
       const url = URL.createObjectURL(data)
       const a   = document.createElement('a')
       a.href     = url
