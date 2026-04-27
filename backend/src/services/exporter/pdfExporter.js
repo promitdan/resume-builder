@@ -23,4 +23,26 @@ async function exportToPdf(content, templateId) {
   }
 }
 
-module.exports = { exportToPdf }
+async function exportHtmlToPdf(html) {
+  const browser = await puppeteer.launch({
+    headless: 'new',
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  })
+
+  try {
+    const page = await browser.newPage()
+    await page.setContent(html, { waitUntil: 'networkidle0' })
+    await page.evaluateHandle('document.fonts.ready')
+    const pdf = await page.pdf({
+      width: '745px',
+      height: '1054px',
+      printBackground: true,
+      margin: { top: 0, right: 0, bottom: 0, left: 0 }
+    })
+    return pdf
+  } finally {
+    await browser.close()
+  }
+}
+
+module.exports = { exportToPdf, exportHtmlToPdf }
