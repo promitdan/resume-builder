@@ -44,18 +44,20 @@ export default function ExecutiveBandTemplate({ content = {}, paletteColors = {}
 
       {hasSkills && (
         <div data-section="skills">
-          <Badge>Skills</Badge>
+          <Badge>{skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills'}</Badge>
           <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.8' }}>
-            {skills.filter(sk => (sk.items ?? []).length > 0).map((sk, si) => (
+            {skills.map((sk, si) =>
+              (sk.items ?? []).length > 0 && (
               <div key={sk.id ?? si} style={{ marginBottom: '2px' }}>
                 {(sk.items ?? []).map((item, ii) => (
-                  <span key={ii}>
+                  <span key={ii} data-item={`sk-${si}-${ii}`}>
                     <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
                     {ii < sk.items.length - 1 ? ', ' : ''}
                   </span>
                 ))}
               </div>
-            ))}
+              )
+            )}
           </div>
         </div>
       )}
@@ -92,17 +94,19 @@ export default function ExecutiveBandTemplate({ content = {}, paletteColors = {}
 
         if (key === 'experience' && experience.length > 0) return (
           <div key={key} data-section="experience">
-            <Badge>Experience</Badge>
+            <Badge>{experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience'}</Badge>
             {experience.map((e, i) => (
               <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                {!e._bulletContinuation && (
                 <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                   {e.company && <span>, <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor></span>}
                   {e.location && <span style={{ fontWeight: 400, color: c.mutedText }}>, <InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></span>}
                 </div>
-                {dateStr(e) && <div style={{ fontSize: 'var(--resume-body)', color: c.dateMuted, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3px', margin: '2px 0 4px' }}>{dateStr(e)}</div>}
+                )}
+                {!e._bulletContinuation && dateStr(e) && <div style={{ fontSize: 'var(--resume-body)', color: c.dateMuted, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.3px', margin: '2px 0 4px' }}>{dateStr(e)}</div>}
                 {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
+                  <div key={bi} data-subitem={`bullet-${bi}`} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
                     <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                   </div>
                 ))}

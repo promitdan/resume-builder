@@ -22,7 +22,6 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
 
   const dateStr = (e) => [e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' — ')
   const hasSkills = skills.some(sk => (sk.items ?? []).length > 0)
-  const allSkillItems = skills.flatMap(sk => sk.items ?? [])
 
   const iconRow = (type, val, path, isLink = false) => (
     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '7px', marginBottom: '6px', fontSize: 'var(--resume-body)', color: c.sidebarText }}>
@@ -53,14 +52,14 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
       {hasSkills && (
         <div data-section="skills">
           <div style={{ height: '1px', background: c.dividerColor, margin: '16px 0' }} />
-          {sidebarLabel('Skills')}
+          {sidebarLabel(skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills')}
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 'var(--resume-body)', lineHeight: '1.9' }}>
-            {allSkillItems.map((item, ii) => (
-              <li key={ii} style={{ paddingLeft: '14px', position: 'relative' }}>
+            {skills.flatMap((sk, gi) => (sk.items ?? []).map((item, ii) => (
+              <li key={`${gi}-${ii}`} data-item={`sk-${gi}-${ii}`} style={{ paddingLeft: '14px', position: 'relative' }}>
                 <span style={{ position: 'absolute', left: 0 }}>•</span>
-                {item}
+                <InlineEditor path={`skills.${gi}.items.${ii}`} value={item}>{item}</InlineEditor>
               </li>
-            ))}
+            )))}
           </ul>
         </div>
       )}
@@ -98,16 +97,18 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
 
         if (key === 'experience' && experience.length > 0) return (
           <div key={key} data-section="experience">
-            <SectionHeader>Experience</SectionHeader>
+            <SectionHeader>{experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience'}</SectionHeader>
             {experience.map((e, i) => (
               <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                {!e._bulletContinuation && (
                 <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                   {e.company && <span>, <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor></span>}
                 </div>
-                {dateStr(e) && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '3px' }}>{dateStr(e)}</div>}
+                )}
+                {!e._bulletContinuation && dateStr(e) && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '3px' }}>{dateStr(e)}</div>}
                 {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
+                  <div key={bi} data-subitem={`bullet-${bi}`} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
                     <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                   </div>
                 ))}

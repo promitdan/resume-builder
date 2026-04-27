@@ -66,7 +66,7 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {}, pa
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {skills.map((sk, si) =>
                   (sk.items ?? []).map((item, ii) => (
-                    <span key={`${si}-${ii}`} style={{ background: c.headingText, color: '#e0e0f0', fontSize: '12px', fontWeight: '500', padding: '5px 12px', borderRadius: '3px' }}>
+                    <span key={`${si}-${ii}`} data-item={`sk-${si}-${ii}`} style={{ background: c.headingText, color: '#e0e0f0', fontSize: '12px', fontWeight: '500', padding: '5px 12px', borderRadius: '3px' }}>
                       <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
                     </span>
                   ))
@@ -90,9 +90,10 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {}, pa
         {sectionOrder.filter(k => k !== 'personal' && k !== 'skills').map(key => {
           if (key === 'experience' && experience.length > 0) return (
             <div key={key} data-section="experience">
-              {sectionLabel('Work History', key === visibleMainKeys[0] && !personal.summary)}
+              {sectionLabel(experience[0]?._isContinuation ? 'Work History (cont.)' : 'Work History', key === visibleMainKeys[0] && !personal.summary)}
               {experience.map((e, i) => (
                 <div key={e.id ?? i} data-item={e.id ?? `exp-${i}`} style={{ marginBottom: l.itemSpacing }}>
+                  {!e._bulletContinuation && (
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                     <div style={{ fontSize: '16px', fontWeight: '700', color: c.headingText }}>
                       <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>
@@ -103,7 +104,8 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {}, pa
                       {e.current ? 'Present' : <InlineEditor path={`experience.${i}.endDate`} value={e.endDate}>{e.endDate}</InlineEditor>}
                     </div>
                   </div>
-                  {(e.role || e.location) && (
+                  )}
+                  {!e._bulletContinuation && (e.role || e.location) && (
                     <div style={{ fontSize: 'var(--resume-meta)', fontWeight: '600', color: '#4a5568', margin: '2px 0 6px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
                       <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                       {e.role && e.location ? ' · ' : ''}
@@ -111,7 +113,7 @@ export default function ExecutiveTemplate({ content = {}, paletteColors = {}, pa
                     </div>
                   )}
                   {e.bullets?.filter(Boolean).map((b, bi) => (
-                    <div key={bi} style={{ display: 'flex', alignItems: 'baseline', fontSize: 'var(--resume-body)', lineHeight: '1.65', color: '#444', marginBottom: '2px' }}>
+                    <div key={bi} data-subitem={`bullet-${bi}`} style={{ display: 'flex', alignItems: 'baseline', fontSize: 'var(--resume-body)', lineHeight: '1.65', color: '#444', marginBottom: '2px' }}>
                       <span style={{ flexShrink: 0, marginRight: '2px' }}>•</span>
                       <div style={{ flex: 1, minWidth: 0 }}><RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} /></div>
                     </div>
