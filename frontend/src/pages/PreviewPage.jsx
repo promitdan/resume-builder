@@ -25,6 +25,8 @@ export default function PreviewPage() {
   const palettes = tpl?.palettes ?? []
   const isMonochrome = palettes.length === 0
 
+  // Height constant for sidebar and preview scroll area
+  const SIDEBAR_HEIGHT = 'calc(100vh - 120px)'
 
   // Page navigation
   const scrollRef = useRef()
@@ -74,7 +76,7 @@ export default function PreviewPage() {
           <div
             ref={scrollRef}
             onScroll={handleScroll}
-            style={{ overflow: 'auto', maxHeight: 'calc(100vh - 120px)', background: '#e2e8f0', padding: '24px', boxSizing: 'border-box', display: 'flex', justifyContent: 'center' }}
+            style={{ overflow: 'auto', maxHeight: SIDEBAR_HEIGHT, background: '#e2e8f0', padding: '24px', boxSizing: 'border-box', display: 'flex', justifyContent: 'center' }}
           >
             <ResumePreview
               content={content}
@@ -119,12 +121,12 @@ export default function PreviewPage() {
           display: 'flex',
           border: '1px solid #e2e8f0', borderRadius: '10px',
           overflow: 'hidden', background: '#fff',
-          height: 'calc(100vh - 120px)',
+          height: SIDEBAR_HEIGHT,
         }}>
 
           {/* Left column: scrollable template list */}
           <div style={{
-            width: '160px', flexShrink: 0,
+            width: '140px', flexShrink: 0,
             borderRight: '1px solid #e2e8f0',
             display: 'flex', flexDirection: 'column',
             overflow: 'hidden',
