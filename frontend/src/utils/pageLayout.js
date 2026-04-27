@@ -78,23 +78,58 @@ export function distributePages(sections, firstPageMaxBottom, subsequentPageAvai
     // Section with distributable items
     let entry = null
     for (const item of sec.items) {
-      const hdr = entry ? 0 : sec.headerHeight
-      const wouldFlush = isFirst
-        ? item.bottom > firstPageMaxBottom && current.length > 0
-        : used > 0 && used + hdr + item.height > subsequentPageAvail
-      if (wouldFlush) {
-        flush()
-        entry = null
+      if (item.subitems.length === 0) {
+        // Atomic item — original behavior
+        const hdr = entry ? 0 : sec.headerHeight
+        const wouldFlush = isFirst
+          ? item.bottom > firstPageMaxBottom && current.length > 0
+          : used > 0 && used + hdr + item.height > subsequentPageAvail
+        if (wouldFlush) {
+          flush()
+          entry = null
+        }
+        // intentional: if a single item exceeds a full page, it still goes on the
+        // current (empty) page rather than looping forever
+        if (!entry) {
+          entry = { sectionId: sec.id, items: [], isContinuation: seen.has(sec.id) }
+          current.push(entry)
+          if (!isFirst) used += sec.headerHeight
+        }
+        entry.items.push({ id: item.id, subitems: null, isBulletContinuation: false })
+        if (!isFirst) used += item.height
+      } else {
+        // Item with subitems — split at subitem boundary
+        let itemEntry = null
+        for (let si = 0; si < item.subitems.length; si++) {
+          const subitem      = item.subitems[si]
+          const needsSecHdr  = !entry
+          const needsItemHdr = !itemEntry && si === 0
+          const wouldFlush = isFirst
+            ? subitem.bottom > firstPageMaxBottom && current.length > 0
+            : used > 0 && used
+                + (needsSecHdr  ? sec.headerHeight  : 0)
+                + (needsItemHdr ? item.headerHeight : 0)
+                + subitem.height > subsequentPageAvail
+          if (wouldFlush) {
+            flush()
+            entry     = null
+            itemEntry = null
+          }
+          if (!entry) {
+            entry = { sectionId: sec.id, items: [], isContinuation: seen.has(sec.id) }
+            current.push(entry)
+            if (!isFirst) used += sec.headerHeight
+          }
+          if (!itemEntry) {
+            const isBulletContinuation = si > 0
+            itemEntry = { id: item.id, subitems: [], isBulletContinuation }
+            entry.items.push(itemEntry)
+            if (!isFirst && !isBulletContinuation) used += item.headerHeight
+          }
+          itemEntry.subitems.push(subitem.id)
+          if (!isFirst) used += subitem.height
+        }
       }
-      // intentional: if a single item exceeds a full page, it still goes on the
-      // current (empty) page rather than looping forever
-      if (!entry) {
-        entry = { sectionId: sec.id, items: [], isContinuation: seen.has(sec.id) }
-        current.push(entry)
-        if (!isFirst) used += sec.headerHeight
-      }
-      entry.items.push(item.id)
-      if (!isFirst) used += item.height
     }
   }
 
