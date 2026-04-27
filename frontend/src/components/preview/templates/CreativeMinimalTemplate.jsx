@@ -22,7 +22,6 @@ export default function CreativeMinimalTemplate({ content = {}, paletteColors = 
 
   const dateStr = (e) => [e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' — ')
   const hasSkills = skills.some(sk => (sk.items ?? []).length > 0)
-  const allSkillItems = skills.flatMap(sk => sk.items ?? [])
 
   const contactFields = [
     { path: 'personal.phone',    val: personal.phone },
@@ -73,16 +72,18 @@ export default function CreativeMinimalTemplate({ content = {}, paletteColors = 
 
         if (key === 'experience' && experience.length > 0) return (
           <div key={key} data-section="experience">
-            <Row label="Experience">
+            <Row label={experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience'}>
               {experience.map((e, i) => (
                 <div key={e.id ?? i} data-item={e.id ?? `exp-${i}`} style={{ marginBottom: l.itemSpacing }}>
+                  {!e._bulletContinuation && (
                   <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                     <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                     {e.company && <span>, <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor></span>}
                   </div>
-                  {dateStr(e) && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '3px' }}>{dateStr(e)}</div>}
+                  )}
+                  {!e._bulletContinuation && dateStr(e) && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '3px' }}>{dateStr(e)}</div>}
                   {e.bullets?.filter(Boolean).map((b, bi) => (
-                    <div key={bi} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
+                    <div key={bi} data-subitem={`bullet-${bi}`} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
                       <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                     </div>
                   ))}
@@ -112,11 +113,11 @@ export default function CreativeMinimalTemplate({ content = {}, paletteColors = 
 
         if (key === 'skills' && hasSkills) return (
           <div key={key} data-section="skills">
-            <Row label="Skills">
+            <Row label={skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills'}>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 24px' }}>
-                {allSkillItems.map((item, ii) => (
-                  <div key={ii} style={{ fontSize: 'var(--resume-body)', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                    <span>•</span><span>{item}</span>
+                {skills.flatMap((sk, gi) => (sk.items ?? []).map((item, ii) => ({ gi, ii, item }))).map(({ gi, ii, item }) => (
+                  <div key={`${gi}-${ii}`} data-item={`sk-${gi}-${ii}`} style={{ fontSize: 'var(--resume-body)', display: 'flex', alignItems: 'baseline', gap: '6px' }}>
+                    <span>•</span><InlineEditor path={`skills.${gi}.items.${ii}`} value={item}>{item}</InlineEditor>
                   </div>
                 ))}
               </div>

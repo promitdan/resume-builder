@@ -26,7 +26,6 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {},
 
   const dateStr = (e) => [e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' · ')
   const hasSkills = skills.some(sk => (sk.items ?? []).length > 0)
-  const allSkillItems = skills.flatMap(sk => sk.items ?? [])
 
   /* ── Header: name left + details table right ── */
   const detailRows = [
@@ -105,20 +104,22 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {},
 
         if (key === 'experience' && experience.length > 0) return (
           <div key={key} data-section="experience">
-            <SectionHeader>Experience</SectionHeader>
+            <SectionHeader>{experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience'}</SectionHeader>
             <Divider />
             {experience.map((e, i) => (
               <div key={e.id ?? i} data-item={e.id ?? `exp-${i}`} style={{ marginBottom: l.itemSpacing }}>
-                {dateStr(e) && <div style={{ fontSize: '12px', color: c.mutedText, marginBottom: '2px' }}>{dateStr(e)}</div>}
+                {!e._bulletContinuation && dateStr(e) && <div style={{ fontSize: '12px', color: c.mutedText, marginBottom: '2px' }}>{dateStr(e)}</div>}
+                {!e._bulletContinuation && (
                 <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                   <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>
                 </div>
-                {e.role && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText }}>
+                )}
+                {!e._bulletContinuation && e.role && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText }}>
                   <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                   {e.location && <span>, <InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></span>}
                 </div>}
                 {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginTop: '4px' }}>
+                  <div key={bi} data-subitem={`bullet-${bi}`} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginTop: '4px' }}>
                     <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                   </div>
                 ))}
@@ -149,11 +150,14 @@ export default function CreativeStarTemplate({ content = {}, paletteColors = {},
 
         if (key === 'skills' && hasSkills) return (
           <div key={key} data-section="skills">
-            <SectionHeader>Skills</SectionHeader>
+            <SectionHeader>{skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills'}</SectionHeader>
             <Divider />
             <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.9' }}>
-              {allSkillItems.map((item, ii) => (
-                <span key={ii}>{item}{ii < allSkillItems.length - 1 ? ' · ' : ''}</span>
+              {skills.flatMap((sk, gi) => (sk.items ?? []).map((item, ii) => ({ gi, ii, item }))).map(({ gi, ii, item }, flatIdx, arr) => (
+                <span key={`${gi}-${ii}`} data-item={`sk-${gi}-${ii}`}>
+                  <InlineEditor path={`skills.${gi}.items.${ii}`} value={item}>{item}</InlineEditor>
+                  {flatIdx < arr.length - 1 ? ' · ' : ''}
+                </span>
               ))}
             </div>
           </div>
