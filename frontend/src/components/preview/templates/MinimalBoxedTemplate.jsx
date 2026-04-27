@@ -42,20 +42,22 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {},
 
       {hasSkills && (
         <div data-section="skills">
-          {sectionHeader('Skills')}
-          {skills.filter(sk => (sk.items ?? []).length > 0).map((sk, si) => (
+          {sectionHeader(skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills')}
+          {skills.map((sk, si) =>
+            (sk.items ?? []).length > 0 && (
             <div key={sk.id ?? si} style={{ marginBottom: '4px' }}>
               {sk.label && <div style={{ fontSize: '10px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.6px', color: c.mutedText, marginBottom: '2px' }}>{sk.label}</div>}
               <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.7' }}>
                 {(sk.items ?? []).map((item, ii) => (
-                  <span key={ii}>
+                  <span key={ii} data-item={`sk-${si}-${ii}`}>
                     <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
                     {ii < sk.items.length - 1 ? ', ' : ''}
                   </span>
                 ))}
               </div>
             </div>
-          ))}
+            )
+          )}
         </div>
       )}
 
@@ -104,9 +106,10 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {},
 
         if (key === 'experience' && experience.length > 0) return (
           <div key={key} data-section="experience">
-            {sectionHeader('Experience')}
+            {sectionHeader(experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience')}
             {experience.map((e, i) => (
               <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+                {!e._bulletContinuation && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                   <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
                     <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
@@ -114,9 +117,10 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {},
                   </div>
                   {dateStr(e) && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, whiteSpace: 'nowrap', marginLeft: '8px' }}>{dateStr(e)}</div>}
                 </div>
-                {e.location && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '3px' }}><InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></div>}
+                )}
+                {!e._bulletContinuation && e.location && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '3px' }}><InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></div>}
                 {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} style={{ display: 'flex', alignItems: 'baseline', fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
+                  <div key={bi} data-subitem={`bullet-${bi}`} style={{ display: 'flex', alignItems: 'baseline', fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
                     <span style={{ flexShrink: 0, marginRight: '4px' }}>•</span>
                     <div style={{ flex: 1, minWidth: 0 }}><RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} /></div>
                   </div>

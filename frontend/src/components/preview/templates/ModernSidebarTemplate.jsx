@@ -25,8 +25,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
 
   const dateStr = (e) => [e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' — ')
 
-  const allSkillItems = skills.flatMap(sk => sk.items ?? [])
-  const hasSkills = allSkillItems.length > 0
+  const hasSkills = skills.some(sk => (sk.items ?? []).length > 0)
   const hasSocial = personal.linkedin || personal.website
 
   const sidebar = (
@@ -75,12 +74,12 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
       {/* Skills */}
       {hasSkills && (
         <div data-section="skills">
-          {sidebarLabel('Skills')}
+          {sidebarLabel(skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills')}
           <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: 'var(--resume-body)', lineHeight: '1.8' }}>
-            {skills.flatMap((sk, si) => (sk.items ?? []).map((item, ii) => (
-              <li key={`${si}-${ii}`} style={{ paddingLeft: '14px', position: 'relative', color: c.sidebarText }}>
+            {skills.flatMap((sk, gi) => (sk.items ?? []).map((item, ii) => (
+              <li key={`${gi}-${ii}`} data-item={`sk-${gi}-${ii}`} style={{ paddingLeft: '14px', position: 'relative', color: c.sidebarText }}>
                 <span style={{ position: 'absolute', left: 0, color: c.sidebarMuted }}>·</span>
-                <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
+                <InlineEditor path={`skills.${gi}.items.${ii}`} value={item}>{item}</InlineEditor>
               </li>
             )))}
           </ul>
@@ -140,21 +139,25 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
 
         if (key === 'experience' && experience.length > 0) return (
           <div key={key} data-section="experience">
-            {mainLabel('Experience')}
+            {mainLabel(experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience')}
             {experience.map((e, i) => (
               <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
-                <div style={{ fontSize: 'var(--resume-label)', color: c.mutedText, marginBottom: '2px' }}>{dateStr(e)}</div>
-                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)', marginBottom: '1px' }}>
-                  <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
-                </div>
-                {e.company && (
+                {!e._bulletContinuation && (
+                  <div style={{ fontSize: 'var(--resume-label)', color: c.mutedText, marginBottom: '2px' }}>{dateStr(e)}</div>
+                )}
+                {!e._bulletContinuation && (
+                  <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)', marginBottom: '1px' }}>
+                    <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
+                  </div>
+                )}
+                {!e._bulletContinuation && e.company && (
                   <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '5px' }}>
                     <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>
                     {e.location && <span> · <InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></span>}
                   </div>
                 )}
                 {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
+                  <div key={bi} data-subitem={`bullet-${bi}`} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
                     <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
                   </div>
                 ))}

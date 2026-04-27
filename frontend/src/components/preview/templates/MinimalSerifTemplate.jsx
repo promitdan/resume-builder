@@ -73,22 +73,26 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {},
 
         if (key === 'experience' && experience.length > 0) return (
           <div key={key} data-section="experience">
-            {sectionHeader('Experience')}
+            {sectionHeader(experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience')}
             {experience.map((e, i) => (
               <div key={e.id ?? i} data-item={e.id ?? `exp-${i}`} style={{ marginBottom: l.itemSpacing }}>
+                {!e._bulletContinuation && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '1px' }}>
                   <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)', fontStyle: 'italic' }}>
                     <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                   </div>
                   {dateStr(e) && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText }}>{dateStr(e)}</div>}
                 </div>
+                )}
+                {!e._bulletContinuation && (
                 <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '4px' }}>
                   {e.company && <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>}
                   {e.company && e.location ? ', ' : ''}
                   {e.location && <InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor>}
                 </div>
+                )}
                 {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} style={{ display: 'flex', alignItems: 'baseline', fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
+                  <div key={bi} data-subitem={`bullet-${bi}`} style={{ display: 'flex', alignItems: 'baseline', fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}>
                     <span style={{ flexShrink: 0, marginRight: '4px' }}>•</span>
                     <div style={{ flex: 1, minWidth: 0 }}><RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} /></div>
                   </div>
@@ -119,18 +123,16 @@ export default function MinimalSerifTemplate({ content = {}, paletteColors = {},
 
         if (key === 'skills' && hasSkills) return (
           <div key={key} data-section="skills">
-            {sectionHeader('Skills')}
+            {sectionHeader(skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills')}
             <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.9', textAlign: 'center' }}>
-              {skills.filter(sk => (sk.items ?? []).length > 0).map((sk, si) => (
-                <span key={sk.id ?? si}>
-                  {(sk.items ?? []).map((item, ii) => (
-                    <span key={ii}>
-                      <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
-                      {(si < skills.length - 1 || ii < sk.items.length - 1) ? ' · ' : ''}
-                    </span>
-                  ))}
-                </span>
-              ))}
+              {skills.map((sk, si) =>
+                (sk.items ?? []).map((item, ii) => (
+                  <span key={`${si}-${ii}`} data-item={`sk-${si}-${ii}`}>
+                    <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
+                    {(si < skills.length - 1 || ii < (sk.items ?? []).length - 1) ? ' · ' : ''}
+                  </span>
+                ))
+              )}
             </div>
           </div>
         )

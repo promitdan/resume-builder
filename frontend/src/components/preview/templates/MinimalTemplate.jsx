@@ -73,11 +73,11 @@ export default function MinimalTemplate({ content = {}, paletteColors = {}, page
         return sectionOrder.filter(k => k !== 'personal').map(key => {
           if (key === 'skills' && hasSkillItems) return (
             <div key={key} data-section="skills">
-              {sectionLabel('Skills', key === visibleKeys[0])}
+              {sectionLabel(skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills', key === visibleKeys[0])}
               <div style={{ fontSize: 'var(--resume-body)', color: '#555', lineHeight: '2' }}>
                 {skills.map((sk, si) =>
                   (sk.items ?? []).map((item, ii) => (
-                    <span key={`${si}-${ii}`}>
+                    <span key={`${si}-${ii}`} data-item={`sk-${si}-${ii}`}>
                       <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
                       {(si < skills.length - 1 || ii < (sk.items ?? []).length - 1) && ' · '}
                     </span>
@@ -89,9 +89,10 @@ export default function MinimalTemplate({ content = {}, paletteColors = {}, page
 
           if (key === 'experience' && experience.length > 0) return (
             <div key={key} data-section="experience">
-              {sectionLabel('Experience', key === visibleKeys[0])}
+              {sectionLabel(experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience', key === visibleKeys[0])}
               {experience.map((e, i) => (
                 <div key={e.id ?? i} data-item={e.id ?? `exp-${i}`} style={{ marginBottom: l.itemSpacing }}>
+                  {!e._bulletContinuation && (
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '2px' }}>
                     <div style={{ fontSize: '16px', fontWeight: '600', color: c.headingText }}>
                       <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor>
@@ -102,7 +103,8 @@ export default function MinimalTemplate({ content = {}, paletteColors = {}, page
                       {e.current ? 'Present' : <InlineEditor path={`experience.${i}.endDate`} value={e.endDate}>{e.endDate}</InlineEditor>}
                     </div>
                   </div>
-                  {(e.role || e.location) && (
+                  )}
+                  {!e._bulletContinuation && (e.role || e.location) && (
                     <div style={{ fontSize: 'var(--resume-body)', color: '#666', marginBottom: '8px' }}>
                       <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
                       {e.role && e.location ? ' · ' : ''}
@@ -110,7 +112,7 @@ export default function MinimalTemplate({ content = {}, paletteColors = {}, page
                     </div>
                   )}
                   {e.bullets?.filter(Boolean).map((b, bi) => (
-                    <div key={bi} style={{ display: 'flex', alignItems: 'baseline', fontSize: 'var(--resume-body)', lineHeight: '1.7', color: '#444' }}>
+                    <div key={bi} data-subitem={`bullet-${bi}`} style={{ display: 'flex', alignItems: 'baseline', fontSize: 'var(--resume-body)', lineHeight: '1.7', color: '#444' }}>
                       <span style={{ flexShrink: 0, marginRight: '2px' }}>•</span>
                       <div style={{ flex: 1, minWidth: 0 }}><RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} /></div>
                     </div>
