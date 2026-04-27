@@ -7,16 +7,29 @@ function measureSectionsInEl(el, containerEl) {
   const ref = containerEl.getBoundingClientRect()
   const sections = []
   for (const sEl of el.querySelectorAll('[data-section]')) {
-    const sr = sEl.getBoundingClientRect()
+    const sr   = sEl.getBoundingClientRect()
     const sTop = sr.top - ref.top
     const items = []
     for (const iEl of sEl.querySelectorAll('[data-item]')) {
-      const ir = iEl.getBoundingClientRect()
+      const ir      = iEl.getBoundingClientRect()
+      const itemTop = ir.top - ref.top
+      const subitems = []
+      for (const siEl of iEl.querySelectorAll('[data-subitem]')) {
+        const sir = siEl.getBoundingClientRect()
+        subitems.push({
+          id:     siEl.dataset.subitem,
+          top:    sir.top    - ref.top,
+          bottom: sir.bottom - ref.top,
+          height: sir.height,
+        })
+      }
       items.push({
-        id:     iEl.dataset.item,
-        top:    ir.top    - ref.top,
-        bottom: ir.bottom - ref.top,
-        height: ir.height,
+        id:           iEl.dataset.item,
+        top:          itemTop,
+        bottom:       ir.bottom - ref.top,
+        height:       ir.height,
+        headerHeight: subitems.length > 0 ? subitems[0].top - itemTop : ir.height,
+        subitems,
       })
     }
     sections.push({
