@@ -32,7 +32,7 @@ async function exportHtmlToPdf(html) {
   try {
     const page = await browser.newPage()
     await page.setContent(html, { waitUntil: 'networkidle0' })
-    await page.evaluateHandle('document.fonts.ready')
+    await page.evaluate(() => document.fonts.ready)
     const pdf = await page.pdf({
       width: '745px',
       height: '1054px',
