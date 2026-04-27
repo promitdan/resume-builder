@@ -113,89 +113,130 @@ export default function PreviewPage() {
           )}
         </div>
 
-        {/* Right sidebar */}
-        <div style={{ width: '240px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '16px' }}>
-          {/* Edit Resume */}
-          <button
-            type="button"
-            onClick={() => navigate('/build')}
-            style={{ width: '100%', background: '#3b82f6', color: '#fff', fontWeight: 600, fontSize: '14px', padding: '11px', borderRadius: '8px', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
-            onMouseEnter={e => e.currentTarget.style.background='#2563eb'}
-            onMouseLeave={e => e.currentTarget.style.background='#3b82f6'}
-          >
-            ✏ Edit Resume
-          </button>
+        {/* Right sidebar — split panel */}
+        <div style={{
+          width: '320px', flexShrink: 0,
+          display: 'flex',
+          border: '1px solid #e2e8f0', borderRadius: '10px',
+          overflow: 'hidden', background: '#fff',
+          height: 'calc(100vh - 120px)',
+        }}>
 
-          {/* Template switcher card */}
-          <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '16px' }}>
-            <h3 style={{ margin: '0 0 12px', fontSize: '13px', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Template</h3>
-            <TemplateSwitcher />
+          {/* Left column: scrollable template list */}
+          <div style={{
+            width: '160px', flexShrink: 0,
+            borderRight: '1px solid #e2e8f0',
+            display: 'flex', flexDirection: 'column',
+            overflow: 'hidden',
+          }}>
+            <div style={{
+              padding: '10px 12px 8px',
+              fontSize: '10px', fontWeight: 700,
+              textTransform: 'uppercase', letterSpacing: '0.5px',
+              color: '#94a3b8',
+              borderBottom: '1px solid #f1f5f9',
+              flexShrink: 0,
+            }}>
+              Templates
+            </div>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '10px' }}>
+              <TemplateSwitcher />
+            </div>
           </div>
 
-          {/* Color palette card */}
-          <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '16px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <h3 style={{ margin: 0, fontSize: '13px', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Color</h3>
-              <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 500 }}>
-                {isMonochrome ? 'Monochrome' : palettes[paletteIndex]?.label}
-              </span>
-            </div>
-            {isMonochrome ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#1a1a1a', boxShadow: '0 0 0 2.5px #fff, 0 0 0 4.5px #1a1a1a', flexShrink: 0 }} />
-                <span style={{ fontSize: '12px', color: '#94a3b8' }}>No color variants for this template</span>
+          {/* Right column: static controls */}
+          <div style={{
+            flex: 1, display: 'flex', flexDirection: 'column',
+            padding: '12px', overflow: 'hidden',
+          }}>
+
+            {/* Edit Resume button */}
+            <button
+              type="button"
+              onClick={() => navigate('/build')}
+              style={{
+                width: '100%', background: '#3b82f6', color: '#fff',
+                fontWeight: 600, fontSize: '13px', padding: '9px',
+                borderRadius: '8px', border: 'none', cursor: 'pointer',
+                marginBottom: '16px',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = '#2563eb'}
+              onMouseLeave={e => e.currentTarget.style.background = '#3b82f6'}
+            >
+              ✏ Edit Resume
+            </button>
+
+            {/* Color section */}
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', color: '#94a3b8' }}>Color</span>
+                <span style={{ fontSize: '11px', color: '#94a3b8', fontWeight: 500 }}>
+                  {isMonochrome ? 'Monochrome' : palettes[paletteIndex]?.label}
+                </span>
               </div>
-            ) : (
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                {palettes.map((palette, i) => (
+              {isMonochrome ? (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{ width: '24px', height: '24px', borderRadius: '50%', background: '#1a1a1a', boxShadow: '0 0 0 2.5px #fff, 0 0 0 4.5px #1a1a1a', flexShrink: 0 }} />
+                  <span style={{ fontSize: '11px', color: '#94a3b8' }}>No color variants</span>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                  {palettes.map((palette, i) => (
+                    <button
+                      key={palette.label}
+                      type="button"
+                      title={palette.label}
+                      onClick={() => setPaletteIndex(i)}
+                      style={{
+                        width: '24px', height: '24px', borderRadius: '50%',
+                        background: palette.swatch, border: 'none',
+                        cursor: 'pointer', padding: 0, flexShrink: 0,
+                        boxShadow: i === paletteIndex
+                          ? `0 0 0 2.5px #fff, 0 0 0 4.5px ${palette.swatch}`
+                          : '0 1px 3px rgba(0,0,0,0.20)',
+                        transition: 'box-shadow 0.15s ease',
+                      }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Font size section */}
+            <div style={{ marginBottom: '16px' }}>
+              <div style={{ fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px', color: '#94a3b8', marginBottom: '8px' }}>
+                Typography
+              </div>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                {FONT_SIZE_OPTIONS.map(({ key, label }) => (
                   <button
-                    key={palette.label}
+                    key={key}
                     type="button"
-                    title={palette.label}
-                    onClick={() => setPaletteIndex(i)}
+                    onClick={() => setFontSize(key)}
                     style={{
-                      width: '24px', height: '24px', borderRadius: '50%',
-                      background: palette.swatch, border: 'none',
-                      cursor: 'pointer', padding: 0, flexShrink: 0,
-                      boxShadow: i === paletteIndex
-                        ? `0 0 0 2.5px #fff, 0 0 0 4.5px ${palette.swatch}`
-                        : '0 1px 3px rgba(0,0,0,0.20)',
-                      transition: 'box-shadow 0.15s ease',
+                      flex: 1, height: '34px',
+                      border: `1.5px solid ${fontSize === key ? '#3b82f6' : '#e2e8f0'}`,
+                      borderRadius: '6px',
+                      background: fontSize === key ? '#eff6ff' : '#fff',
+                      color: fontSize === key ? '#3b82f6' : '#334155',
+                      fontWeight: 600, fontSize: '13px', cursor: 'pointer',
                     }}
-                  />
+                  >
+                    {label}
+                  </button>
                 ))}
               </div>
-            )}
-          </div>
-
-          {/* Typography card */}
-          <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '16px' }}>
-            <h3 style={{ margin: '0 0 12px', fontSize: '13px', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Typography</h3>
-            <div style={{ display: 'flex', gap: '6px' }}>
-              {FONT_SIZE_OPTIONS.map(({ key, label }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setFontSize(key)}
-                  style={{
-                    flex: 1, height: '34px',
-                    border: `1.5px solid ${fontSize === key ? '#3b82f6' : '#e2e8f0'}`,
-                    borderRadius: '6px',
-                    background: fontSize === key ? '#eff6ff' : '#fff',
-                    color: fontSize === key ? '#3b82f6' : '#334155',
-                    fontWeight: 600, fontSize: '13px', cursor: 'pointer',
-                  }}
-                >
-                  {label}
-                </button>
-              ))}
             </div>
-          </div>
 
-          {/* Download card */}
-          <div style={{ background: '#fff', borderRadius: '10px', border: '1px solid #e2e8f0', padding: '16px' }}>
-            <h3 style={{ margin: '0 0 12px', fontSize: '13px', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Download</h3>
+            {/* Spacer — pushes download to bottom */}
+            <div style={{ flex: 1 }} />
+
+            {/* Divider */}
+            <div style={{ height: '1px', background: '#f1f5f9', margin: '0 -12px 12px' }} />
+
+            {/* Download */}
             <DownloadButtons />
+
           </div>
         </div>
       </div>
