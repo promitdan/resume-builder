@@ -28,6 +28,9 @@ ${FONT_LINK}
   *, *::before, *::after { box-sizing: border-box; }
   body { margin: 0; padding: 0; }
   @page { size: 745px 1054px; margin: 0; }
+  .ProseMirror { outline: none; }
+  .ProseMirror p { margin: 0; }
+  .ProseMirror a { color: #2563eb; text-decoration: underline; }
 </style>
 </head>
 <body>
