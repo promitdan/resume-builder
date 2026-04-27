@@ -119,6 +119,7 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
       {pageSlices.map(({ slicedContent, pageIndex }, i) => (
         <div
           key={`page-${pageIndex}`}
+          data-page-card
           className="page"
           style={{
             width:        `${PAGE_WIDTH}px`,
