@@ -94,13 +94,11 @@ function getPos(i, current) {
 }
 
 export default function FanCarousel() {
-  const [current, setCurrent] = useState(2)  // start on Executive
-  const [tplName, setTplName] = useState(TEMPLATES[2].name)
+  const [current, setCurrent] = useState(2)
 
   const goTo = useCallback((idx) => {
     const next = ((idx % N) + N) % N
     setCurrent(next)
-    setTplName(TEMPLATES[next].name)
   }, [])
 
   const move = useCallback((dir) => goTo(current + dir), [current, goTo])
@@ -143,17 +141,16 @@ export default function FanCarousel() {
         background: 'radial-gradient(ellipse 60% 50% at 50% 55%, rgba(244,124,32,0.10) 0%, transparent 70%)',
       }} />
 
-      {/* Template name */}
+      {/* Section label */}
       <div style={{
         position: 'absolute', top: 20, left: 0, right: 0,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, zIndex: 10,
+        display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10,
       }}>
-        <span style={{ fontSize: 10, fontWeight: 600, letterSpacing: 1, color: '#4a5578', textTransform: 'uppercase' }}>Template</span>
-        <span style={{ fontSize: 13, fontWeight: 700, color: '#f47c20' }}>{tplName}</span>
+        <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '1.5px', color: '#6b7a99', textTransform: 'uppercase', paddingBottom: '5px'  }}>Professional Template Options</span>
       </div>
 
       {/* Fan stage */}
-      <div style={{ position: 'relative', width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ position: 'relative', width: '100%', flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
         {arrowBtn('‹', () => move(-1))}
 
         {TEMPLATES.map(({ Component, config, name }, i) => {
@@ -186,7 +183,7 @@ export default function FanCarousel() {
       </div>
 
       {/* Dot indicators — sit just above the feature strip */}
-      <div style={{ position: 'absolute', bottom: 68, left: 0, right: 0, display: 'flex', gap: 7, justifyContent: 'center', zIndex: 10 }}>
+      <div style={{ position: 'absolute', bottom: 152, left: 0, right: 0, display: 'flex', gap: 7, justifyContent: 'center', zIndex: 10 }}>
         {TEMPLATES.map((_, i) => (
           <div
             key={i}
@@ -206,14 +203,17 @@ export default function FanCarousel() {
         flexShrink: 0, display: 'flex',
         borderTop: '1px solid rgba(255,255,255,0.07)',
         background: 'rgba(0,0,0,0.25)',
+        paddingBottom: 12,
         zIndex: 10,
+        position: 'relative',
+        bottom: 20
       }}>
         {[
           {
             label: 'ATS Friendly',
             sub: 'Beat the bots',
             icon: (
-              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+              <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
                 <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.4"/>
                 <path d="M7 10l2 2 4-4" stroke="#f47c20" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -223,7 +223,7 @@ export default function FanCarousel() {
             label: 'AI Suggestions',
             sub: 'Write better, faster',
             icon: (
-              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+              <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
                 <path d="M10 2L11.4 6.6H16.2L12.4 9.4L13.8 14L10 11.2L6.2 14L7.6 9.4L3.8 6.6H8.6L10 2Z" stroke="currentColor" strokeWidth="1.3" fill="#f47c20" fillOpacity="0.8"/>
               </svg>
             ),
@@ -232,7 +232,7 @@ export default function FanCarousel() {
             label: 'Multiple Formats',
             sub: 'PDF & DOCX',
             icon: (
-              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+              <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
                 <rect x="3" y="2" width="10" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
                 <rect x="7" y="5" width="10" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.4" fill="rgba(244,124,32,0.15)" strokeOpacity="0.5"/>
                 <line x1="6" y1="7" x2="10" y2="7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.6"/>
@@ -244,7 +244,7 @@ export default function FanCarousel() {
             label: 'Secure & Private',
             sub: 'Your data, your control',
             icon: (
-              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+              <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
                 <path d="M10 2L4 5v5c0 3.5 2.5 6.5 6 7.5 3.5-1 6-4 6-7.5V5L10 2Z" stroke="currentColor" strokeWidth="1.4" fill="rgba(244,124,32,0.12)"/>
                 <path d="M7.5 10l2 2 3-3" stroke="#f47c20" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
@@ -252,14 +252,14 @@ export default function FanCarousel() {
           },
         ].map(({ label, sub, icon }) => (
           <div key={label} style={{
-            flex: 1, display: 'flex', alignItems: 'center', gap: 9,
-            padding: '10px 14px',
+            flex: 1, display: 'flex', alignItems: 'center', gap: 12,
+            padding: '16px 18px 20px',
             borderRight: '1px solid rgba(255,255,255,0.06)',
           }}>
-            <div style={{ color: 'rgba(255,255,255,0.55)', flexShrink: 0 }}>{icon}</div>
+            <div style={{ color: 'rgba(255,255,255,0.6)', flexShrink: 0 }}>{icon}</div>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.85)', lineHeight: 1.2 }}>{label}</div>
-              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 1 }}>{sub}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,0.9)', lineHeight: 1.2 }}>{label}</div>
+              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{sub}</div>
             </div>
           </div>
         ))}

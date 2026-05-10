@@ -5,9 +5,9 @@ import axios from 'axios'
 import { useResumeStore } from '../store/useResumeStore'
 import FanCarousel from '../components/landing/FanCarousel'
 
-function LogoIcon() {
+function LogoIcon({ size = 30 }) {
   return (
-    <svg width="30" height="30" viewBox="0 0 36 36" fill="none">
+    <svg width={size} height={size} viewBox="0 0 36 36" fill="none">
       <path d="M6 28 Q18 33 30 28 L28 34 Q18 38 8 34Z" fill="#1a2744"/>
       <rect x="10" y="18" width="16" height="12" rx="2" fill="#1a2744"/>
       <rect x="11" y="5" width="14" height="18" rx="2" fill="white" stroke="#1a2744" strokeWidth="1.5"/>
@@ -71,8 +71,8 @@ const HIW_STEPS = [
   {
     title: 'Build or upload',
     desc: 'Start fresh or upload your existing resume. AI parses it instantly.',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+    Icon: ({ size = 22 }) => (
+      <svg viewBox="0 0 24 24" fill="none" width={size} height={size}>
         <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="#1a2744" strokeWidth="1.8" strokeLinecap="round"/>
         <path d="M12 15V4" stroke="#f47c20" strokeWidth="1.8" strokeLinecap="round"/>
         <path d="M8 8l4-4 4 4" stroke="#f47c20" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -82,8 +82,8 @@ const HIW_STEPS = [
   {
     title: 'Choose a template',
     desc: 'Pick from 17+ templates. Customize colors, fonts and layout.',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+    Icon: ({ size = 22 }) => (
+      <svg viewBox="0 0 24 24" fill="none" width={size} height={size}>
         <rect x="3" y="3" width="8" height="11" rx="1.5" stroke="#1a2744" strokeWidth="1.8"/>
         <rect x="13" y="3" width="8" height="5" rx="1.5" stroke="#f47c20" strokeWidth="1.8"/>
         <rect x="13" y="10" width="8" height="4" rx="1.5" stroke="#1a2744" strokeWidth="1.5" opacity="0.4"/>
@@ -94,8 +94,8 @@ const HIW_STEPS = [
   {
     title: 'Export & apply',
     desc: 'Download PDF or DOCX in one click. No watermarks. No paywall.',
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+    Icon: ({ size = 22 }) => (
+      <svg viewBox="0 0 24 24" fill="none" width={size} height={size}>
         <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="#1a2744" strokeWidth="1.8" strokeLinecap="round"/>
         <path d="M12 4v11" stroke="#f47c20" strokeWidth="1.8" strokeLinecap="round"/>
         <path d="M8 11l4 4 4-4" stroke="#f47c20" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
@@ -170,48 +170,30 @@ export default function LandingPage() {
   const bg     = '#f8f9fb'
 
   return (
-    <div style={{ height: '100vh', overflow: 'hidden', display: 'flex', flexDirection: 'column', fontFamily: "'Inter', -apple-system, sans-serif", background: bg, color: navy }}>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', fontFamily: "'Inter', -apple-system, sans-serif", background: bg, color: navy }}>
 
       {uploading && <UploadingOverlay />}
 
-      <nav style={{
-        flexShrink: 0, height: 60, display: 'flex', alignItems: 'center',
-        padding: '0 48px', background: 'rgba(248,249,251,0.97)',
-        borderBottom: `1px solid ${border}`, zIndex: 100,
-      }}>
-        <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none' }}>
-          <LogoIcon />
-          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-            <span style={{ fontWeight: 800, fontSize: 12, color: navy }}>Resume</span>
-            <span style={{ fontWeight: 800, fontSize: 12, color: orange }}>Forge</span>
-          </div>
-        </a>
-        <div style={{ display: 'flex', gap: 28, marginLeft: 36 }}>
-          {['Templates', 'How it works'].map(l => (
-            <a key={l} href="#" style={{ color: muted, fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>{l}</a>
-          ))}
-        </div>
-        <div style={{ marginLeft: 'auto', fontSize: 10, fontWeight: 700, letterSpacing: '1.5px', color: '#a0aabf', textTransform: 'uppercase', marginRight: 20 }}>
-          Craft · Refine · Get Hired
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <a href="#" style={{ color: muted, fontSize: 14, fontWeight: 500, textDecoration: 'none' }}>Sign in</a>
-          <a href="#" style={{ background: navy, color: '#fff', fontSize: 14, fontWeight: 700, padding: '9px 20px', borderRadius: 7, textDecoration: 'none' }}>
-            Get started free
-          </a>
-        </div>
-      </nav>
-
-      <div style={{ flex: 1, display: 'grid', gridTemplateColumns: '1fr 1fr', minHeight: 0 }}>
+      {/* Hero — full viewport */}
+      <div style={{ height: '100vh', display: 'grid', gridTemplateColumns: '5fr 7fr' }}>
 
         <div style={{
-          padding: '44px 52px', display: 'flex', flexDirection: 'column',
-          justifyContent: 'space-between', background: bg,
+          padding: '36px 48px', display: 'flex', flexDirection: 'column',
+          gap: '30px', background: bg,
           borderRight: `1px solid ${border}`, overflow: 'hidden',
         }}>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-            {/* Badge */}
+          {/* Branding */}
+          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none', width: 'fit-content' }}>
+            <LogoIcon size={100} />
+            <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.15 }}>
+              <span style={{ fontWeight: 800, fontSize: 24, color: navy }}>Resume</span>
+              <span style={{ fontWeight: 800, fontSize: 24, color: orange }}>Forge</span>
+            </div>
+          </a>
+
+          {/* Badge + Headline + Subline */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 0,
               background: '#fff3e0', border: '1px solid #fed7aa',
@@ -223,23 +205,38 @@ export default function LandingPage() {
               <span style={{ color: '#c9a87a', margin: '0 6px' }}>·</span>
               <span style={{ color: '#a07840', letterSpacing: '0.4px' }}>NO SIGN-UP REQUIRED</span>
             </div>
-            {/* Headline */}
             <div>
-              <h1 style={{ margin: 0, fontSize: 'clamp(30px, 3vw, 46px)', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-1.5px', color: navy }}>
+              <h1 style={{ margin: 0, fontSize: 'clamp(26px, 2.8vw, 42px)', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-1.5px', color: navy }}>
                 Forge a resume<br />that gets you <em style={{ fontStyle: 'normal', color: orange }}>hired</em>
               </h1>
-              <p style={{ margin: '10px 0 0', fontSize: 15, color: muted, lineHeight: 1.6, maxWidth: 380 }}>
+              <p style={{ margin: '8px 0 0', fontSize: 14, color: muted, lineHeight: 1.6, maxWidth: 400 }}>
                 Create a professional resume in minutes. AI-powered suggestions, stunning templates, and one-click export.
               </p>
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+          {/* Feature grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
             {FEATURES.map(({ name, sub, icon }) => (
-              <div key={name} style={{
-                display: 'flex', alignItems: 'center', gap: 12,
-                background: '#fff', border: `1px solid ${border}`, borderRadius: 10, padding: '12px 14px',
-              }}>
+              <div
+                key={name}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  background: '#fff', border: `1px solid ${border}`, borderRadius: 10, padding: '10px 12px',
+                  transition: 'border-color 0.15s, box-shadow 0.15s, transform 0.15s',
+                  cursor: 'default',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = orange
+                  e.currentTarget.style.boxShadow = `0 4px 18px rgba(244,124,32,0.12)`
+                  e.currentTarget.style.transform = 'translateY(-2px)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = border
+                  e.currentTarget.style.boxShadow = 'none'
+                  e.currentTarget.style.transform = 'translateY(0)'
+                }}
+              >
                 <div style={{
                   width: 36, height: 36, borderRadius: 8, flexShrink: 0,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -255,65 +252,65 @@ export default function LandingPage() {
             ))}
           </div>
 
-          <div style={{ display: 'flex', gap: 10 }}>
-            <button
-              onClick={handleBuild}
-              style={{
-                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                background: navy, color: '#fff', fontSize: 14, fontWeight: 700,
-                padding: '12px 20px', borderRadius: 9, border: 'none', cursor: 'pointer',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = '#243560'}
-              onMouseLeave={e => e.currentTarget.style.background = navy}
-            >
-              Build my resume →
-            </button>
-            <button
-              onClick={() => uploadRef.current?.click()}
-              style={{
-                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                background: 'transparent', color: navy, fontSize: 14, fontWeight: 600,
-                padding: '12px 16px', borderRadius: 9, border: `1.5px solid ${border}`, cursor: 'pointer',
-              }}
-              onMouseEnter={e => e.currentTarget.style.borderColor = navy}
-              onMouseLeave={e => e.currentTarget.style.borderColor = border}
-            >
-              <svg viewBox="0 0 20 20" fill="none" width="15" height="15" style={{ flexShrink: 0 }}>
-                <path d="M3 13v2a2 2 0 002 2h10a2 2 0 002-2v-2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
-                <path d="M10 12V4M7 7l3-3 3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Upload &amp; edit
-            </button>
-            <input
-              ref={uploadRef} type="file" accept=".pdf,.docx"
-              style={{ display: 'none' }}
-              onChange={e => handleFile(e.target.files[0])}
-            />
+          {/* CTAs */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                onClick={handleBuild}
+                style={{
+                  flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  background: navy, color: '#fff', fontSize: 14, fontWeight: 700,
+                  padding: '11px 20px', borderRadius: 9, border: 'none', cursor: 'pointer',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = '#243560'}
+                onMouseLeave={e => e.currentTarget.style.background = navy}
+              >
+                Build my resume →
+              </button>
+              <button
+                onClick={() => uploadRef.current?.click()}
+                style={{
+                  flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  background: 'transparent', color: navy, fontSize: 14, fontWeight: 600,
+                  padding: '11px 16px', borderRadius: 9, border: `1.5px solid ${border}`, cursor: 'pointer',
+                }}
+                onMouseEnter={e => e.currentTarget.style.borderColor = navy}
+                onMouseLeave={e => e.currentTarget.style.borderColor = border}
+              >
+                <svg viewBox="0 0 20 20" fill="none" width="15" height="15" style={{ flexShrink: 0 }}>
+                  <path d="M3 13v2a2 2 0 002 2h10a2 2 0 002-2v-2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                  <path d="M10 12V4M7 7l3-3 3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Upload &amp; edit
+              </button>
+              <input
+                ref={uploadRef} type="file" accept=".pdf,.docx"
+                style={{ display: 'none' }}
+                onChange={e => handleFile(e.target.files[0])}
+              />
+            </div>
+            {uploadError && (
+              <p style={{ margin: 0, color: '#ef4444', fontSize: 13, fontWeight: 500 }}>{uploadError}</p>
+            )}
           </div>
 
-          {uploadError && (
-            <p style={{ margin: 0, color: '#ef4444', fontSize: 13, fontWeight: 500 }}>{uploadError}</p>
-          )}
-
+          {/* How it works */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '1.5px', color: '#a0aabf', textTransform: 'uppercase' }}>
               How it works
             </div>
             <div style={{ display: 'flex' }}>
-              {HIW_STEPS.map(({ title, desc, icon }, idx) => (
+              {HIW_STEPS.map(({ title, desc, Icon }, idx) => (
                 <div key={title} style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingRight: idx < 2 ? 14 : 0 }}>
-                  {/* Icon circle row + dashed connector */}
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
                     <div style={{ position: 'relative', flexShrink: 0 }}>
-                      {/* Main icon circle */}
                       <div style={{
                         width: 46, height: 46, borderRadius: '50%',
                         background: '#eef1f7',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                       }}>
-                        {icon}
+                        <Icon size={22} />
                       </div>
-                      {/* Step number badge */}
                       <div style={{
                         position: 'absolute', top: -3, right: -3,
                         width: 18, height: 18, borderRadius: '50%',
@@ -336,6 +333,7 @@ export default function LandingPage() {
             </div>
           </div>
 
+          {/* Trust strip */}
           <div style={{ display: 'flex', gap: 20, paddingTop: 4, borderTop: `1px solid ${border}` }}>
             {['Free forever', 'No account needed', 'Nothing stored on our servers'].map(item => (
               <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, color: muted }}>
@@ -343,11 +341,13 @@ export default function LandingPage() {
               </div>
             ))}
           </div>
+
         </div>
 
         <FanCarousel />
 
       </div>
+
     </div>
   )
 }
