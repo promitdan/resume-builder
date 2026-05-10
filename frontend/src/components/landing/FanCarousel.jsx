@@ -185,8 +185,8 @@ export default function FanCarousel() {
         {arrowBtn('›', () => move(1))}
       </div>
 
-      {/* Dot indicators */}
-      <div style={{ position: 'absolute', bottom: 18, left: 0, right: 0, display: 'flex', gap: 7, justifyContent: 'center', zIndex: 10 }}>
+      {/* Dot indicators — sit just above the feature strip */}
+      <div style={{ position: 'absolute', bottom: 68, left: 0, right: 0, display: 'flex', gap: 7, justifyContent: 'center', zIndex: 10 }}>
         {TEMPLATES.map((_, i) => (
           <div
             key={i}
@@ -198,6 +198,70 @@ export default function FanCarousel() {
               transition: 'background 0.2s, transform 0.2s',
             }}
           />
+        ))}
+      </div>
+
+      {/* Feature strip */}
+      <div style={{
+        flexShrink: 0, display: 'flex',
+        borderTop: '1px solid rgba(255,255,255,0.07)',
+        background: 'rgba(0,0,0,0.25)',
+        zIndex: 10,
+      }}>
+        {[
+          {
+            label: 'ATS Friendly',
+            sub: 'Beat the bots',
+            icon: (
+              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.4"/>
+                <path d="M7 10l2 2 4-4" stroke="#f47c20" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            ),
+          },
+          {
+            label: 'AI Suggestions',
+            sub: 'Write better, faster',
+            icon: (
+              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                <path d="M10 2L11.4 6.6H16.2L12.4 9.4L13.8 14L10 11.2L6.2 14L7.6 9.4L3.8 6.6H8.6L10 2Z" stroke="currentColor" strokeWidth="1.3" fill="#f47c20" fillOpacity="0.8"/>
+              </svg>
+            ),
+          },
+          {
+            label: 'Multiple Formats',
+            sub: 'PDF & DOCX',
+            icon: (
+              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                <rect x="3" y="2" width="10" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
+                <rect x="7" y="5" width="10" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.4" fill="rgba(244,124,32,0.15)" strokeOpacity="0.5"/>
+                <line x1="6" y1="7" x2="10" y2="7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.6"/>
+                <line x1="6" y1="10" x2="10" y2="10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.6"/>
+              </svg>
+            ),
+          },
+          {
+            label: 'Secure & Private',
+            sub: 'Your data, your control',
+            icon: (
+              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                <path d="M10 2L4 5v5c0 3.5 2.5 6.5 6 7.5 3.5-1 6-4 6-7.5V5L10 2Z" stroke="currentColor" strokeWidth="1.4" fill="rgba(244,124,32,0.12)"/>
+                <path d="M7.5 10l2 2 3-3" stroke="#f47c20" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            ),
+          },
+        ].map(({ label, sub, icon }) => (
+          <div key={label} style={{
+            flex: 1, display: 'flex', alignItems: 'center', gap: 9,
+            padding: '10px 14px',
+            borderRight: '1px solid rgba(255,255,255,0.06)',
+          }}>
+            <div style={{ color: 'rgba(255,255,255,0.55)', flexShrink: 0 }}>{icon}</div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.85)', lineHeight: 1.2 }}>{label}</div>
+              <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', marginTop: 1 }}>{sub}</div>
+            </div>
+          </div>
         ))}
       </div>
     </div>
