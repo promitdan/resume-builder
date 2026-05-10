@@ -23,7 +23,7 @@ function LogoIcon() {
 
 const FEATURES = [
   {
-    name: '17 Templates',
+    name: '17+ Templates',
     sub: '5 style families',
     icon: (
       <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
@@ -35,7 +35,7 @@ const FEATURES = [
     ),
   },
   {
-    name: 'AI Editing',
+    name: 'AI-Powered Editing',
     sub: 'Smart suggestions',
     icon: (
       <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
@@ -55,7 +55,7 @@ const FEATURES = [
     ),
   },
   {
-    name: 'Fully Private',
+    name: '100% Private',
     sub: 'No account needed',
     icon: (
       <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
@@ -68,9 +68,40 @@ const FEATURES = [
 ]
 
 const HIW_STEPS = [
-  { title: 'Build or upload',  desc: 'Start fresh or drop in a PDF/DOCX — AI parses it instantly.' },
-  { title: 'Pick a template',  desc: '17 templates, 5 families. Swap colors and fonts anytime.'     },
-  { title: 'Export & apply',   desc: 'One-click PDF or DOCX. No watermarks, no paywall.'            },
+  {
+    title: 'Build or upload',
+    desc: 'Start fresh or upload your existing resume. AI parses it instantly.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+        <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="#1a2744" strokeWidth="1.8" strokeLinecap="round"/>
+        <path d="M12 15V4" stroke="#f47c20" strokeWidth="1.8" strokeLinecap="round"/>
+        <path d="M8 8l4-4 4 4" stroke="#f47c20" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
+  {
+    title: 'Choose a template',
+    desc: 'Pick from 17+ templates. Customize colors, fonts and layout.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+        <rect x="3" y="3" width="8" height="11" rx="1.5" stroke="#1a2744" strokeWidth="1.8"/>
+        <rect x="13" y="3" width="8" height="5" rx="1.5" stroke="#f47c20" strokeWidth="1.8"/>
+        <rect x="13" y="10" width="8" height="4" rx="1.5" stroke="#1a2744" strokeWidth="1.5" opacity="0.4"/>
+        <rect x="3" y="16" width="18" height="4" rx="1.5" stroke="#1a2744" strokeWidth="1.5" opacity="0.3"/>
+      </svg>
+    ),
+  },
+  {
+    title: 'Export & apply',
+    desc: 'Download PDF or DOCX in one click. No watermarks. No paywall.',
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+        <path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2" stroke="#1a2744" strokeWidth="1.8" strokeLinecap="round"/>
+        <path d="M12 4v11" stroke="#f47c20" strokeWidth="1.8" strokeLinecap="round"/>
+        <path d="M8 11l4 4 4-4" stroke="#f47c20" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
 ]
 
 function UploadingOverlay() {
@@ -180,22 +211,26 @@ export default function LandingPage() {
         }}>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+            {/* Badge */}
             <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              background: '#fff3e0', color: '#b45309', border: '1px solid #fed7aa',
-              fontSize: 11, fontWeight: 700, padding: '5px 13px', borderRadius: 20,
-              width: 'fit-content', letterSpacing: '0.4px',
+              display: 'inline-flex', alignItems: 'center', gap: 0,
+              background: '#fff3e0', border: '1px solid #fed7aa',
+              fontSize: 11, fontWeight: 700, padding: '5px 12px', borderRadius: 20,
+              width: 'fit-content',
             }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: orange, flexShrink: 0, display: 'inline-block' }} />
-              AI-powered · No sign-up required
+              <span style={{ color: orange, marginRight: 5, fontSize: 13 }}>⚡</span>
+              <span style={{ color: orange, letterSpacing: '0.6px' }}>AI-POWERED</span>
+              <span style={{ color: '#c9a87a', margin: '0 6px' }}>·</span>
+              <span style={{ color: '#a07840', letterSpacing: '0.4px' }}>NO SIGN-UP REQUIRED</span>
             </div>
+            {/* Headline */}
             <div>
               <h1 style={{ margin: 0, fontSize: 'clamp(30px, 3vw, 46px)', fontWeight: 900, lineHeight: 1.08, letterSpacing: '-1.5px', color: navy }}>
                 Forge a resume<br />that gets you <em style={{ fontStyle: 'normal', color: orange }}>hired</em>
               </h1>
-              <div style={{ marginTop: 6, fontSize: 11, fontWeight: 700, letterSpacing: '2px', color: '#a0aabf', textTransform: 'uppercase' }}>
-                Craft. &nbsp;Refine. &nbsp;Get Hired.
-              </div>
+              <p style={{ margin: '10px 0 0', fontSize: 15, color: muted, lineHeight: 1.6, maxWidth: 380 }}>
+                Create a professional resume in minutes. AI-powered suggestions, stunning templates, and one-click export.
+              </p>
             </div>
           </div>
 
@@ -243,7 +278,11 @@ export default function LandingPage() {
               onMouseEnter={e => e.currentTarget.style.borderColor = navy}
               onMouseLeave={e => e.currentTarget.style.borderColor = border}
             >
-              📄 Upload &amp; edit
+              <svg viewBox="0 0 20 20" fill="none" width="15" height="15" style={{ flexShrink: 0 }}>
+                <path d="M3 13v2a2 2 0 002 2h10a2 2 0 002-2v-2" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/>
+                <path d="M10 12V4M7 7l3-3 3 3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              Upload &amp; edit
             </button>
             <input
               ref={uploadRef} type="file" accept=".pdf,.docx"
@@ -257,26 +296,41 @@ export default function LandingPage() {
           )}
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '1.2px', color: '#a0aabf', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '1.5px', color: '#a0aabf', textTransform: 'uppercase' }}>
               How it works
             </div>
             <div style={{ display: 'flex' }}>
-              {HIW_STEPS.map(({ title, desc }, idx) => (
-                <div key={title} style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingRight: idx < 2 ? 12 : 0 }}>
+              {HIW_STEPS.map(({ title, desc, icon }, idx) => (
+                <div key={title} style={{ flex: 1, display: 'flex', flexDirection: 'column', paddingRight: idx < 2 ? 14 : 0 }}>
+                  {/* Icon circle row + dashed connector */}
                   <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-                    <div style={{
-                      width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
-                      background: navy, color: '#fff', fontSize: 13, fontWeight: 800,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    }}>
-                      {idx + 1}
+                    <div style={{ position: 'relative', flexShrink: 0 }}>
+                      {/* Main icon circle */}
+                      <div style={{
+                        width: 46, height: 46, borderRadius: '50%',
+                        background: '#eef1f7',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}>
+                        {icon}
+                      </div>
+                      {/* Step number badge */}
+                      <div style={{
+                        position: 'absolute', top: -3, right: -3,
+                        width: 18, height: 18, borderRadius: '50%',
+                        background: orange, color: '#fff',
+                        fontSize: 9, fontWeight: 900,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        boxShadow: '0 0 0 2px #f8f9fb',
+                      }}>
+                        {idx + 1}
+                      </div>
                     </div>
                     {idx < 2 && (
-                      <div style={{ flex: 1, height: 1, background: border, marginLeft: 8 }} />
+                      <div style={{ flex: 1, height: 0, borderTop: '1.5px dashed #d0d5e4', marginLeft: 10 }} />
                     )}
                   </div>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: navy, marginBottom: 4 }}>{title}</div>
-                  <div style={{ fontSize: 11.5, color: muted, lineHeight: 1.55 }}>{desc}</div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: navy, marginBottom: 3 }}>{title}</div>
+                  <div style={{ fontSize: 11, color: muted, lineHeight: 1.55 }}>{desc}</div>
                 </div>
               ))}
             </div>
