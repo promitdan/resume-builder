@@ -12,7 +12,8 @@ export default function TemplatePreview({ Component, paletteColors, content }) {
     const el = containerRef.current
     if (!el) return
     const obs = new ResizeObserver(([entry]) => {
-      setScale(entry.contentRect.width / TEMPLATE_WIDTH)
+      const w = entry.contentRect.width
+      if (w > 0) setScale(w / TEMPLATE_WIDTH)
     })
     obs.observe(el)
     return () => obs.disconnect()
