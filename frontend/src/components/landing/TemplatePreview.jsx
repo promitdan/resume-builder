@@ -28,6 +28,7 @@ export default function TemplatePreview({ Component, paletteColors, content }) {
         transform: `scale(${scale})`,
         pointerEvents: 'none',
         userSelect: 'none',
+        background: '#fff',
       }}>
         <Component content={content} paletteColors={paletteColors} pageIndex={0} />
       </div>
