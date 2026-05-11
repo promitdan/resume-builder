@@ -61,7 +61,6 @@ const bg2    = '#e8e3d8'
 
 export default function TemplateGallery({ onStart }) {
   const currentTemplateId = useResumeStore(s => s.templateId)
-  const setTemplateId     = useResumeStore(s => s.setTemplateId)
 
   const initialFamily = CATEGORIES.find(c =>
     c.templates.some(t => t.id === currentTemplateId)
@@ -76,7 +75,6 @@ export default function TemplateGallery({ onStart }) {
 
   function handleVariantClick(templateId) {
     setSelectedId(templateId)
-    setTemplateId(templateId)
   }
 
   function handleStart() {
@@ -129,7 +127,10 @@ export default function TemplateGallery({ onStart }) {
             return (
               <div
                 key={family.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => handleFamilyClick(family.id)}
+                onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && handleFamilyClick(family.id)}
                 style={{
                   flex: 1, border: `2px solid ${isExpanded || hasSelected ? navy : border}`,
                   borderRadius: 12, overflow: 'hidden', cursor: 'pointer',
@@ -196,7 +197,10 @@ export default function TemplateGallery({ onStart }) {
                   return (
                     <div
                       key={id}
+                      role="button"
+                      tabIndex={0}
                       onClick={() => handleVariantClick(id)}
+                      onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && handleVariantClick(id)}
                       style={{
                         width: 160, flexShrink: 0, cursor: 'pointer',
                         border: `2px solid ${isSelected ? orange : border}`,
