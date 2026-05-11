@@ -19,7 +19,7 @@ function Thumbnail({ id }) {
 
   return (
     <img
-      src={`/thumbnails/${id}.webp`}
+      src={`/thumbnails/${id}.png`}
       alt=""
       onError={() => setErr(true)}
       style={{
