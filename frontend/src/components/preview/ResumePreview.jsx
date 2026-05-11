@@ -22,7 +22,7 @@ import {
   CONTENT_HEIGHT, PAGE_GAP, PAGE_WIDTH,
 } from '../../utils/pageLayout'
 
-const COMPONENT_MAP = {
+export const COMPONENT_MAP = {
   'classic':             ClassicTemplate,
   'classic-traditional': ClassicTemplate,
   'classic-academic':    ClassicAcademicTemplate,
