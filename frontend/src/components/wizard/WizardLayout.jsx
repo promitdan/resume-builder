@@ -14,6 +14,7 @@ export default function WizardLayout({ steps, currentStep, onNext, onStepClick, 
   const step = steps[currentStep]
   if (!step) return <div>Invalid step</div>
 
+  const StepComponent = step.component
   const isLast        = currentStep === steps.length - 1
   const tpl           = TEMPLATE_CONFIGS[templateId]
   const paletteColors = tpl?.palettes?.[paletteIndex]?.colors ?? {}
@@ -66,7 +67,7 @@ export default function WizardLayout({ steps, currentStep, onNext, onStepClick, 
             const done   = i < currentStep
             const active = i === currentStep
             return (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
+              <div key={s.title} style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
                 {i > 0 && <span style={{ color: '#cbd5e1', fontSize: 12 }}>›</span>}
                 <button
                   onClick={() => done && onStepClick && onStepClick(i)}
@@ -127,7 +128,7 @@ export default function WizardLayout({ steps, currentStep, onNext, onStepClick, 
           flex: '0 0 55%', overflowY: 'auto',
           padding: '28px 32px', borderRight: '1px solid #e2e8f0',
         }}>
-          <step.component />
+          <StepComponent />
         </div>
 
         {/* Right: live preview */}

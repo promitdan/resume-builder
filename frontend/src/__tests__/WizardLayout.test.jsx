@@ -87,6 +87,6 @@ describe('WizardLayout', () => {
 
   it('renders the live preview panel', () => {
     render(<WizardLayout steps={mockSteps} currentStep={0} onNext={vi.fn()} onStepClick={vi.fn()} onChangeTemplate={vi.fn()} />)
-    expect(screen.getAllByTestId('template-preview').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByTestId('template-preview')).toHaveLength(2)
   })
 })
