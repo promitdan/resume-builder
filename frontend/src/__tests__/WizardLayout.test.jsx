@@ -22,9 +22,12 @@ vi.mock('../components/landing/TemplatePreview', () => ({
 vi.mock('../components/preview/ResumePreview', () => ({
   default: () => <div data-testid="resume-preview" />,
   COMPONENT_MAP: { 'classic-traditional': () => <div /> },
-  PAGE_WIDTH: 745,
   CONTENT_HEIGHT: 1054,
   PAGE_GAP: 16,
+}))
+
+vi.mock('../../utils/pageLayout', () => ({
+  PAGE_WIDTH: 745,
 }))
 
 vi.mock('../registry/templateRegistry', () => ({

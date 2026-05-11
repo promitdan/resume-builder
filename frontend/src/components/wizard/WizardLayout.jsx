@@ -1,5 +1,6 @@
 import { useResumeStore } from '../../store/useResumeStore'
-import ResumePreview, { COMPONENT_MAP, PAGE_WIDTH, CONTENT_HEIGHT, PAGE_GAP } from '../preview/ResumePreview'
+import ResumePreview, { COMPONENT_MAP, CONTENT_HEIGHT, PAGE_GAP } from '../preview/ResumePreview'
+import { PAGE_WIDTH } from '../../utils/pageLayout'
 import { TEMPLATE_CONFIGS } from '../../registry/templateRegistry'
 import TemplatePreview from '../landing/TemplatePreview'
 import { useRef, useEffect, useState } from 'react'
