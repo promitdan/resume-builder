@@ -1,0 +1,41 @@
+{
+  "layoutType": "two-column",
+  "id": "creative-vibrant",
+  "name": "Vibrant",
+  "category": "creative",
+  "layout": {
+    "type": "two-column",
+    "leftWidthPercent": 56,
+    "itemSpacing": "16px"
+  },
+  "colors": {
+    "headerBg":           "#d63c1a",
+    "accentColor":        "#c43518",
+    "sectionHeadingColor":"#111111",
+    "dividerColor":       "#c43518",
+    "mainBg":             "#ffffff",
+    "mainText":           "#1a1a1a",
+    "mutedText":          "#555555",
+    "skillBorder":        "#c8c0b8",
+    "skillBg":            "#f5f3f0",
+    "starColor":          "#c43518"
+  },
+  "typography": {
+    "nameFont":        "Inter, sans-serif",
+    "nameFontSize":    "26px",
+    "nameFontWeight":  "900",
+    "bodyFont":        "Inter, sans-serif",
+    "bodyLineHeight":  "1.6",
+    "sectionLabelSize":"10.5px"
+  },
+  "palettes": [
+    { "label": "Crimson", "swatch": "#d63c1a", "colors": {} },
+    { "label": "Cobalt",  "swatch": "#1a55d6", "colors": { "headerBg": "#1a55d6", "accentColor": "#1a55d6", "dividerColor": "#1a55d6", "starColor": "#1a55d6" } },
+    { "label": "Forest",  "swatch": "#226b38", "colors": { "headerBg": "#226b38", "accentColor": "#226b38", "dividerColor": "#226b38", "starColor": "#226b38" } },
+    { "label": "Plum",    "swatch": "#6c3ebf", "colors": { "headerBg": "#6c3ebf", "accentColor": "#6c3ebf", "dividerColor": "#6c3ebf", "starColor": "#6c3ebf" } }
+  ],
+  "defaultColumns": {
+    "left":  ["experience", "skills", "summary"],
+    "right": ["awards", "certifications", "education", "languages", "projects"]
+  }
+}

@@ -16,6 +16,7 @@ import ExecutiveSidebarTemplate from './templates/ExecutiveSidebarTemplate'
 import CreativeTemplate         from './templates/CreativeTemplate'
 import CreativeStarTemplate     from './templates/CreativeStarTemplate'
 import CreativeMinimalTemplate  from './templates/CreativeMinimalTemplate'
+import CreativeVibrantTemplate  from './templates/CreativeVibrantTemplate'
 import { TEMPLATE_CONFIGS }     from '../../registry/templateRegistry'
 import {
   measureAndDistribute, sliceContent,
@@ -41,6 +42,7 @@ export const COMPONENT_MAP = {
   'creative':            CreativeTemplate,
   'creative-star':       CreativeStarTemplate,
   'creative-minimal':    CreativeMinimalTemplate,
+  'creative-vibrant':    CreativeVibrantTemplate,
 }
 
 const FONT_SIZE_VARS = {

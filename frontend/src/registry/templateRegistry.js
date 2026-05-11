@@ -15,6 +15,7 @@ import executiveSidebarTpl from '../templates/executive-sidebar.json'
 import creativeTpl         from '../templates/creative.json'
 import creativeStarTpl    from '../templates/creative-star.json'
 import creativeMinimalTpl from '../templates/creative-minimal.json'
+import creativeVibrantTpl from '../templates/creative-vibrant.json'
 
 export const TEMPLATE_CONFIGS = {
   'classic-traditional': classicTpl,
@@ -34,6 +35,7 @@ export const TEMPLATE_CONFIGS = {
   'creative':            creativeTpl,
   'creative-star':       creativeStarTpl,
   'creative-minimal':    creativeMinimalTpl,
+  'creative-vibrant':    creativeVibrantTpl,
 }
 
 export const CATEGORIES = [
@@ -74,9 +76,10 @@ export const CATEGORIES = [
   {
     id: 'creative', label: 'Creative',
     templates: [
-      { id: 'creative',         label: 'Classic' },
-      { id: 'creative-star',    label: 'Star'    },
-      { id: 'creative-minimal', label: 'Minimal' },
+      { id: 'creative',          label: 'Classic'  },
+      { id: 'creative-star',     label: 'Star'     },
+      { id: 'creative-minimal',  label: 'Minimal'  },
+      { id: 'creative-vibrant',  label: 'Vibrant'  },
     ],
   },
 ]
