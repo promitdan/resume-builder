@@ -30,19 +30,47 @@ export default function DownloadButtons() {
     }
   }
 
-  const btn = (type, label, bg, hover) => (
+  const navy = '#1a2744'
+
+  // PDF file icon: folded-corner document with red PDF badge
+  const PdfIcon = () => (
+    <svg viewBox="0 0 20 22" fill="none" width="15" height="17" style={{ flexShrink: 0 }}>
+      <path d="M3 2a1 1 0 011-1h9l4 4v15a1 1 0 01-1 1H4a1 1 0 01-1-1V2z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2"/>
+      <path d="M13 1v4h4" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2" strokeLinejoin="round"/>
+      <rect x="2" y="12" width="10" height="6" rx="1.2" fill="#ef4444"/>
+      <text x="7" y="17" textAnchor="middle" fontSize="4.5" fontWeight="800" fill="#fff" fontFamily="Arial, sans-serif">PDF</text>
+    </svg>
+  )
+
+  // DOCX file icon: folded-corner document with blue Word badge
+  const DocxIcon = () => (
+    <svg viewBox="0 0 20 22" fill="none" width="15" height="17" style={{ flexShrink: 0 }}>
+      <path d="M3 2a1 1 0 011-1h9l4 4v15a1 1 0 01-1 1H4a1 1 0 01-1-1V2z" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2"/>
+      <path d="M13 1v4h4" stroke="rgba(255,255,255,0.5)" strokeWidth="1.2" strokeLinejoin="round"/>
+      <rect x="2" y="12" width="10" height="6" rx="1.2" fill="#2563eb"/>
+      <text x="7" y="17" textAnchor="middle" fontSize="4" fontWeight="800" fill="#fff" fontFamily="Arial, sans-serif">DOC</text>
+    </svg>
+  )
+
+  const btn = (type, label, Icon) => (
     <button type="button" onClick={() => download(type)} disabled={!!loading}
-      style={{ width: '100%', background: loading === type ? '#94a3b8' : bg, color: '#fff', fontWeight: 600, fontSize: '13px', padding: '10px', borderRadius: '6px', border: 'none', cursor: loading ? 'wait' : 'pointer', marginBottom: '8px', transition: 'background 0.15s' }}
-      onMouseEnter={e => { if (!loading) e.currentTarget.style.background = hover }}
-      onMouseLeave={e => { if (!loading) e.currentTarget.style.background = loading === type ? '#94a3b8' : bg }}>
-      {loading === type ? 'Generating…' : label}
+      style={{
+        width: '100%', background: loading === type ? '#64748b' : navy,
+        color: '#fff', fontWeight: 600, fontSize: '13px', padding: '11px 14px',
+        borderRadius: '8px', border: 'none', cursor: loading ? 'wait' : 'pointer',
+        marginBottom: '8px', transition: 'background 0.15s',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 9,
+      }}
+      onMouseEnter={e => { if (!loading) e.currentTarget.style.background = '#243560' }}
+      onMouseLeave={e => { if (!loading) e.currentTarget.style.background = loading === type ? '#64748b' : navy }}>
+      {loading === type ? 'Generating…' : <><Icon />{label}</>}
     </button>
   )
 
   return (
     <div>
-      {btn('pdf',  '⬇ Download PDF',  '#3b82f6', '#2563eb')}
-      {btn('docx', '⬇ Download DOCX', '#0369a1', '#075985')}
+      {btn('pdf',  'Download PDF',  PdfIcon)}
+      {/* {btn('docx', 'Download DOCX', DocxIcon)} */}
       {error && <p style={{ margin: '6px 0 0', color: '#ef4444', fontSize: '12px' }}>{error}</p>}
     </div>
   )
