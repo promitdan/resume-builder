@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { v4 as uuid } from 'uuid'
 import { set as lodashSet } from 'lodash'
+import { TEMPLATE_CONFIGS } from '../registry/templateRegistry'
 
 const emptyContent = () => ({
   meta: { version: '1.0', updatedAt: new Date().toISOString() },
@@ -115,6 +116,8 @@ const initialState = {
   templateId: 'classic-traditional',
   paletteIndex: 0,
   fontSize: 'medium',
+  leftColumnOrder: [],
+  rightColumnOrder: [],
 }
 
 export const useResumeStore = create((set) => ({
@@ -210,17 +213,40 @@ export const useResumeStore = create((set) => ({
     set((s) => {
       const order = s.content.sectionOrder.filter((k) => k !== key)
       if (enabled) order.push(key)
-      return { content: { ...s.content, sectionOrder: order } }
+      const isTwoCol = TEMPLATE_CONFIGS[s.templateId]?.layoutType === 'two-column'
+      if (!isTwoCol) return { content: { ...s.content, sectionOrder: order } }
+      const left  = enabled ? s.leftColumnOrder  : s.leftColumnOrder.filter(k  => k !== key)
+      const right = enabled
+        ? [...s.rightColumnOrder, key]
+        : s.rightColumnOrder.filter(k => k !== key)
+      return { content: { ...s.content, sectionOrder: order }, leftColumnOrder: left, rightColumnOrder: right }
     }),
 
   reorderSections: (newOrder) =>
     set((s) => ({ content: { ...s.content, sectionOrder: newOrder } })),
 
-  setTemplateId: (templateId) => set({ templateId, paletteIndex: 0 }),
+  setTemplateId: (templateId) => set((s) => {
+    const tpl  = TEMPLATE_CONFIGS[templateId]
+    const base = { templateId, paletteIndex: 0 }
+    if (tpl?.layoutType !== 'two-column') return base
+    // Preserve existing column orders if already set (user customisation survives template switches)
+    if (s.leftColumnOrder.length > 0 || s.rightColumnOrder.length > 0) return base
+    if (!tpl.defaultColumns) return base
+    const enabled = new Set(s.content.sectionOrder.filter(k => k !== 'personal'))
+    const defs    = tpl.defaultColumns
+    return {
+      ...base,
+      leftColumnOrder:  defs.left.filter(k  => enabled.has(k)),
+      rightColumnOrder: defs.right.filter(k => enabled.has(k)),
+    }
+  }),
 
   setPaletteIndex: (paletteIndex) => set({ paletteIndex }),
 
   setFontSize: (fontSize) => set({ fontSize }),
+
+  setLeftColumnOrder:  (order) => set({ leftColumnOrder: order }),
+  setRightColumnOrder: (order) => set({ rightColumnOrder: order }),
 
   loadMockData: () => set({ content: mockContent(), templateId: 'classic-traditional' }),
 
@@ -234,4 +260,4 @@ export const useResumeStore = create((set) => ({
     }),
 }))
 
-useResumeStore.getInitialState = () => ({ content: emptyContent(), templateId: 'classic-traditional', paletteIndex: 0, fontSize: 'medium' })
+useResumeStore.getInitialState = () => ({ content: emptyContent(), templateId: 'classic-traditional', paletteIndex: 0, fontSize: 'medium', leftColumnOrder: [], rightColumnOrder: [] })
