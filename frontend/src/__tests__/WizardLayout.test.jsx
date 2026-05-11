@@ -11,6 +11,7 @@ vi.mock('../store/useResumeStore', () => ({
     },
     templateId: 'classic-traditional',
     paletteIndex: 0,
+    fontSize: 'medium',
   }),
 }))
 
@@ -19,7 +20,11 @@ vi.mock('../components/landing/TemplatePreview', () => ({
 }))
 
 vi.mock('../components/preview/ResumePreview', () => ({
+  default: () => <div data-testid="resume-preview" />,
   COMPONENT_MAP: { 'classic-traditional': () => <div /> },
+  PAGE_WIDTH: 745,
+  CONTENT_HEIGHT: 1054,
+  PAGE_GAP: 16,
 }))
 
 vi.mock('../registry/templateRegistry', () => ({
@@ -85,8 +90,9 @@ describe('WizardLayout', () => {
     expect(onChangeTemplate).toHaveBeenCalled()
   })
 
-  it('renders the live preview panel', () => {
+  it('renders the live preview panel using ResumePreview', () => {
     render(<WizardLayout steps={mockSteps} currentStep={0} onNext={vi.fn()} onStepClick={vi.fn()} onChangeTemplate={vi.fn()} />)
-    expect(screen.getAllByTestId('template-preview')).toHaveLength(2)
+    expect(screen.getAllByTestId('template-preview')).toHaveLength(1)
+    expect(screen.getByTestId('resume-preview')).toBeInTheDocument()
   })
 })

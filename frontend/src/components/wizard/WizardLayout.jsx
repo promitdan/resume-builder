@@ -1,7 +1,8 @@
 import { useResumeStore } from '../../store/useResumeStore'
-import { COMPONENT_MAP } from '../preview/ResumePreview'
+import ResumePreview, { COMPONENT_MAP, PAGE_WIDTH, CONTENT_HEIGHT, PAGE_GAP } from '../preview/ResumePreview'
 import { TEMPLATE_CONFIGS } from '../../registry/templateRegistry'
 import TemplatePreview from '../landing/TemplatePreview'
+import { useRef, useEffect, useState } from 'react'
 
 const navy   = '#1a2744'
 const orange = '#f47c20'
@@ -10,6 +11,7 @@ export default function WizardLayout({ steps, currentStep, onNext, onStepClick, 
   const content       = useResumeStore(s => s.content)
   const templateId    = useResumeStore(s => s.templateId)
   const paletteIndex  = useResumeStore(s => s.paletteIndex)
+  const fontSize      = useResumeStore(s => s.fontSize)
 
   const step = steps[currentStep]
   if (!step) return <div>Invalid step</div>
@@ -19,6 +21,20 @@ export default function WizardLayout({ steps, currentStep, onNext, onStepClick, 
   const tpl           = TEMPLATE_CONFIGS[templateId]
   const paletteColors = tpl?.palettes?.[paletteIndex]?.colors ?? {}
   const Component     = COMPONENT_MAP[templateId]
+
+  const panelRef = useRef()
+  const [scale, setScale] = useState(1)
+  const [pageCount, setPageCount] = useState(1)
+  useEffect(() => {
+    const el = panelRef.current
+    if (!el) return
+    const obs = new ResizeObserver(([entry]) => {
+      const w = entry.contentRect.width
+      if (w > 0) setScale(w / PAGE_WIDTH)
+    })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
 
   return (
     <div style={{
@@ -133,23 +149,33 @@ export default function WizardLayout({ steps, currentStep, onNext, onStepClick, 
 
         {/* Right: live preview */}
         <div style={{
-          flex: '0 0 45%', overflow: 'hidden',
+          flex: '0 0 45%', overflowY: 'auto', overflowX: 'hidden',
           background: '#f1f5f9',
-          display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
           padding: '24px 20px',
         }}>
-          {Component ? (
+          <div
+            ref={panelRef}
+            style={{
+              width: '100%',
+              height: (pageCount * CONTENT_HEIGHT + (pageCount - 1) * PAGE_GAP) * scale,
+              overflow: 'hidden',
+            }}
+          >
             <div style={{
-              width: '100%', maxWidth: 420,
-              aspectRatio: '745 / 1054',
-              boxShadow: '0 4px 24px rgba(15,23,42,0.14)',
-              borderRadius: 2, overflow: 'hidden',
+              transform: `scale(${scale})`,
+              transformOrigin: 'top left',
+              width: PAGE_WIDTH,
+              filter: 'drop-shadow(0 4px 16px rgba(15,23,42,0.14))',
             }}>
-              <TemplatePreview Component={Component} paletteColors={paletteColors} content={content} />
+              <ResumePreview
+                content={content}
+                templateId={templateId}
+                paletteIndex={paletteIndex}
+                fontSize={fontSize}
+                onBreaksChange={setPageCount}
+              />
             </div>
-          ) : (
-            <div style={{ color: '#94a3b8', fontSize: 13 }}>No preview available</div>
-          )}
+          </div>
         </div>
       </div>
     </div>
