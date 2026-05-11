@@ -135,6 +135,13 @@ export default function TemplateGallery({ onStart }) {
       fontFamily: "'Inter', -apple-system, sans-serif",
       display: 'flex', flexDirection: 'column',
     }}>
+      <style>{`
+        @keyframes variantsFadeIn {
+          from { opacity: 0; transform: translateY(-6px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        .variants-panel { animation: variantsFadeIn 0.18s ease; }
+      `}</style>
       {/* Header */}
       <div style={{
         padding: '24px 48px 20px', background: bg2,
@@ -194,11 +201,16 @@ export default function TemplateGallery({ onStart }) {
                 onClick={() => handleFamilyClick(family.id)}
                 onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && handleFamilyClick(family.id)}
                 style={{
-                  flex: 1, border: `2px solid ${isExpanded || hasSelected ? navy : border}`,
+                  flex: 1,
+                  border: `1.5px solid ${isExpanded ? navy : hasSelected ? '#c2cce0' : border}`,
                   borderRadius: 12, overflow: 'hidden', cursor: 'pointer',
-                  background: isExpanded ? navy : '#fff',
-                  transition: 'border-color 0.15s, box-shadow 0.15s, background 0.15s',
-                  boxShadow: isExpanded ? '0 4px 16px rgba(26,39,68,0.12)' : 'none',
+                  background: isExpanded ? '#eef1f8' : '#fff',
+                  transition: 'border-color 0.18s, box-shadow 0.18s, background 0.18s',
+                  boxShadow: isExpanded
+                    ? '0 0 0 3px rgba(26,39,68,0.08), 0 4px 14px rgba(26,39,68,0.10)'
+                    : hasSelected
+                    ? '0 0 0 2px rgba(26,39,68,0.05)'
+                    : 'none',
                   padding: '14px 16px',
                   display: 'flex', alignItems: 'center', gap: 12,
                   position: 'relative',
@@ -206,21 +218,20 @@ export default function TemplateGallery({ onStart }) {
               >
                 <div style={{
                   width: 36, height: 36, borderRadius: 8, flexShrink: 0,
-                  background: isExpanded ? 'rgba(255,255,255,0.15)' : bg,
+                  background: isExpanded ? 'rgba(26,39,68,0.08)' : bg,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'background 0.18s',
                 }}>
-                  {FAMILY_META[family.id]?.icon(isExpanded ? '#fff' : navy)}
+                  {FAMILY_META[family.id]?.icon(navy)}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
-                    fontWeight: 700, fontSize: 13, lineHeight: 1.3,
-                    color: isExpanded ? '#fff' : navy,
+                    fontWeight: 700, fontSize: 13, lineHeight: 1.3, color: navy,
                   }}>
                     {family.label}
                   </div>
                   <div style={{
-                    fontSize: 11, marginTop: 2,
-                    color: isExpanded ? 'rgba(255,255,255,0.65)' : '#7a7060',
+                    fontSize: 11, marginTop: 2, color: '#7a7060',
                     whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                   }}>
                     {FAMILY_META[family.id]?.description}
@@ -228,9 +239,7 @@ export default function TemplateGallery({ onStart }) {
                 </div>
                 <span style={{
                   fontSize: 10, fontWeight: 600, flexShrink: 0,
-                  color: isExpanded ? 'rgba(255,255,255,0.55)' : '#a09080',
-                  background: isExpanded ? 'rgba(255,255,255,0.12)' : bg,
-                  borderRadius: 20, padding: '2px 7px',
+                  color: '#a09080', background: bg, borderRadius: 20, padding: '2px 7px',
                 }}>
                   {family.templates.length} styles
                 </span>
@@ -244,7 +253,7 @@ export default function TemplateGallery({ onStart }) {
           const family = CATEGORIES.find(c => c.id === expandedFamily)
           if (!family) return null
           return (
-            <div style={{
+            <div key={expandedFamily} className="variants-panel" style={{
               background: '#fff', borderRadius: 12, padding: '20px 24px',
               border: `1px solid ${border}`,
               boxShadow: '0 2px 12px rgba(26,39,68,0.08)',
