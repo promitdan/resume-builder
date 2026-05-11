@@ -214,7 +214,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
           )}
         </>
       )}
-      {pageIndex === 0 && (personal.email || personal.phone || personal.location) && (
+      {pageIndex === 0 && (personal.email || personal.phone || personal.location || hasSocial) && (
         <>
           {sidebarLabel('Details')}
           <div style={{ fontSize: 'var(--resume-body)', color: c.sidebarText }}>
@@ -236,14 +236,6 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
                 <InlineEditor path="personal.location" value={personal.location}>{personal.location}</InlineEditor>
               </div>
             )}
-          </div>
-        </>
-      )}
-      {leftColumnOrder.map(key => renderSection(key, 'left'))}
-      {pageIndex === 0 && hasSocial && (
-        <>
-          {sidebarLabel('Social Links')}
-          <div style={{ fontSize: 'var(--resume-body)', color: c.sidebarText }}>
             {personal.linkedin && (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
                 <ContactIcon type="linkedin" size={13} color={c.sidebarMuted} />
@@ -259,6 +251,7 @@ export default function ModernSidebarTemplate({ content = {}, paletteColors = {}
           </div>
         </>
       )}
+      {leftColumnOrder.map(key => renderSection(key, 'left'))}
     </div>
   )
 
