@@ -80,11 +80,11 @@ const N = TEMPLATES.length
 
 // Maps relative position (-2..2) to fan transform styles
 const FAN_STYLE = {
-  '-2': { transform: 'translateX(-29vh) translateY(4vh) rotate(-14deg) scale(0.60)', filter: 'blur(5px)', zIndex: 1,  boxShadow: '0 6px 20px rgba(0,0,0,0.45)',  cursor: 'pointer' },
-  '-1': { transform: 'translateX(-16vh) translateY(2vh) rotate(-7deg)  scale(0.78)', filter: 'blur(3px)', zIndex: 3,  boxShadow: '0 12px 36px rgba(0,0,0,0.55)', cursor: 'pointer' },
-  '0':  { transform: 'translateX(0)     translateY(0)   rotate(0deg)   scale(1)',    filter: 'none',       zIndex: 5,  boxShadow: '0 32px 80px rgba(0,0,0,0.7), 0 0 0 1.5px rgba(244,124,32,0.4)', cursor: 'default' },
-  '1':  { transform: 'translateX(16vh)  translateY(2vh) rotate(7deg)   scale(0.78)', filter: 'blur(3px)', zIndex: 3,  boxShadow: '0 12px 36px rgba(0,0,0,0.55)', cursor: 'pointer' },
-  '2':  { transform: 'translateX(29vh)  translateY(4vh) rotate(14deg)  scale(0.60)', filter: 'blur(5px)', zIndex: 1,  boxShadow: '0 6px 20px rgba(0,0,0,0.45)',  cursor: 'pointer' },
+  '-2': { transform: 'translateX(-29vh) translateY(4vh) rotate(-14deg) scale(0.60)', filter: 'blur(4px)', zIndex: 1,  boxShadow: '0 6px 24px rgba(26,39,68,0.18)',  cursor: 'pointer' },
+  '-1': { transform: 'translateX(-16vh) translateY(2vh) rotate(-7deg)  scale(0.78)', filter: 'blur(2px)', zIndex: 3,  boxShadow: '0 10px 32px rgba(26,39,68,0.22)', cursor: 'pointer' },
+  '0':  { transform: 'translateX(0)     translateY(0)   rotate(0deg)   scale(1)',    filter: 'none',       zIndex: 5,  boxShadow: '0 24px 64px rgba(26,39,68,0.28), 0 0 0 1.5px rgba(244,124,32,0.35)', cursor: 'default' },
+  '1':  { transform: 'translateX(16vh)  translateY(2vh) rotate(7deg)   scale(0.78)', filter: 'blur(2px)', zIndex: 3,  boxShadow: '0 10px 32px rgba(26,39,68,0.22)', cursor: 'pointer' },
+  '2':  { transform: 'translateX(29vh)  translateY(4vh) rotate(14deg)  scale(0.60)', filter: 'blur(4px)', zIndex: 1,  boxShadow: '0 6px 24px rgba(26,39,68,0.18)',  cursor: 'pointer' },
 }
 
 function getPos(i, current) {
@@ -115,15 +115,15 @@ export default function FanCarousel() {
       style={{
         position: 'absolute', top: '50%', transform: 'translateY(-50%)',
         width: 36, height: 36, borderRadius: '50%',
-        background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)',
-        color: '#6b7a99', fontSize: 22, cursor: 'pointer', zIndex: 20,
+        background: 'rgba(26,39,68,0.65)', border: '1px solid rgba(26,39,68,0.15)',
+        color: '#fff', fontSize: 22, cursor: 'pointer', zIndex: 20,
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        transition: 'background 0.15s, color 0.15s',
+        transition: 'background 0.15s',
         left: label === '‹' ? 16 : undefined,
         right: label === '›' ? 16 : undefined,
       }}
-      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.color = '#fff' }}
-      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; e.currentTarget.style.color = '#6b7a99' }}
+      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(26,39,68,0.9)' }}
+      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(26,39,68,0.65)' }}
     >
       {label}
     </button>
@@ -131,14 +131,14 @@ export default function FanCarousel() {
 
   return (
     <div style={{
-      background: '#111827', display: 'flex', flexDirection: 'column',
+      background: 'linear-gradient(160deg, #ede8de 0%, #e4dfd4 55%, #d8d2c6 100%)', display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center',
       overflow: 'hidden', position: 'relative',
     }}>
       {/* Ambient glow */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
-        background: 'radial-gradient(ellipse 60% 50% at 50% 55%, rgba(244,124,32,0.10) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse 60% 50% at 50% 50%, rgba(244,124,32,0.07) 0%, transparent 70%)',
       }} />
 
       {/* Section label */}
@@ -146,7 +146,7 @@ export default function FanCarousel() {
         position: 'absolute', top: 20, left: 0, right: 0,
         display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 10,
       }}>
-        <span style={{ fontSize: 12, fontWeight: 700, letterSpacing: '1.5px', color: '#6b7a99', textTransform: 'uppercase', paddingBottom: '5px'  }}>Professional Template Options</span>
+        <span style={{ fontSize: 10, fontWeight: 700, letterSpacing: '1.5px', color: '#a09080', textTransform: 'uppercase' }}>Professional Template Preview</span>
       </div>
 
       {/* Fan stage */}
@@ -190,7 +190,7 @@ export default function FanCarousel() {
             onClick={() => goTo(i)}
             style={{
               width: 6, height: 6, borderRadius: '50%', cursor: 'pointer',
-              background: i === current ? '#f47c20' : 'rgba(255,255,255,0.2)',
+              background: i === current ? '#f47c20' : 'rgba(26,39,68,0.2)',
               transform: i === current ? 'scale(1.4)' : 'scale(1)',
               transition: 'background 0.2s, transform 0.2s',
             }}
@@ -201,65 +201,61 @@ export default function FanCarousel() {
       {/* Feature strip */}
       <div style={{
         flexShrink: 0, display: 'flex',
-        borderTop: '1px solid rgba(255,255,255,0.07)',
-        background: 'rgba(0,0,0,0.25)',
+        borderTop: '1px solid rgba(26,39,68,0.12)',
+        background: 'rgba(26,39,68,0.06)',
         paddingBottom: 12,
         zIndex: 10,
-        position: 'relative',
-        bottom: 20
       }}>
         {[
           {
-            label: 'ATS Friendly',
-            sub: 'Beat the bots',
+            label: 'ATS Friendly', sub: 'Beat the bots', iconBg: '#ede9fe',
             icon: (
-              <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
-                <circle cx="10" cy="10" r="7.5" stroke="currentColor" strokeWidth="1.4"/>
-                <path d="M7 10l2 2 4-4" stroke="#f47c20" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                <circle cx="10" cy="10" r="7.5" stroke="#7c3aed" strokeWidth="1.4"/>
+                <path d="M7 10l2 2 4-4" stroke="#7c3aed" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             ),
           },
           {
-            label: 'AI Suggestions',
-            sub: 'Write better, faster',
+            label: 'AI Suggestions', sub: 'Write better, faster', iconBg: '#fff7ed',
             icon: (
-              <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
-                <path d="M10 2L11.4 6.6H16.2L12.4 9.4L13.8 14L10 11.2L6.2 14L7.6 9.4L3.8 6.6H8.6L10 2Z" stroke="currentColor" strokeWidth="1.3" fill="#f47c20" fillOpacity="0.8"/>
+              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                <path d="M10 2L11.4 6.6H16.2L12.4 9.4L13.8 14L10 11.2L6.2 14L7.6 9.4L3.8 6.6H8.6L10 2Z" fill="#f47c20"/>
               </svg>
             ),
           },
           {
-            label: 'Multiple Formats',
-            sub: 'PDF & DOCX',
+            label: 'Multiple Formats', sub: 'PDF & DOCX', iconBg: '#dcfce7',
             icon: (
-              <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
-                <rect x="3" y="2" width="10" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.4"/>
-                <rect x="7" y="5" width="10" height="13" rx="1.5" stroke="currentColor" strokeWidth="1.4" fill="rgba(244,124,32,0.15)" strokeOpacity="0.5"/>
-                <line x1="6" y1="7" x2="10" y2="7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.6"/>
-                <line x1="6" y1="10" x2="10" y2="10" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.6"/>
+              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                <rect x="4" y="2" width="12" height="14" rx="2" stroke="#16a34a" strokeWidth="1.5"/>
+                <path d="M10 7v5M7.5 10l2.5 2.5 2.5-2.5" stroke="#16a34a" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <line x1="7" y1="5" x2="13" y2="5" stroke="#16a34a" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/>
               </svg>
             ),
           },
           {
-            label: 'Secure & Private',
-            sub: 'Your data, your control',
+            label: 'Secure & Private', sub: 'Your data, your control', iconBg: '#dbeafe',
             icon: (
-              <svg viewBox="0 0 20 20" fill="none" width="22" height="22">
-                <path d="M10 2L4 5v5c0 3.5 2.5 6.5 6 7.5 3.5-1 6-4 6-7.5V5L10 2Z" stroke="currentColor" strokeWidth="1.4" fill="rgba(244,124,32,0.12)"/>
-                <path d="M7.5 10l2 2 3-3" stroke="#f47c20" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+                <path d="M10 2L4 5v5c0 3.5 2.5 6.5 6 7.5 3.5-1 6-4 6-7.5V5L10 2Z" stroke="#2563eb" strokeWidth="1.4" fill="rgba(37,99,235,0.1)"/>
+                <path d="M7.5 10l2 2 3-3" stroke="#2563eb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             ),
           },
-        ].map(({ label, sub, icon }) => (
+        ].map(({ label, sub, icon, iconBg }) => (
           <div key={label} style={{
-            flex: 1, display: 'flex', alignItems: 'center', gap: 12,
-            padding: '16px 18px 20px',
-            borderRight: '1px solid rgba(255,255,255,0.06)',
+            flex: 1, display: 'flex', alignItems: 'center', gap: 10,
+            padding: '14px 14px 18px',
+            borderRight: '1px solid rgba(26,39,68,0.08)',
           }}>
-            <div style={{ color: 'rgba(255,255,255,0.6)', flexShrink: 0 }}>{icon}</div>
+            <div style={{
+              width: 36, height: 36, borderRadius: '50%', background: iconBg,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            }}>{icon}</div>
             <div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'rgba(255,255,255,0.9)', lineHeight: 1.2 }}>{label}</div>
-              <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>{sub}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: '#1a2744', lineHeight: 1.2 }}>{label}</div>
+              <div style={{ fontSize: 11, color: '#7a7060', marginTop: 2 }}>{sub}</div>
             </div>
           </div>
         ))}
