@@ -1,13 +1,16 @@
-﻿import t from '../../../templates/minimal-columns.json'
+import { useResumeStore } from '../../../store/useResumeStore'
+import t from '../../../templates/minimal-columns.json'
 import InlineEditor from '../InlineEditor'
 import RichTextEditor from '../RichTextEditor'
 import ContactLink from '../ContactLink'
 
 export default function MinimalColumnsTemplate({ content = {}, paletteColors = {}, pageIndex = 0 }) {
   const { personal = {}, experience = [], education = [], skills = [],
-          projects = [], certifications = [], languages = [], awards = [], custom = [],
-          sectionOrder = [] } = content
+          projects = [], certifications = [], languages = [], awards = [], custom = [] } = content
   const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
+
+  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder)  ?? []
+  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder) ?? []
 
   const Bar = () => <div style={{ width: '32px', height: '3px', background: c.headingText, margin: '4px 0 10px' }} />
 
@@ -23,7 +26,153 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
   )
 
   const dateStr = (e) => [e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' - ')
-  const hasSkills = skills.some(sk => (sk.items ?? []).length > 0)
+
+  const renderSection = (key, _col) => {
+    if (key === 'skills') {
+      if (!skills.some(sk => (sk.items ?? []).length > 0)) return null
+      return (
+        <div key={key} data-section="skills">
+          {sectionHeader(skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills')}
+          <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.8' }}>
+            {skills.map((sk, si) =>
+              (sk.items ?? []).length > 0 && (
+              <div key={sk.id ?? si} style={{ marginBottom: '4px' }}>
+                {(sk.items ?? []).map((item, ii) => (
+                  <span key={ii} data-item={`sk-${si}-${ii}`}>
+                    <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
+                    {ii < sk.items.length - 1 ? ', ' : ''}
+                  </span>
+                ))}
+              </div>
+              )
+            )}
+          </div>
+        </div>
+      )
+    }
+    if (key === 'languages') {
+      if (languages.length === 0) return null
+      return (
+        <div key={key} data-section="languages">
+          {sectionHeader('Languages')}
+          <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.8' }}>
+            {languages.map((lang, i) => (
+              <div key={lang.id ?? i}>
+                <InlineEditor path={`languages.${i}.language`} value={lang.language}>{lang.language}</InlineEditor>
+                {lang.proficiency && <span style={{ color: c.mutedText }}> ({lang.proficiency})</span>}
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+    if (key === 'experience') {
+      if (experience.length === 0) return null
+      return (
+        <div key={key} data-section="experience">
+          {sectionHeader(experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience')}
+          {experience.map((e, i) => (
+            <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+              {!e._bulletContinuation && (
+              <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
+                <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
+                {e.company && <span>, <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor></span>}
+              </div>
+              )}
+              {!e._bulletContinuation && dateStr(e) && <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)', marginBottom: '4px' }}>{dateStr(e)}</div>}
+              {!e._bulletContinuation && e.location && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '3px' }}><InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></div>}
+              {e.bullets?.filter(Boolean).map((b, bi) => (
+                <div key={bi} data-subitem={`bullet-${bi}`} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
+                  <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      )
+    }
+    if (key === 'education') {
+      if (education.length === 0) return null
+      return (
+        <div key={key} data-section="education">
+          {sectionHeader('Education')}
+          {education.map((e, i) => (
+            <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: '12px', fontSize: 'var(--resume-body)' }}>
+              <div style={{ fontWeight: 700 }}>
+                <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
+                {e.location && <span style={{ fontWeight: 400 }}>, <InlineEditor path={`education.${i}.location`} value={e.location}>{e.location}</InlineEditor></span>}
+                {e.degree && <span>, <InlineEditor path={`education.${i}.degree`} value={e.degree}>{e.degree}</InlineEditor></span>}
+                {e.field && <span>, <InlineEditor path={`education.${i}.field`} value={e.field}>{e.field}</InlineEditor></span>}
+              </div>
+              <div style={{ color: c.mutedText }}>{[e.startDate, e.endDate].filter(Boolean).join(' - ')}{e.gpa ? ` · GPA: ${e.gpa}` : ''}</div>
+            </div>
+          ))}
+        </div>
+      )
+    }
+    if (key === 'certifications') {
+      if (certifications.length === 0) return null
+      return (
+        <div key={key} data-section="certifications">
+          {sectionHeader('Certifications and Licenses')}
+          {certifications.map((cert, i) => (
+            <div key={cert.id ?? i} data-item={cert.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
+              <InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor>
+              {cert.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`certifications.${i}.issuer`} value={cert.issuer}>{cert.issuer}</InlineEditor></span>}
+              {cert.date   && <span style={{ color: c.mutedText }}> · <InlineEditor path={`certifications.${i}.date`} value={cert.date}>{cert.date}</InlineEditor></span>}
+            </div>
+          ))}
+        </div>
+      )
+    }
+    if (key === 'awards') {
+      if (awards.length === 0) return null
+      return (
+        <div key={key} data-section="awards">
+          {sectionHeader('Achievements')}
+          {awards.map((aw, i) => (
+            <div key={aw.id ?? i} data-item={aw.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
+              {aw.title && <span style={{ fontWeight: 700 }}><InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor></span>}
+              {aw.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`awards.${i}.issuer`} value={aw.issuer}>{aw.issuer}</InlineEditor></span>}
+              {aw.date   && <span style={{ color: c.mutedText }}> · <InlineEditor path={`awards.${i}.date`} value={aw.date}>{aw.date}</InlineEditor></span>}
+              {aw.description && <div style={{ marginTop: '2px' }}><RichTextEditor path={`awards.${i}.description`} value={aw.description} /></div>}
+            </div>
+          ))}
+        </div>
+      )
+    }
+    if (key === 'projects') {
+      if (projects.length === 0) return null
+      return (
+        <div key={key} data-section="projects">
+          {sectionHeader('Projects')}
+          {projects.map((proj, i) => (
+            <div key={proj.id ?? i} data-item={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
+              <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
+                <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
+                {proj.url && <span style={{ fontWeight: 400 }}> · <ContactLink path={`projects.${i}.url`} value={proj.url} /></span>}
+              </div>
+              {proj.description && <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginTop: '3px' }}><RichTextEditor path={`projects.${i}.description`} value={proj.description} /></div>}
+            </div>
+          ))}
+        </div>
+      )
+    }
+    if (key === 'custom') {
+      if (custom.length === 0) return null
+      return (
+        <div key={key} data-section="custom">
+          {custom.map((sec, i) => (
+            <div key={sec.id ?? i} data-item={sec.id ?? i}>
+              {sectionHeader(<InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor>)}
+              <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
+            </div>
+          ))}
+        </div>
+      )
+    }
+    return null
+  }
 
   /* ── Left column ── */
   const leftCol = (
@@ -46,39 +195,7 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
         </>
       )}
 
-      {hasSkills && (
-        <div data-section="skills">
-          {sectionHeader(skills[0]?._isContinuation ? 'Skills (cont.)' : 'Skills')}
-          <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.8' }}>
-            {skills.map((sk, si) =>
-              (sk.items ?? []).length > 0 && (
-              <div key={sk.id ?? si} style={{ marginBottom: '4px' }}>
-                {(sk.items ?? []).map((item, ii) => (
-                  <span key={ii} data-item={`sk-${si}-${ii}`}>
-                    <InlineEditor path={`skills.${si}.items.${ii}`} value={item}>{item}</InlineEditor>
-                    {ii < sk.items.length - 1 ? ', ' : ''}
-                  </span>
-                ))}
-              </div>
-              )
-            )}
-          </div>
-        </div>
-      )}
-
-      {languages.length > 0 && (
-        <div data-section="languages">
-          {sectionHeader('Languages')}
-          <div style={{ fontSize: 'var(--resume-body)', lineHeight: '1.8' }}>
-            {languages.map((lang, i) => (
-              <div key={lang.id ?? i}>
-                <InlineEditor path={`languages.${i}.language`} value={lang.language}>{lang.language}</InlineEditor>
-                {lang.proficiency && <span style={{ color: c.mutedText }}> ({lang.proficiency})</span>}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
+      {leftColumnOrder.map(key => renderSection(key, 'left'))}
     </div>
   )
 
@@ -94,103 +211,7 @@ export default function MinimalColumnsTemplate({ content = {}, paletteColors = {
         </div>
       )}
 
-      {sectionOrder.filter(k => !['personal', 'skills', 'languages'].includes(k)).map(key => {
-
-        if (key === 'experience' && experience.length > 0) return (
-          <div key={key} data-section="experience">
-            {sectionHeader(experience[0]?._isContinuation ? 'Experience (cont.)' : 'Experience')}
-            {experience.map((e, i) => (
-              <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: l.itemSpacing }}>
-                {!e._bulletContinuation && (
-                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
-                  <InlineEditor path={`experience.${i}.role`} value={e.role}>{e.role}</InlineEditor>
-                  {e.company && <span>, <InlineEditor path={`experience.${i}.company`} value={e.company}>{e.company}</InlineEditor></span>}
-                </div>
-                )}
-                {!e._bulletContinuation && dateStr(e) && <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)', marginBottom: '4px' }}>{dateStr(e)}</div>}
-                {!e._bulletContinuation && e.location && <div style={{ fontSize: 'var(--resume-body)', color: c.mutedText, marginBottom: '3px' }}><InlineEditor path={`experience.${i}.location`} value={e.location}>{e.location}</InlineEditor></div>}
-                {e.bullets?.filter(Boolean).map((b, bi) => (
-                  <div key={bi} data-subitem={`bullet-${bi}`} style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginBottom: '2px' }}>
-                    <RichTextEditor path={`experience.${i}.bullets.${bi}`} value={b} />
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        )
-
-        if (key === 'education' && education.length > 0) return (
-          <div key={key} data-section="education">
-            {sectionHeader('Education')}
-            {education.map((e, i) => (
-              <div key={e.id ?? i} data-item={e.id ?? i} style={{ marginBottom: '12px', fontSize: 'var(--resume-body)' }}>
-                <div style={{ fontWeight: 700 }}>
-                  <InlineEditor path={`education.${i}.institution`} value={e.institution}>{e.institution}</InlineEditor>
-                  {e.location && <span style={{ fontWeight: 400 }}>, <InlineEditor path={`education.${i}.location`} value={e.location}>{e.location}</InlineEditor></span>}
-                  {e.degree && <span>, <InlineEditor path={`education.${i}.degree`} value={e.degree}>{e.degree}</InlineEditor></span>}
-                  {e.field && <span>, <InlineEditor path={`education.${i}.field`} value={e.field}>{e.field}</InlineEditor></span>}
-                </div>
-                <div style={{ color: c.mutedText }}>{[e.startDate, e.endDate].filter(Boolean).join(' - ')}{e.gpa ? ` · GPA: ${e.gpa}` : ''}</div>
-              </div>
-            ))}
-          </div>
-        )
-
-        if (key === 'certifications' && certifications.length > 0) return (
-          <div key={key} data-section="certifications">
-            {sectionHeader('Certifications and Licenses')}
-            {certifications.map((cert, i) => (
-              <div key={cert.id ?? i} data-item={cert.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
-                <InlineEditor path={`certifications.${i}.name`} value={cert.name}>{cert.name}</InlineEditor>
-                {cert.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`certifications.${i}.issuer`} value={cert.issuer}>{cert.issuer}</InlineEditor></span>}
-                {cert.date   && <span style={{ color: c.mutedText }}> · <InlineEditor path={`certifications.${i}.date`} value={cert.date}>{cert.date}</InlineEditor></span>}
-              </div>
-            ))}
-          </div>
-        )
-
-        if (key === 'awards' && awards.length > 0) return (
-          <div key={key} data-section="awards">
-            {sectionHeader('Achievements')}
-            {awards.map((aw, i) => (
-              <div key={aw.id ?? i} data-item={aw.id ?? i} style={{ marginBottom: '6px', fontSize: 'var(--resume-body)' }}>
-                {aw.title && <span style={{ fontWeight: 700 }}><InlineEditor path={`awards.${i}.title`} value={aw.title}>{aw.title}</InlineEditor></span>}
-                {aw.issuer && <span style={{ color: c.mutedText }}> · <InlineEditor path={`awards.${i}.issuer`} value={aw.issuer}>{aw.issuer}</InlineEditor></span>}
-                {aw.date   && <span style={{ color: c.mutedText }}> · <InlineEditor path={`awards.${i}.date`} value={aw.date}>{aw.date}</InlineEditor></span>}
-                {aw.description && <div style={{ marginTop: '2px' }}><RichTextEditor path={`awards.${i}.description`} value={aw.description} /></div>}
-              </div>
-            ))}
-          </div>
-        )
-
-        if (key === 'projects' && projects.length > 0) return (
-          <div key={key} data-section="projects">
-            {sectionHeader('Projects')}
-            {projects.map((proj, i) => (
-              <div key={proj.id ?? i} data-item={proj.id ?? i} style={{ marginBottom: l.itemSpacing }}>
-                <div style={{ fontWeight: 700, fontSize: 'var(--resume-body)' }}>
-                  <InlineEditor path={`projects.${i}.title`} value={proj.title}>{proj.title}</InlineEditor>
-                  {proj.url && <span style={{ fontWeight: 400 }}> · <ContactLink path={`projects.${i}.url`} value={proj.url} /></span>}
-                </div>
-                {proj.description && <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight, marginTop: '3px' }}><RichTextEditor path={`projects.${i}.description`} value={proj.description} /></div>}
-              </div>
-            ))}
-          </div>
-        )
-
-        if (key === 'custom' && custom.length > 0) return (
-          <div key={key} data-section="custom">
-            {custom.map((sec, i) => (
-              <div key={sec.id ?? i} data-item={sec.id ?? i}>
-                {sectionHeader(<InlineEditor path={`custom.${i}.title`} value={sec.title}>{sec.title || 'Other'}</InlineEditor>)}
-                <div style={{ fontSize: 'var(--resume-body)', lineHeight: ty.bodyLineHeight }}><RichTextEditor path={`custom.${i}.description`} value={sec.description} /></div>
-              </div>
-            ))}
-          </div>
-        )
-
-        return null
-      })}
+      {rightColumnOrder.map(key => renderSection(key, 'right'))}
     </div>
   )
 
