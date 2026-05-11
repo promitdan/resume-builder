@@ -1,70 +1,92 @@
 import { render, screen, fireEvent } from '@testing-library/react'
+import { describe, it, expect, vi } from 'vitest'
+
+vi.mock('../store/useResumeStore', () => ({
+  useResumeStore: (selector) => selector({
+    content: {
+      personal: { name: '', title: '', email: '', phone: '', location: '', linkedin: '', website: '', summary: '' },
+      experience: [], education: [], skills: [], projects: [],
+      certifications: [], languages: [], awards: [], custom: [],
+      sectionOrder: ['personal'], _raw: '',
+    },
+    templateId: 'classic-traditional',
+    paletteIndex: 0,
+  }),
+}))
+
+vi.mock('../components/landing/TemplatePreview', () => ({
+  default: () => <div data-testid="template-preview" />,
+}))
+
+vi.mock('../components/preview/ResumePreview', () => ({
+  COMPONENT_MAP: { 'classic-traditional': () => <div /> },
+}))
+
+vi.mock('../registry/templateRegistry', () => ({
+  TEMPLATE_CONFIGS: { 'classic-traditional': { palettes: [] } },
+}))
+
 import WizardLayout from '../components/wizard/WizardLayout'
 
 const mockSteps = [
-  { title: 'Info',  component: () => <div>Info Step</div> },
-  { title: 'Work',  component: () => <div>Work Step</div> },
-  { title: 'Done',  component: () => <div>Done Step</div> }
+  { title: 'Personal',   component: () => <div>Personal Step</div>   },
+  { title: 'Experience', component: () => <div>Experience Step</div> },
+  { title: 'Education',  component: () => <div>Education Step</div>  },
 ]
 
-test('renders current step component', () => {
-  render(<WizardLayout steps={mockSteps} currentStep={0} onNext={() => {}} />)
-  expect(screen.getByText('Info Step')).toBeInTheDocument()
-})
+describe('WizardLayout', () => {
+  it('renders the active step component', () => {
+    render(<WizardLayout steps={mockSteps} currentStep={0} onNext={vi.fn()} onStepClick={vi.fn()} onChangeTemplate={vi.fn()} />)
+    expect(screen.getByText('Personal Step')).toBeInTheDocument()
+  })
 
-test('shows step indicator text', () => {
-  render(<WizardLayout steps={mockSteps} currentStep={1} onNext={() => {}} />)
-  expect(screen.getByText(/step 2 of 3/i)).toBeInTheDocument()
-})
+  it('renders all step labels in the top bar', () => {
+    render(<WizardLayout steps={mockSteps} currentStep={0} onNext={vi.fn()} onStepClick={vi.fn()} onChangeTemplate={vi.fn()} />)
+    expect(screen.getByText('Personal')).toBeInTheDocument()
+    expect(screen.getByText('Experience')).toBeInTheDocument()
+    expect(screen.getByText('Education')).toBeInTheDocument()
+  })
 
-test('Next button calls onNext', () => {
-  const onNext = vi.fn()
-  render(<WizardLayout steps={mockSteps} currentStep={0} onNext={onNext} />)
-  fireEvent.click(screen.getByText(/next/i))
-  expect(onNext).toHaveBeenCalled()
-})
+  it('shows "Next →" on non-last steps', () => {
+    render(<WizardLayout steps={mockSteps} currentStep={0} onNext={vi.fn()} onStepClick={vi.fn()} onChangeTemplate={vi.fn()} />)
+    expect(screen.getByText('Next →')).toBeInTheDocument()
+  })
 
-test('Next button shows Finish on last step', () => {
-  render(<WizardLayout steps={mockSteps} currentStep={2} onNext={() => {}} />)
-  expect(screen.getByText(/finish/i)).toBeInTheDocument()
-})
+  it('shows "Finish →" on the last step', () => {
+    render(<WizardLayout steps={mockSteps} currentStep={2} onNext={vi.fn()} onStepClick={vi.fn()} onChangeTemplate={vi.fn()} />)
+    expect(screen.getByText('Finish →')).toBeInTheDocument()
+  })
 
-test('clicking a completed step calls onStepClick with its index', () => {
-  const onStepClick = vi.fn()
-  render(<WizardLayout steps={mockSteps} currentStep={2} onNext={() => {}} onStepClick={onStepClick} />)
-  // Step 0 (Info) is completed when currentStep=2 — click its sidebar item
-  fireEvent.click(screen.getByText('Info'))
-  expect(onStepClick).toHaveBeenCalledWith(0)
-})
+  it('calls onNext when Next/Finish is clicked', () => {
+    const onNext = vi.fn()
+    render(<WizardLayout steps={mockSteps} currentStep={0} onNext={onNext} onStepClick={vi.fn()} onChangeTemplate={vi.fn()} />)
+    fireEvent.click(screen.getByText('Next →'))
+    expect(onNext).toHaveBeenCalled()
+  })
 
-test('clicking a future step does not call onStepClick', () => {
-  const onStepClick = vi.fn()
-  render(<WizardLayout steps={mockSteps} currentStep={0} onNext={() => {}} onStepClick={onStepClick} />)
-  // Step 2 (Done) is in the future when currentStep=0
-  fireEvent.click(screen.getByText('Done'))
-  expect(onStepClick).not.toHaveBeenCalled()
-})
+  it('calls onStepClick with index for a completed step', () => {
+    const onStepClick = vi.fn()
+    render(<WizardLayout steps={mockSteps} currentStep={2} onNext={vi.fn()} onStepClick={onStepClick} onChangeTemplate={vi.fn()} />)
+    fireEvent.click(screen.getByText('Personal'))
+    expect(onStepClick).toHaveBeenCalledWith(0)
+  })
 
-test('all step titles rendered in sidebar', () => {
-  render(<WizardLayout steps={mockSteps} currentStep={0} onNext={() => {}} />)
-  // Use getAllByText because 'Info' appears in both sidebar and top bar h2
-  expect(screen.getAllByText('Info').length).toBeGreaterThanOrEqual(1)
-  expect(screen.getByText('Work')).toBeInTheDocument()
-  expect(screen.getByText('Done')).toBeInTheDocument()
-})
+  it('does not call onStepClick for a future step', () => {
+    const onStepClick = vi.fn()
+    render(<WizardLayout steps={mockSteps} currentStep={0} onNext={vi.fn()} onStepClick={onStepClick} onChangeTemplate={vi.fn()} />)
+    fireEvent.click(screen.getByText('Education'))
+    expect(onStepClick).not.toHaveBeenCalled()
+  })
 
-test('when hasContent is true, clicking any step (including future) calls onStepClick', () => {
-  const onStepClick = vi.fn()
-  render(
-    <WizardLayout
-      steps={mockSteps}
-      currentStep={0}
-      onNext={() => {}}
-      onStepClick={onStepClick}
-      hasContent={true}
-    />
-  )
-  // Step 2 (Done) is a future step — should be clickable when hasContent=true
-  fireEvent.click(screen.getByText('Done'))
-  expect(onStepClick).toHaveBeenCalledWith(2)
+  it('calls onChangeTemplate when "Change template" is clicked', () => {
+    const onChangeTemplate = vi.fn()
+    render(<WizardLayout steps={mockSteps} currentStep={0} onNext={vi.fn()} onStepClick={vi.fn()} onChangeTemplate={onChangeTemplate} />)
+    fireEvent.click(screen.getByText('Change template'))
+    expect(onChangeTemplate).toHaveBeenCalled()
+  })
+
+  it('renders the live preview panel', () => {
+    render(<WizardLayout steps={mockSteps} currentStep={0} onNext={vi.fn()} onStepClick={vi.fn()} onChangeTemplate={vi.fn()} />)
+    expect(screen.getAllByTestId('template-preview').length).toBeGreaterThanOrEqual(1)
+  })
 })
