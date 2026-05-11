@@ -4,6 +4,7 @@ import { useResumeStore } from '../store/useResumeStore'
 import ResumePreview, { CONTENT_HEIGHT, PAGE_GAP } from '../components/preview/ResumePreview'
 import TemplateSwitcher from '../components/preview/TemplateSwitcher'
 import DownloadButtons from '../components/shared/DownloadButtons'
+import SectionsPanel from '../components/preview/SectionsPanel'
 import { TEMPLATE_CONFIGS } from '../registry/templateRegistry'
 
 const FONT_SIZE_OPTIONS = [
@@ -300,11 +301,12 @@ export default function PreviewPage() {
             </div>
           </div>
 
-          {/* Spacer */}
-          <div style={{ flex: 1 }} />
-
           {/* Downloads */}
           <DownloadButtons />
+
+          {/* Sections */}
+          <div style={{ height: 1, background: '#f1f5f9', margin: '6px 0' }} />
+          <SectionsPanel />
 
         </div>
       </div>
