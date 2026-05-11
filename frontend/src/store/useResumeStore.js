@@ -228,7 +228,7 @@ export const useResumeStore = create((set) => ({
   setTemplateId: (templateId) => set((s) => {
     const tpl  = TEMPLATE_CONFIGS[templateId]
     const base = { templateId, paletteIndex: 0 }
-    if (tpl?.layoutType !== 'two-column') return base
+    if (tpl?.layoutType !== 'two-column') return { ...base, leftColumnOrder: [], rightColumnOrder: [] }
     // Preserve existing column orders if already set (user customisation survives template switches)
     if (s.leftColumnOrder.length > 0 || s.rightColumnOrder.length > 0) return base
     if (!tpl.defaultColumns) return base
