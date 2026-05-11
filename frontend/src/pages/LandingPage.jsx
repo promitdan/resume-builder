@@ -169,6 +169,10 @@ export default function LandingPage() {
   }
 
   function handleBuild() {
+    navigate('/build')
+  }
+
+  function handleLoadMock() {
     loadMockData()
     navigate('/build')
   }
@@ -393,6 +397,22 @@ export default function LandingPage() {
                 >
                   Start building →
                 </button>
+                {import.meta.env.DEV && (
+                  <button
+                    onClick={handleLoadMock}
+                    style={{
+                      width: '100%', padding: '7px', borderRadius: 8,
+                      border: `1.5px dashed ${border}`,
+                      background: 'transparent', color: muted, fontSize: 11, fontWeight: 600,
+                      cursor: 'pointer',
+                      transition: 'border-color 0.15s, color 0.15s',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = navy; e.currentTarget.style.color = navy }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = border; e.currentTarget.style.color = muted }}
+                  >
+                    🧪 Test with mock data
+                  </button>
+                )}
               </div>
 
               <input ref={uploadRef} type="file" accept=".pdf,.docx" style={{ display: 'none' }} onChange={e => handleFile(e.target.files[0])} />
