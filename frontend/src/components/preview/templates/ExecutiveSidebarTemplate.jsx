@@ -10,8 +10,8 @@ export default function ExecutiveSidebarTemplate({ content = {}, paletteColors =
           projects = [], certifications = [], languages = [], awards = [], custom = [] } = content
   const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
 
-  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder)  ?? []
-  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder) ?? []
+  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder.length  > 0 ? s.leftColumnOrder  : (t.defaultColumns?.left  ?? []))
+  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder.length > 0 ? s.rightColumnOrder : (t.defaultColumns?.right ?? []))
 
   const SectionHeader = ({ children }) => (
     <div style={{ fontSize: ty.sectionLabelSize, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px', color: c.headingText, marginBottom: '8px', marginTop: '20px', paddingBottom: '4px', borderBottom: `1.5px solid ${c.dividerColor}` }}>

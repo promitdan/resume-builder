@@ -9,8 +9,8 @@ export default function MinimalBoxedTemplate({ content = {}, paletteColors = {},
           projects = [], certifications = [], languages = [], awards = [], custom = [] } = content
   const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
 
-  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder)  ?? []
-  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder) ?? []
+  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder.length  > 0 ? s.leftColumnOrder  : (t.defaultColumns?.left  ?? []))
+  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder.length > 0 ? s.rightColumnOrder : (t.defaultColumns?.right ?? []))
 
   const Rule = () => <div style={{ height: '1px', background: c.dividerColor, margin: '6px 0 10px' }} />
 

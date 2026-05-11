@@ -9,8 +9,8 @@ export default function ExecutiveBandTemplate({ content = {}, paletteColors = {}
           projects = [], certifications = [], languages = [], awards = [], custom = [] } = content
   const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
 
-  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder)  ?? []
-  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder) ?? []
+  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder.length  > 0 ? s.leftColumnOrder  : (t.defaultColumns?.left  ?? []))
+  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder.length > 0 ? s.rightColumnOrder : (t.defaultColumns?.right ?? []))
 
   const Badge = ({ children }) => (
     <div style={{ display: 'inline-block', background: c.labelBg, color: c.labelText, fontSize: ty.sectionLabelSize, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1.2px', padding: '3px 8px', marginBottom: '10px', marginTop: '18px' }}>

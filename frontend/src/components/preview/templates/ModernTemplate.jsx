@@ -10,8 +10,8 @@ export default function ModernTemplate({ content = {}, paletteColors = {}, pageI
           projects = [], certifications = [], languages = [], awards = [], custom = [] } = content
   const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
 
-  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder)  ?? []
-  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder) ?? []
+  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder.length  > 0 ? s.leftColumnOrder  : (t.defaultColumns?.left  ?? []))
+  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder.length > 0 ? s.rightColumnOrder : (t.defaultColumns?.right ?? []))
 
   const sidebarLabel = (text) => (
     <div style={{ fontSize: 'var(--resume-label)', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', color: c.sidebarAccent, borderBottom: '1px solid #2d5080', paddingBottom: '4px', marginBottom: '10px', marginTop: '18px' }}>{text}</div>

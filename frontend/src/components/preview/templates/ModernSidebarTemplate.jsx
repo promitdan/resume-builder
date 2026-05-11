@@ -8,8 +8,8 @@ import { useResumeStore } from '../../../store/useResumeStore'
 export default function ModernSidebarTemplate({ content = {}, paletteColors = {}, pageIndex = 0 }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [] } = content
-  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder)  ?? []
-  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder) ?? []
+  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder.length  > 0 ? s.leftColumnOrder  : (t.defaultColumns?.left  ?? []))
+  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder.length > 0 ? s.rightColumnOrder : (t.defaultColumns?.right ?? []))
   const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
 
   const sidebarLabel = (text) => (

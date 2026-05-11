@@ -10,8 +10,8 @@ export default function ModernBannerTemplate({ content = {}, paletteColors = {},
           projects = [], certifications = [], languages = [], awards = [], custom = [] } = content
   const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
 
-  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder)  ?? []
-  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder) ?? []
+  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder.length  > 0 ? s.leftColumnOrder  : (t.defaultColumns?.left  ?? []))
+  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder.length > 0 ? s.rightColumnOrder : (t.defaultColumns?.right ?? []))
 
   const leftLabel = (text) => (
     <div style={{ marginBottom: '8px', marginTop: '18px' }}>
