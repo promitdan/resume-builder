@@ -1,42 +1,6 @@
 import { useParams } from 'react-router-dom'
-import ClassicTemplate         from '../components/preview/templates/ClassicTemplate'
-import ClassicAcademicTemplate from '../components/preview/templates/ClassicAcademicTemplate'
-import ClassicFormalTemplate   from '../components/preview/templates/ClassicFormalTemplate'
-import ModernTemplate          from '../components/preview/templates/ModernTemplate'
-import ModernSidebarTemplate   from '../components/preview/templates/ModernSidebarTemplate'
-import ModernBannerTemplate    from '../components/preview/templates/ModernBannerTemplate'
-import ModernSplitTemplate     from '../components/preview/templates/ModernSplitTemplate'
-import MinimalTemplate         from '../components/preview/templates/MinimalTemplate'
-import MinimalColumnsTemplate  from '../components/preview/templates/MinimalColumnsTemplate'
-import MinimalBoxedTemplate    from '../components/preview/templates/MinimalBoxedTemplate'
-import MinimalSerifTemplate    from '../components/preview/templates/MinimalSerifTemplate'
-import ExecutiveTemplate       from '../components/preview/templates/ExecutiveTemplate'
-import ExecutiveBandTemplate   from '../components/preview/templates/ExecutiveBandTemplate'
-import ExecutiveSidebarTemplate from '../components/preview/templates/ExecutiveSidebarTemplate'
-import CreativeTemplate        from '../components/preview/templates/CreativeTemplate'
-import CreativeStarTemplate    from '../components/preview/templates/CreativeStarTemplate'
-import CreativeMinimalTemplate from '../components/preview/templates/CreativeMinimalTemplate'
-import { TEMPLATE_CONFIGS }    from '../registry/templateRegistry'
-
-const COMPONENT_MAP = {
-  'classic-traditional': ClassicTemplate,
-  'classic-academic':    ClassicAcademicTemplate,
-  'classic-formal':      ClassicFormalTemplate,
-  'modern':              ModernTemplate,
-  'modern-sidebar':      ModernSidebarTemplate,
-  'modern-banner':       ModernBannerTemplate,
-  'modern-split':        ModernSplitTemplate,
-  'minimal':             MinimalTemplate,
-  'minimal-columns':     MinimalColumnsTemplate,
-  'minimal-boxed':       MinimalBoxedTemplate,
-  'minimal-serif':       MinimalSerifTemplate,
-  'executive':           ExecutiveTemplate,
-  'executive-band':      ExecutiveBandTemplate,
-  'executive-sidebar':   ExecutiveSidebarTemplate,
-  'creative':            CreativeTemplate,
-  'creative-star':       CreativeStarTemplate,
-  'creative-minimal':    CreativeMinimalTemplate,
-}
+import { COMPONENT_MAP } from '../components/preview/ResumePreview'
+import { TEMPLATE_CONFIGS } from '../registry/templateRegistry'
 
 const FONT_VARS = {
   '--resume-body':  '14px',
