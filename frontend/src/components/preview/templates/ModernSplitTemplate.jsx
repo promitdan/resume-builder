@@ -8,8 +8,8 @@ import { useResumeStore } from '../../../store/useResumeStore'
 export default function ModernSplitTemplate({ content = {}, paletteColors = {}, pageIndex = 0 }) {
   const { personal = {}, experience = [], education = [], skills = [],
           projects = [], certifications = [], languages = [], awards = [], custom = [] } = content
-  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder)
-  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder)
+  const leftColumnOrder  = useResumeStore(s => s.leftColumnOrder)  ?? []
+  const rightColumnOrder = useResumeStore(s => s.rightColumnOrder) ?? []
   const c = { ...t.colors, ...paletteColors }, ty = t.typography, l = t.layout
 
   const sidebarLabel = (text) => (
@@ -27,7 +27,6 @@ export default function ModernSplitTemplate({ content = {}, paletteColors = {}, 
   )
 
   const dateStr = (e) => [e.startDate, e.current ? 'Present' : e.endDate].filter(Boolean).join(' — ')
-  const hasSkills = skills.some(sk => (sk.items ?? []).length > 0)
   const hasSocial = personal.linkedin || personal.website
 
   const renderSection = (key, col) => {
