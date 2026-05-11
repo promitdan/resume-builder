@@ -45,12 +45,60 @@ const THUMBNAIL_CONTENT = {
   _raw: '',
 }
 
-const FAMILY_ACCENT = {
-  classic:   '#1a2744',
-  modern:    '#1e3a5f',
-  minimal:   '#555555',
-  executive: '#1a1a1a',
-  creative:  '#6c63ff',
+const FAMILY_META = {
+  classic:   {
+    description: 'Timeless and professional',
+    icon: (color) => (
+      <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+        <rect x="3" y="2" width="14" height="17" rx="2" stroke={color} strokeWidth="1.5"/>
+        <line x1="6" y1="7"  x2="14" y2="7"  stroke={color} strokeWidth="1.3" strokeLinecap="round"/>
+        <line x1="6" y1="10" x2="14" y2="10" stroke={color} strokeWidth="1.3" strokeLinecap="round"/>
+        <line x1="6" y1="13" x2="10" y2="13" stroke={color} strokeWidth="1.3" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  modern:    {
+    description: 'Clean and contemporary',
+    icon: (color) => (
+      <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+        <rect x="2"  y="2" width="7" height="17" rx="1.5" stroke={color} strokeWidth="1.5"/>
+        <rect x="11" y="2" width="7" height="8"  rx="1.5" stroke={color} strokeWidth="1.5"/>
+        <rect x="11" y="12" width="7" height="7" rx="1.5" stroke={color} strokeWidth="1.5"/>
+      </svg>
+    ),
+  },
+  minimal:   {
+    description: 'Simple and elegant',
+    icon: (color) => (
+      <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+        <line x1="3" y1="5"  x2="17" y2="5"  stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1="3" y1="9"  x2="13" y2="9"  stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1="3" y1="13" x2="17" y2="13" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1="3" y1="17" x2="10" y2="17" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  executive: {
+    description: 'Bold and corporate',
+    icon: (color) => (
+      <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+        <rect x="2" y="7" width="16" height="11" rx="2" stroke={color} strokeWidth="1.5"/>
+        <path d="M7 7V5a3 3 0 016 0v2" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1="10" y1="11" x2="10" y2="14" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+        <line x1="7"  y1="12.5" x2="13" y2="12.5" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
+  creative:  {
+    description: 'Unique and eye-catching',
+    icon: (color) => (
+      <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+        <circle cx="10" cy="10" r="3.5" stroke={color} strokeWidth="1.5"/>
+        <path d="M10 2v2M10 16v2M2 10h2M16 10h2" stroke={color} strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M4.93 4.93l1.41 1.41M13.66 13.66l1.41 1.41M4.93 15.07l1.41-1.41M13.66 6.34l1.41-1.41" stroke={color} strokeWidth="1.3" strokeLinecap="round"/>
+      </svg>
+    ),
+  },
 }
 
 const navy   = '#1a2744'
@@ -93,12 +141,26 @@ export default function TemplateGallery({ onStart }) {
         borderBottom: `1px solid ${border}`,
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
       }}>
-        <div>
-          <div style={{ fontWeight: 800, fontSize: 22, color: navy, letterSpacing: '-0.5px' }}>
-            Resume<span style={{ color: orange }}>Forge</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <div style={{
+            width: 40, height: 40, borderRadius: 10,
+            background: '#fff7ed', border: `1px solid ${border}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+          }}>
+            <svg viewBox="0 0 20 20" fill="none" width="18" height="18">
+              <rect x="3" y="2" width="14" height="17" rx="2" stroke={orange} strokeWidth="1.5"/>
+              <line x1="6" y1="7"  x2="14" y2="7"  stroke={orange} strokeWidth="1.3" strokeLinecap="round"/>
+              <line x1="6" y1="10" x2="14" y2="10" stroke={orange} strokeWidth="1.3" strokeLinecap="round"/>
+              <line x1="6" y1="13" x2="10" y2="13" stroke={orange} strokeWidth="1.3" strokeLinecap="round"/>
+            </svg>
           </div>
-          <div style={{ fontSize: 13, color: '#7a7060', marginTop: 3 }}>
-            Choose a template to get started
+          <div>
+            <div style={{ fontWeight: 800, fontSize: 20, color: navy, letterSpacing: '-0.3px' }}>
+              Choose a template to get started
+            </div>
+            <div style={{ fontSize: 12, color: '#7a7060', marginTop: 2 }}>
+              Pick a design that best fits your style and profession.
+            </div>
           </div>
         </div>
         <button
@@ -134,39 +196,44 @@ export default function TemplateGallery({ onStart }) {
                 style={{
                   flex: 1, border: `2px solid ${isExpanded || hasSelected ? navy : border}`,
                   borderRadius: 12, overflow: 'hidden', cursor: 'pointer',
-                  background: '#fff', transition: 'border-color 0.15s, box-shadow 0.15s',
+                  background: isExpanded || hasSelected ? navy : '#fff',
+                  transition: 'border-color 0.15s, box-shadow 0.15s, background 0.15s',
                   boxShadow: isExpanded ? '0 4px 16px rgba(26,39,68,0.12)' : 'none',
+                  padding: '14px 16px',
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  position: 'relative',
                 }}
               >
                 <div style={{
-                  height: 110, background: FAMILY_ACCENT[family.id],
-                  position: 'relative', overflow: 'hidden',
+                  width: 36, height: 36, borderRadius: 8, flexShrink: 0,
+                  background: isExpanded || hasSelected ? 'rgba(255,255,255,0.15)' : bg,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  <div style={{
-                    position: 'absolute', inset: 0, opacity: 0.15,
-                    display: 'flex', flexDirection: 'column', gap: 6, padding: 12,
-                  }}>
-                    <div style={{ height: 12, background: '#fff', borderRadius: 2, width: '60%' }} />
-                    <div style={{ height: 5,  background: '#fff', borderRadius: 2, width: '40%' }} />
-                    <div style={{ height: 4,  background: '#fff', borderRadius: 2, width: '80%', marginTop: 6 }} />
-                    <div style={{ height: 4,  background: '#fff', borderRadius: 2, width: '70%' }} />
-                    <div style={{ height: 4,  background: '#fff', borderRadius: 2, width: '75%' }} />
-                  </div>
+                  {FAMILY_META[family.id]?.icon(isExpanded || hasSelected ? '#fff' : navy)}
                 </div>
-                <div style={{
-                  padding: '10px 14px',
-                  display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                }}>
-                  <span style={{
-                    fontWeight: 700, fontSize: 14,
-                    color: isExpanded || hasSelected ? navy : '#7a7060',
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{
+                    fontWeight: 700, fontSize: 13, lineHeight: 1.3,
+                    color: isExpanded || hasSelected ? '#fff' : navy,
                   }}>
                     {family.label}
-                  </span>
-                  <span style={{ color: '#a09080', fontSize: 11 }}>
-                    {family.templates.length} styles
-                  </span>
+                  </div>
+                  <div style={{
+                    fontSize: 11, marginTop: 2,
+                    color: isExpanded || hasSelected ? 'rgba(255,255,255,0.65)' : '#7a7060',
+                    whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                  }}>
+                    {FAMILY_META[family.id]?.description}
+                  </div>
                 </div>
+                <span style={{
+                  fontSize: 10, fontWeight: 600, flexShrink: 0,
+                  color: isExpanded || hasSelected ? 'rgba(255,255,255,0.55)' : '#a09080',
+                  background: isExpanded || hasSelected ? 'rgba(255,255,255,0.12)' : bg,
+                  borderRadius: 20, padding: '2px 7px',
+                }}>
+                  {family.templates.length} styles
+                </span>
               </div>
             )
           })}
