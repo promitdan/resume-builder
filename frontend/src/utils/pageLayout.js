@@ -197,23 +197,24 @@ export function sliceContent(fullContent, pageAssignment, pageIndex) {
   return slice
 }
 
-export function measureAndDistribute(containerEl, isTwoColumn) {
+// containerScale: the CSS transform scale applied to an ancestor of containerEl.
+// getBoundingClientRect() returns viewport-space coords that include ancestor transforms,
+// so all measured positions are already multiplied by containerScale. We scale the
+// PAGE_CONTENT_MAX threshold by the same factor so comparisons remain correct.
+export function measureAndDistribute(containerEl, isTwoColumn, containerScale = 1) {
+  const scaledMax    = PAGE_CONTENT_MAX * containerScale
   const containerTop = containerEl.getBoundingClientRect().top
   const hdrEl        = containerEl.querySelector('[data-page-header]')
-  // headerBottom: absolute position (from container top) where the header ends
   const headerBottom = hdrEl ? hdrEl.getBoundingClientRect().bottom - containerTop : 0
 
-  // Page 1: any section/item whose bottom exceeds this is pushed to page 2
-  const firstPageMaxBottom = PAGE_CONTENT_MAX
+  const firstPageMaxBottom = scaledMax
 
   if (!isTwoColumn) {
     const sections = measureSectionsInEl(containerEl, containerEl)
 
-    // Estimate the top offset on page 2 (header hidden, sections start near template top)
-    // = gap between header bottom and first section top on the hidden full render
-    const firstSectionTop    = sections.length > 0 ? sections[0].top : headerBottom
-    const topGap             = Math.max(0, firstSectionTop - headerBottom)
-    const subsequentPageAvail = Math.max(PAGE_CONTENT_MAX / 2, PAGE_CONTENT_MAX - topGap)
+    const firstSectionTop     = sections.length > 0 ? sections[0].top : headerBottom
+    const topGap              = Math.max(0, firstSectionTop - headerBottom)
+    const subsequentPageAvail = Math.max(scaledMax / 2, scaledMax - topGap)
 
     const pages = distributePages(sections, firstPageMaxBottom, subsequentPageAvail)
     return { type: 'single', pages }
@@ -232,8 +233,8 @@ export function measureAndDistribute(containerEl, isTwoColumn) {
   const firstSectionTop = allSections.length > 0
     ? Math.min(...allSections.map(s => s.top))
     : headerBottom
-  const topGap             = Math.max(0, firstSectionTop - headerBottom)
-  const subsequentPageAvail = Math.max(PAGE_CONTENT_MAX / 2, PAGE_CONTENT_MAX - topGap)
+  const topGap              = Math.max(0, firstSectionTop - headerBottom)
+  const subsequentPageAvail = Math.max(scaledMax / 2, scaledMax - topGap)
 
   const leftPages  = distributePages(colSections.left,  firstPageMaxBottom, subsequentPageAvail)
   const rightPages = distributePages(colSections.right, firstPageMaxBottom, subsequentPageAvail)

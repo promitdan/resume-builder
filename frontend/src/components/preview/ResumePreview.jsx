@@ -51,7 +51,7 @@ const FONT_SIZE_VARS = {
 
 export { CONTENT_HEIGHT, PAGE_GAP }
 
-export default function ResumePreview({ content, templateId, paletteIndex = 0, fontSize = 'medium', onBreaksChange }) {
+export default function ResumePreview({ content, templateId, paletteIndex = 0, fontSize = 'medium', onBreaksChange, containerScale = 1 }) {
   const Template      = COMPONENT_MAP[templateId]
   const tpl           = TEMPLATE_CONFIGS[templateId]
   const measureRef    = useRef()
@@ -66,7 +66,7 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
     const el = measureRef.current
 
     const compute = () => {
-      const result = measureAndDistribute(el, isTwoColumn)
+      const result = measureAndDistribute(el, isTwoColumn, containerScale)
       let slices
 
       if (result.type === 'single') {
@@ -97,7 +97,7 @@ export default function ResumePreview({ content, templateId, paletteIndex = 0, f
     const ro = new ResizeObserver(compute)
     ro.observe(el)
     return () => ro.disconnect()
-  }, [content, templateId, fontSize, isTwoColumn, paletteIndex, onBreaksChange])
+  }, [content, templateId, fontSize, isTwoColumn, paletteIndex, onBreaksChange, containerScale])
 
   if (!Template) return <div style={{ padding: '20px', color: '#e53e3e' }}>Unknown template: {templateId}</div>
 

@@ -171,6 +171,7 @@ export default function WizardLayout({ steps, currentStep, maxVisitedStep = curr
                 paletteIndex={paletteIndex}
                 fontSize={fontSize}
                 onBreaksChange={setPageCount}
+                containerScale={scale}
               />
             </div>
           </div>
