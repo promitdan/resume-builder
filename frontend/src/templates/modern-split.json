@@ -27,5 +27,9 @@
     "bodyFont": "Inter, sans-serif",
     "bodyFontSize": "13px",
     "bodyLineHeight": "1.6"
+  },
+  "defaultColumns": {
+    "left":  ["skills", "languages"],
+    "right": ["experience", "education", "projects", "certifications", "awards", "custom"]
   }
 }

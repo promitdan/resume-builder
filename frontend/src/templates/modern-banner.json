@@ -35,5 +35,9 @@
     { "label": "Navy",   "swatch": "#3f5270", "colors": { "bannerBg": "#3f5270", "accentColor": "#2f4260" } },
     { "label": "Teal",   "swatch": "#3f6a72", "colors": { "bannerBg": "#3f6a72", "accentColor": "#2f5a62" } },
     { "label": "Umber",  "swatch": "#5f5248", "colors": { "bannerBg": "#5f5248", "accentColor": "#4f4238" } }
-  ]
+  ],
+  "defaultColumns": {
+    "left":  ["education", "skills", "languages"],
+    "right": ["experience", "projects", "certifications", "awards", "custom"]
+  }
 }

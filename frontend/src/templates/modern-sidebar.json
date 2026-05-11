@@ -34,5 +34,9 @@
     { "label": "Teal",     "swatch": "#2a5a68", "colors": { "sidebarBg": "#2a5a68", "sidebarMuted": "#7ab0bc" } },
     { "label": "Forest",   "swatch": "#2a3f30", "colors": { "sidebarBg": "#2a3f30", "sidebarMuted": "#7aaa88" } },
     { "label": "Plum",     "swatch": "#3d3050", "colors": { "sidebarBg": "#3d3050", "sidebarMuted": "#a090c0" } }
-  ]
+  ],
+  "defaultColumns": {
+    "left":  ["skills", "languages"],
+    "right": ["experience", "education", "projects", "certifications", "awards", "custom"]
+  }
 }

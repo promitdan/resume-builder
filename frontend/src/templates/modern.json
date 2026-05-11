@@ -48,5 +48,9 @@
     "dividerStyle": "solid-accent", "bulletStyle": "bullet", "dateAlignment": "inline-right",
     "sidebarSections": ["personal-contact", "skills", "education"],
     "mainSections": ["experience", "projects", "awards", "custom"]
+  },
+  "defaultColumns": {
+    "left":  ["skills", "education", "languages"],
+    "right": ["experience", "projects", "certifications", "awards", "custom"]
   }
 }
