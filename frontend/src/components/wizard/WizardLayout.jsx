@@ -153,18 +153,13 @@ export default function WizardLayout({ steps, currentStep, onNext, onStepClick, 
           background: '#f1f5f9',
           padding: '24px 20px',
         }}>
-          <div
-            ref={panelRef}
-            style={{
-              width: '100%',
-              height: (pageCount * CONTENT_HEIGHT + (pageCount - 1) * PAGE_GAP) * scale,
-              overflow: 'hidden',
-            }}
-          >
+          <div ref={panelRef} style={{ width: '100%' }}>
             <div style={{
               transform: `scale(${scale})`,
               transformOrigin: 'top left',
               width: PAGE_WIDTH,
+              // collapse the dead DOM space that transform: scale() leaves behind
+              marginBottom: -((pageCount * CONTENT_HEIGHT + (pageCount - 1) * PAGE_GAP) * (1 - scale)),
               filter: 'drop-shadow(0 4px 16px rgba(15,23,42,0.14))',
             }}>
               <ResumePreview

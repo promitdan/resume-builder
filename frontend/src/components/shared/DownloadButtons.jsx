@@ -30,7 +30,7 @@ export default function DownloadButtons() {
     }
   }
 
-  const navy = '#1a2744'
+  const navy = '#1c4cb7'
 
   // PDF file icon: folded-corner document with red PDF badge
   const PdfIcon = () => (
@@ -55,7 +55,7 @@ export default function DownloadButtons() {
   const btn = (type, label, Icon) => (
     <button type="button" onClick={() => download(type)} disabled={!!loading}
       style={{
-        width: '100%', background: loading === type ? '#64748b' : navy,
+        width: '100%', background: loading === type ? '#64748b' : '#1c4cb7',
         color: '#fff', fontWeight: 600, fontSize: '13px', padding: '11px 14px',
         borderRadius: '8px', border: 'none', cursor: loading ? 'wait' : 'pointer',
         marginBottom: '8px', transition: 'background 0.15s',
