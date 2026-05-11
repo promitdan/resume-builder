@@ -196,7 +196,7 @@ export default function TemplateGallery({ onStart }) {
                 style={{
                   flex: 1, border: `2px solid ${isExpanded || hasSelected ? navy : border}`,
                   borderRadius: 12, overflow: 'hidden', cursor: 'pointer',
-                  background: isExpanded || hasSelected ? navy : '#fff',
+                  background: isExpanded ? navy : '#fff',
                   transition: 'border-color 0.15s, box-shadow 0.15s, background 0.15s',
                   boxShadow: isExpanded ? '0 4px 16px rgba(26,39,68,0.12)' : 'none',
                   padding: '14px 16px',
@@ -206,21 +206,21 @@ export default function TemplateGallery({ onStart }) {
               >
                 <div style={{
                   width: 36, height: 36, borderRadius: 8, flexShrink: 0,
-                  background: isExpanded || hasSelected ? 'rgba(255,255,255,0.15)' : bg,
+                  background: isExpanded ? 'rgba(255,255,255,0.15)' : bg,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
-                  {FAMILY_META[family.id]?.icon(isExpanded || hasSelected ? '#fff' : navy)}
+                  {FAMILY_META[family.id]?.icon(isExpanded ? '#fff' : navy)}
                 </div>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{
                     fontWeight: 700, fontSize: 13, lineHeight: 1.3,
-                    color: isExpanded || hasSelected ? '#fff' : navy,
+                    color: isExpanded ? '#fff' : navy,
                   }}>
                     {family.label}
                   </div>
                   <div style={{
                     fontSize: 11, marginTop: 2,
-                    color: isExpanded || hasSelected ? 'rgba(255,255,255,0.65)' : '#7a7060',
+                    color: isExpanded ? 'rgba(255,255,255,0.65)' : '#7a7060',
                     whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                   }}>
                     {FAMILY_META[family.id]?.description}
@@ -228,8 +228,8 @@ export default function TemplateGallery({ onStart }) {
                 </div>
                 <span style={{
                   fontSize: 10, fontWeight: 600, flexShrink: 0,
-                  color: isExpanded || hasSelected ? 'rgba(255,255,255,0.55)' : '#a09080',
-                  background: isExpanded || hasSelected ? 'rgba(255,255,255,0.12)' : bg,
+                  color: isExpanded ? 'rgba(255,255,255,0.55)' : '#a09080',
+                  background: isExpanded ? 'rgba(255,255,255,0.12)' : bg,
                   borderRadius: 20, padding: '2px 7px',
                 }}>
                   {family.templates.length} styles
