@@ -94,7 +94,7 @@ export default function PreviewPage() {
         </a>
         <button
           type="button"
-          onClick={() => navigate('/build')}
+          onClick={() => navigate('/build', { state: { fromPreview: true } })}
           style={{
             background: 'none', border: '1.5px solid #e2e8f0',
             color: '#334155', fontWeight: 600, fontSize: 13,

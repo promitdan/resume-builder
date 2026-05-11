@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import WizardLayout         from '../components/wizard/WizardLayout'
 import PersonalInfoStep     from '../components/wizard/PersonalInfoStep'
 import ExperienceStep       from '../components/wizard/ExperienceStep'
@@ -18,9 +18,12 @@ const STEPS = [
 ]
 
 export default function BuildPage() {
-  const [phase, setPhase]                   = useState('gallery')
+  const location   = useLocation()
+  const fromPreview = location.state?.fromPreview === true
+
+  const [phase, setPhase]                   = useState(fromPreview ? 'editor' : 'gallery')
   const [currentStep, setCurrentStep]       = useState(0)
-  const [maxVisitedStep, setMaxVisitedStep] = useState(0)
+  const [maxVisitedStep, setMaxVisitedStep] = useState(fromPreview ? STEPS.length - 1 : 0)
   const navigate                            = useNavigate()
   const setTemplateId                       = useResumeStore(s => s.setTemplateId)
 
