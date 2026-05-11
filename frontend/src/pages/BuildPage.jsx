@@ -18,24 +18,31 @@ const STEPS = [
 ]
 
 export default function BuildPage() {
-  const [phase, setPhase]             = useState('gallery')
-  const [currentStep, setCurrentStep] = useState(0)
-  const navigate                      = useNavigate()
-  const setTemplateId                 = useResumeStore(s => s.setTemplateId)
+  const [phase, setPhase]                   = useState('gallery')
+  const [currentStep, setCurrentStep]       = useState(0)
+  const [maxVisitedStep, setMaxVisitedStep] = useState(0)
+  const navigate                            = useNavigate()
+  const setTemplateId                       = useResumeStore(s => s.setTemplateId)
 
   function handleGalleryStart(templateId) {
     setTemplateId(templateId)
     setCurrentStep(0)
+    setMaxVisitedStep(0)
     setPhase('editor')
   }
 
   function handleNext() {
-    if (currentStep === STEPS.length - 1) navigate('/preview')
-    else setCurrentStep(s => Math.min(s + 1, STEPS.length - 1))
+    if (currentStep === STEPS.length - 1) {
+      navigate('/preview')
+    } else {
+      const next = Math.min(currentStep + 1, STEPS.length - 1)
+      setCurrentStep(next)
+      setMaxVisitedStep(s => Math.max(s, next))
+    }
   }
 
   function handleStepClick(index) {
-    if (index < currentStep) setCurrentStep(index)
+    if (index <= maxVisitedStep) setCurrentStep(index)
   }
 
   if (phase === 'gallery') {
@@ -46,6 +53,7 @@ export default function BuildPage() {
     <WizardLayout
       steps={STEPS}
       currentStep={currentStep}
+      maxVisitedStep={maxVisitedStep}
       onNext={handleNext}
       onStepClick={handleStepClick}
       onChangeTemplate={() => setPhase('gallery')}

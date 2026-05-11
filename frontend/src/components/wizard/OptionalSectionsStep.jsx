@@ -10,7 +10,7 @@ const SECTIONS = [
 
 const PROFICIENCY_LEVELS = ['Native', 'Fluent', 'Professional', 'Basic']
 
-const card    = { background: '#fff', borderRadius: '10px', padding: '28px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', maxWidth: '680px' }
+const card    = { background: '#fff', borderRadius: '10px', padding: '28px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }
 const form    = { marginTop: '16px', padding: '16px', background: '#f8fafc', borderRadius: '8px', borderTop: '1px solid #e2e8f0' }
 const entry   = { border: '1px solid #e2e8f0', borderRadius: '8px', padding: '16px', marginBottom: '10px', background: '#fff' }
 const inp     = { width: '100%', padding: '8px 12px', border: '1px solid #e2e8f0', borderRadius: '6px', fontSize: '13px', color: '#334155', background: '#fff', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit', marginBottom: '8px' }

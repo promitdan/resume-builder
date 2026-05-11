@@ -1,6 +1,6 @@
 import { useResumeStore } from '../../store/useResumeStore'
 
-const card  = { background: '#fff', borderRadius: '10px', padding: '28px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)', maxWidth: '680px' }
+const card  = { background: '#fff', borderRadius: '10px', padding: '28px', boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }
 const inp   = { width: '100%', padding: '9px 13px', border: '1px solid #e2e8f0', borderRadius: '6px', fontSize: '15px', color: '#334155', background: '#fff', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }
 const lbl   = { display: 'block', fontSize: '13px', fontWeight: '600', color: '#334155', marginBottom: '6px' }
 const fld   = { marginBottom: '18px' }

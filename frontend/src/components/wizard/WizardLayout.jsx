@@ -8,7 +8,7 @@ import { useRef, useEffect, useState } from 'react'
 const navy   = '#1a2744'
 const orange = '#f47c20'
 
-export default function WizardLayout({ steps, currentStep, onNext, onStepClick, onChangeTemplate }) {
+export default function WizardLayout({ steps, currentStep, maxVisitedStep = currentStep, onNext, onStepClick, onChangeTemplate }) {
   const content       = useResumeStore(s => s.content)
   const templateId    = useResumeStore(s => s.templateId)
   const paletteIndex  = useResumeStore(s => s.paletteIndex)
@@ -81,22 +81,24 @@ export default function WizardLayout({ steps, currentStep, onNext, onStepClick, 
           justifyContent: 'center', gap: 2, overflow: 'hidden',
         }}>
           {steps.map((s, i) => {
-            const done   = i < currentStep
-            const active = i === currentStep
+            const active    = i === currentStep
+            const completed = i < currentStep
+            const visited   = i <= maxVisitedStep && !active
+            const clickable = visited
             return (
               <div key={s.title} style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
                 {i > 0 && <span style={{ color: '#cbd5e1', fontSize: 12 }}>›</span>}
                 <button
-                  onClick={() => done && onStepClick && onStepClick(i)}
+                  onClick={() => clickable && onStepClick && onStepClick(i)}
                   style={{
                     background: 'none', border: 'none', padding: '3px 7px',
-                    borderRadius: 5, cursor: done ? 'pointer' : 'default',
+                    borderRadius: 5, cursor: clickable ? 'pointer' : 'default',
                     fontSize: 12, fontWeight: active ? 700 : 500,
-                    color: done ? '#334155' : active ? navy : '#94a3b8',
+                    color: active ? navy : visited ? '#334155' : '#94a3b8',
                     display: 'flex', alignItems: 'center', gap: 4,
                   }}
                 >
-                  {done && (
+                  {completed && (
                     <span style={{
                       width: 14, height: 14, borderRadius: '50%',
                       background: '#22c55e', color: '#fff',
@@ -150,7 +152,7 @@ export default function WizardLayout({ steps, currentStep, onNext, onStepClick, 
 
         {/* Right: live preview */}
         <div style={{
-          flex: '0 0 45%', overflowY: 'auto', overflowX: 'hidden',
+          flex: '0 0 30%', overflowY: 'auto', overflowX: 'hidden',
           background: '#f1f5f9',
           padding: '24px 20px',
         }}>
